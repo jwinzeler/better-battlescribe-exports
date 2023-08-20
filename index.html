@@ -8,13 +8,24 @@
     <title>Battlescribe Pretty Html</title>
   </head>
   <body>
+    <div class="wrapper">
+      <details open>
+        <summary>File</summary>
+        <input id="fileInput" accept=".html" type="file" />
+        <a id="downloadButton"><button>Download</button></a>
+      </details>
+      <details open>
+        <summary>Log</summary>
+        <div id="log-wrapper">
+          <code id="log"></code>
+        </div>
+      </details>
+      <details open class="preview-wrapper">
+        <summary>Preview</summary>
+        <iframe id="preview"></iframe>
+      </details>
+    </div>
     <div>
-      <input id="fileInput" accept=".html" type="file" />
-      <button id="convertButton">Convert</button>
-    </div>
-    <div id="log-wrapper">
-      <code id="log"></code>
-    </div>
 	  <script src="src/template.js"></script>
 	  <script src="src/logger.js"></script>
 	  <script src="src/interpreter.js"></script>

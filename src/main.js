@@ -9,9 +9,14 @@ class Main {
     const output = Builder.getOutput(sanitizedRoster);
     console.log(output);
     
-    const download = document.createElement('a');
-    download.setAttribute('href', window.URL.createObjectURL(new Blob([output.innerHTML]), { type: "text/html"}));
+    const download = document.getElementById('downloadButton');
+    const blob = window.URL.createObjectURL(new Blob([output.innerHTML]), { type: "text/html"});
+    download.setAttribute('href', blob);
     download.setAttribute('download', `${roster.name} actually usable.html`);
-    download.click();
+
+    const preview = document.getElementById('preview').contentWindow.document;
+    preview.open();
+    preview.write(output.innerHTML);
+    preview.close();
   }
 }

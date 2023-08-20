@@ -1,6 +1,10 @@
 html, body {
-  padding: 8px;
+  padding: 0;
   margin: 0;
+}
+
+details {
+  padding: 15px 0;
 }
 
 #log-wrapper {
@@ -9,7 +13,6 @@ html, body {
   padding: 8px;
   height: 250px;
   overflow-y: scroll;
-  margin-top: 25px;
 }
 
 #log-wrapper .log {
@@ -22,4 +25,22 @@ html, body {
 
 #log-wrapper .error {
   color: #a00000;
+}
+
+.preview-wrapper {
+  height: 100%;
+}
+
+#preview {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  padding: 8px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

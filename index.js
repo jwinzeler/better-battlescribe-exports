@@ -18,9 +18,7 @@ fileReader.addEventListener('load', (event) => {
 fileInput.addEventListener('change', (event) => {
   file = event.target.files?.[0];
   Logger.log(`New file selected: ${file.name}`);
-});
 
-convertButton.addEventListener('click', () => {
   if (file?.type === 'text/html') {
     Logger.log(`Loading file: ${file.name}`);
     fileReader.readAsText(file);
