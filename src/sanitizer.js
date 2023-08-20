@@ -37,7 +37,6 @@ class Sanitizer {
       } else {
         rules.forEach((rule) => {
           if (object[key].includes(rule.name)) {
-            console.log(`adeded ${rule.name} in`, object);
             object[key] = object[key].replace(rule.name, Builder.getTooltip(rule.name, rule.description));
           }
         });

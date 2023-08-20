@@ -4,7 +4,11 @@ html, body {
 }
 
 details {
-  padding: 15px 0;
+  padding: 8px 0;
+}
+
+summary {
+  margin-bottom: 8px;
 }
 
 #log-wrapper {
