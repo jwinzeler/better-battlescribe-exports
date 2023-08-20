@@ -1,0 +1,25 @@
+html, body {
+  padding: 8px;
+  margin: 0;
+}
+
+#log-wrapper {
+  background: #eee;
+  border-radius: 5px;
+  padding: 8px;
+  height: 250px;
+  overflow-y: scroll;
+  margin-top: 25px;
+}
+
+#log-wrapper .log {
+  color: #555;
+}
+
+#log-wrapper .warn {
+  color: #7e6b00;
+}
+
+#log-wrapper .error {
+  color: #a00000;
+}

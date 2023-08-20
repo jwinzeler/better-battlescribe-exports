@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Battlescribe Pretty Html</title>
+  </head>
+  <body>
+    <div>
+      <input id="fileInput" accept=".html" type="file" />
+      <button id="convertButton">Convert</button>
+    </div>
+    <div id="log-wrapper">
+      <code id="log"></code>
+    </div>
+	  <script src="src/template.js"></script>
+	  <script src="src/logger.js"></script>
+	  <script src="src/interpreter.js"></script>
+	  <script src="src/sanitizer.js"></script>
+	  <script src="src/builder.js"></script>
+	  <script src="src/main.js"></script>
+	  <script src="index.js"></script>
+  </body>
+</html>

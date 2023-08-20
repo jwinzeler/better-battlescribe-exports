@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        --text-primary: #e7dae9;
+        --background-primary: #382638;
+        --border-primary: #dfcae2;
+        --background-datasheet: #DEDEE1;
+        --text-datasheet: #382638;
+        --accent-datasheet: #dddde0;
+        --border-datasheet: #3e1844;
+        --background-datasheet-header: ##1F2123;
+        --sidebar-width: 200px;
+        margin: 0;
+        background: var(--background-primary);
+        box-sizing: border-box;
+        color: var(--text-primary) !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 300;
+        font-size: 1rem;
+      }
+
+      body {
+        display: flex;
+        flex-direction: row;
+      }
+
+      aside {
+        height: 100vh;
+        width: var(--sidebar-width);
+        border-right: 4px solid var(--border-primary);
+        display: block;
+        overflow-y: scroll;
+      }
+
+      main {
+        height: 100vh;
+        overflow-y: scroll;
+        width: calc(100% - var(--sidebar-width));
+      }
+
+      button {
+        appearance: unset;
+        border: none;
+        border-bottom: 1px solid var(--border-primary);
+        background: none;
+        width: 100%;
+        padding: 1rem .5rem;
+        color: var(--text-primary) !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-size: 1.25rem;
+        text-transform: capitalize;
+        font-weight: 300;
+      }
+
+      button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+      }
+
+      button.overview {
+        border-bottom: 1px solid var(--border-primary);
+        font-size: 1.25rem;
+        padding: 1rem .5rem;
+        text-align: center;
+      }
+
+      div.overview-info {
+        padding-top: .5rem;
+        font-size: 0.75rem;
+        text-align: left;
+        line-height: 1.25rem;
+      }
+
+      span.bold {
+        font-weight: 500;
+      }
+
+      div.divider {
+        background: var(--border-primary);
+        padding: .125rem;
+      }
+
+      div.page {
+        height: 100%;
+        display: none;
+      }
+
+      div.page.active {
+        display: block;
+      }
+
+      .datasheet {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+      }
+
+      .datasheet header {
+        padding: 2rem;
+      }
+
+      .datasheet-body {
+        height: 100%;
+        background: var(--background-datasheet);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .datasheet-body .column-left {
+        flex-basis: 65%;
+      }
+
+      .datasheet-body .column-right {
+        flex-basis: 35%;
+      }
+
+      .datasheet-body .column-bottom {
+        flex-basis: 100%;
+        align-self: flex-end;
+      }
+
+      .datasheet-body .column-padding {
+        padding: 1rem;
+      }
+
+      .datasheet-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+      }
+
+      .datasheet-body tr:nth-child(odd) {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      .datasheet-body th {
+        padding: .5rem .5rem;
+        background: var(--border-datasheet);
+        font-weight: 400;
+      }
+
+      .datasheet-body th:nth-child(2) {
+        text-align: left;
+      }
+
+      .datasheet-body td {
+        padding: .5rem .5rem;
+        color: var(--text-datasheet);
+        text-align: center;
+      }
+
+      .datasheet-body td:first-child {
+        width: 2rem;
+      }
+
+      .datasheet-body td:nth-child(2) {
+        text-align: left;
+      }
+
+      .datasheet-body .column-right th {
+        text-align: left;
+      }
+
+      .datasheet-body .column-right th.invuln {
+        position: relative;
+        text-align: center;
+      }
+
+      .datasheet-body .column-right th.invuln div {
+        position: absolute;
+        background: var(--background-datasheet);
+        color: var(--text-datasheet);
+        font-size: 1.5rem;
+        padding: .5rem;
+        border-radius: 0 0 50% 50%;
+        top: -.25rem;
+        left: -3rem;
+        border: 2px solid var(--border-datasheet);
+      }
+
+      .datasheet-body .column-right td {
+        text-align: left;
+      }
+
+      .datasheet-body .column-bottom .keywords {
+        background: #BBB9BA;
+        border: 2px solid var(--border-datasheet);
+        color: var(--text-datasheet);
+        padding: 1rem;
+        font-size: 1rem;
+      }
+
+      .unit-name {
+        font-size: 1.5rem;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+
+      .stats-wrapper {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .stat {
+        padding: 0.25rem;
+        text-align: center;
+      }
+
+      .stat-value {
+        background: var(--background-datasheet);
+        color: var(--text-datasheet);
+        font-size: 1.5rem;
+        font-weight: 500;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: .5rem 0 .5rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid var(--border-datasheet);
+      }
+    </style>
+    <script>
+      togglePage = (id) => {
+        document.querySelectorAll('.page').forEach((page) => page.classList.remove('active'));
+        document.getElementById(id)?.classList.add('active');
+      }
+    </script>
+    <title>RosterName</title>
+  </head>
+  <body>
+      <aside>
+        <button onclick="togglePage('overview-page')" id="overview-button">
+          Tyranid 1000
+          <div class="overview-info">
+            <div><span class="bold">Faction: </span>Xenos - Tyranids</div>
+            <div><span class="bold">Detachment: </span>Invasion Fleet</div>
+            <div><span class="bold">Size: </span>1. Incursion (1000 Points limit)</div>
+          </div>
+        </button>
+        <button onclick="togglePage('winged-tyranid-prime-page')" id="winged-tyranid-prime-button">
+          Winged Tyranid Prime
+          <div class="overview-info">
+            <div><span class="bold">Selections: </span>Warlord</div>
+          </div>
+        </button>
+      </aside>
+      <main>
+        <div id="overview-page" class="page">
+
+        </div>
+        <div id="winged-tyranid-prime-page" class="page active">
+          <div class="datasheet">
+            <header>
+              <div class="unit-name">
+                Wigned Tyranid Prime
+              </div>
+                <div class="stats-wrapper">
+                  <div class="stat">
+                    <div class="stat-name">
+                      M
+                    </div>
+                    <div class="stat-value">
+                      6"
+                    </div>
+                </div>
+                  <div class="stat">
+                    <div class="stat-name">
+                      T
+                    </div>
+                    <div class="stat-value">
+                      5
+                    </div>
+                </div>
+                  <div class="stat">
+                    <div class="stat-name">
+                      SV
+                    </div>
+                    <div class="stat-value">
+                      4+
+                    </div>
+                </div>
+                  <div class="stat">
+                    <div class="stat-name">
+                      W
+                    </div>
+                    <div class="stat-value">
+                      3
+                    </div>
+                </div>
+                  <div class="stat">
+                    <div class="stat-name">
+                      LD
+                    </div>
+                    <div class="stat-value">
+                      7+
+                    </div>
+                </div>
+                  <div class="stat">
+                    <div class="stat-name">
+                      OC
+                    </div>
+                    <div class="stat-value">
+                      2
+                    </div>
+                </div>
+              </div>
+            </header>
+            <div class="datasheet-body">
+              <div class="column-left">
+                <div class="column-padding">
+                  <table>
+                    <tr>
+                      <th></th>
+                      <th>
+                        RANGED WEAPONS
+                      </th>
+                      <th>
+                        RANGE
+                      </th>
+                      <th>
+                        A
+                      </th>
+                      <th>
+                        BS
+                      </th>
+                      <th>
+                        S
+                      </th>
+                      <th>
+                        AP
+                      </th>
+                      <th>
+                        D
+                      </th>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>
+                        Barbed strangler [BLAST]
+                      </td>
+                      <td>
+                        36"
+                      </td>
+                      <td>
+                        D6+1
+                      </td>
+                      <td>
+                        4+
+                      </td>
+                      <td>
+                        6
+                      </td>
+                      <td>
+                        -1
+                      </td>
+                      <td>
+                        1
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>
+                        Barbed strangler [BLAST]
+                      </td>
+                      <td>
+                        36"
+                      </td>
+                      <td>
+                        D6+1
+                      </td>
+                      <td>
+                        4+
+                      </td>
+                      <td>
+                        6
+                      </td>
+                      <td>
+                        -1
+                      </td>
+                      <td>
+                        1
+                      </td>
+                    </tr>
+                  </table>
+                  <table>
+                    <tr>
+                      <th></th>
+                      <th>
+                        MELEE WEAPONS
+                      </th>
+                      <th>
+                        RANGE
+                      </th>
+                      <th>
+                        A
+                      </th>
+                      <th>
+                        BS
+                      </th>
+                      <th>
+                        S
+                      </th>
+                      <th>
+                        AP
+                      </th>
+                      <th>
+                        D
+                      </th>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>
+                        Barbed strangler [BLAST]
+                      </td>
+                      <td>
+                        Melee
+                      </td>
+                      <td>
+                        D6+1
+                      </td>
+                      <td>
+                        4+
+                      </td>
+                      <td>
+                        6
+                      </td>
+                      <td>
+                        -1
+                      </td>
+                      <td>
+                        1
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>
+                        Barbed strangler [BLAST]
+                      </td>
+                      <td>
+                        Melee
+                      </td>
+                      <td>
+                        D6+1
+                      </td>
+                      <td>
+                        4+
+                      </td>
+                      <td>
+                        6
+                      </td>
+                      <td>
+                        -1
+                      </td>
+                      <td>
+                        1
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <div class="column-right">
+                <div class="column-padding">
+                  <table>
+                    <tr>
+                      <th>ABILITIES</th>
+                    </tr>
+                    <tr>
+                      <td>CORE: <span class="bold">Deadly Demise D3, Leader</span></td>
+                    </tr>
+                    <tr>
+                      <td>FACTION: <span class="bold">Shadow in the Warp, Synapse</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="bold">Will of the Hive Mind: </span>Once per turn, one friendly Tyranids
+                        unit within 12" of one or more models with this ability can be
+                        targeted with a Stratagem for 0CP, even if another unit from
+                        your army has already been targeted with that Stratagem
+                        this phase.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="bold">Onslaught (Aura, Psychic): </span>While a friendly Tyranids unit is within 6" of this model, ranged weapons equipped by models in that unit have the [ASSAULT] ability
+                      </td>
+                    </tr>
+                  </table>
+                  <table>
+                    <tr>
+                      <th>INVULNERABLE SAVE</th>
+                      <th class="invuln"><div>4+</div></th>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <div class="column-bottom">
+                <div class="column-padding">
+                  <div class="keywords">KEYWORDS: <span class="bold">Monster, Character, Psyker, Great Devourer, Synapse, Tervigon</span></div>>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+  </body>
+</html>
