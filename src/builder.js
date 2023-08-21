@@ -17,8 +17,8 @@ class Builder {
   static getBody(roster) {
     const body = Builder.createElementWithAttributes('body');
 
-    const aside = Builder.getAside(roster);
-    body.appendChild(aside);
+    const asideAndBackdrop = Builder.getAsideAndBackdrop(roster);
+    asideAndBackdrop.forEach((el) => body.appendChild(el));
 
     const main = Builder.getMain(roster);
     body.appendChild(main);
@@ -31,6 +31,9 @@ class Builder {
 
     /*const overview = Builder.getOverviewPage(roster);
     main.appendChild(overview);*/
+
+    const openAside = Builder.getToggleAsideButton('<', 'open');
+    main.appendChild(openAside);
 
     roster.units.forEach((unit) => {
       const page = Builder.getUnitPage(unit);
@@ -116,7 +119,7 @@ class Builder {
       { attribute: 'class', value: 'column-padding' },
     ]);
 
-    const invulnFound = unit.abilities.abilities.find((ability) => ability.name === "Invulnerable Save")
+    const invulnFound = unit.abilities.abilities.find((ability) => ability.name === "Invulnerable Save");
     if (invulnFound) {
       const invulnTable = Builder.createTable([
         [invulnFound.name, `<div>${invulnFound.description.replace(/.*?([\d]+\+).*?$/g, '$1')}</div>`],
@@ -128,7 +131,7 @@ class Builder {
     const tableData = [
       ['ABILITIES'],
     ];
-    
+
     if (unit.ruleKeys) {
       tableData.push([`CORE: <span class="bold">${unit.ruleKeys.join(', ')}</span>`]);
     }
@@ -140,7 +143,7 @@ class Builder {
           .map((ability) => ([
             `<span class="bold">${ability.name}: </span>${ability.description}`,
           ]),
-        ),
+          ),
       );
     }
 
@@ -235,7 +238,7 @@ class Builder {
         if (stat === 'name') {
           return;
         }
-        
+
         const statEl = Builder.createElementWithAttributes('div', [
           { attribute: 'class', value: 'stat' },
         ]);
@@ -257,8 +260,12 @@ class Builder {
     return header;
   }
 
-  static getAside(roster) {
+  static getAsideAndBackdrop(roster) {
     const aside = Builder.createElementWithAttributes('aside');
+    const backdrop = Builder.createElementWithAttributes('div', [{ attribute: 'id', value: 'backdrop' }]);
+
+    const close = Builder.getToggleAsideButton('X', 'close');
+    aside.appendChild(close);
 
     const overview = Builder.getOverviewButton(roster);
     aside.appendChild(overview);
@@ -268,17 +275,17 @@ class Builder {
       aside.appendChild(button);
     });
 
-    return aside;
+    return [aside, backdrop];
   }
 
   static getUnitButton(unit) {
     const id = Builder.stringToId(unit.name);
     const button = Builder.createElementWithAttributes('button', [
       { attribute: 'onclick', value: `togglePage('${id}-page')` },
-      { attribute: 'id', value: `${id}-button`},
+      { attribute: 'id', value: `${id}-button` },
     ]);
     button.innerHTML = unit.name;
-    
+
     const info = Builder.createElementWithAttributes('div', [{ attribute: 'class', value: 'overview-info' }]);
 
     unit.selections.forEach((selection) => {
@@ -293,25 +300,35 @@ class Builder {
     return button;
   }
 
+  static getToggleAsideButton(text, id) {
+    const button = Builder.createElementWithAttributes('button', [
+      { attribute: 'onclick', value: "toggleAside()" },
+      { attribute: 'class', value: 'toggle-aside' },
+      { attribute: 'id', value: `${id}` },
+    ]);
+    button.innerHTML = `${text}`;
+    return button;
+  }
+
   static getOverviewButton(roster) {
     const button = Builder.createElementWithAttributes('button', [
       { attribute: 'onclick', value: "togglePage('overview-page')" },
-      { attribute: 'id', value: `overview-button`},
+      { attribute: 'id', value: `overview-button` },
     ]);
     button.innerHTML = roster.name;
-    
+
     const info = Builder.createElementWithAttributes('div', [{ attribute: 'class', value: 'overview-info' }]);
 
     const faction = Builder.createElementWithAttributes('div');
     faction.appendChild(Builder.createBoldSpan('Faction: '));
     faction.innerHTML += roster.faction.name;
     info.appendChild(faction);
-    
+
     const detachment = Builder.createElementWithAttributes('div');
     detachment.appendChild(Builder.createBoldSpan('Detachment: '));
     detachment.innerHTML += roster.detachment.name;
     info.appendChild(detachment);
-    
+
     const size = Builder.createElementWithAttributes('div');
     size.appendChild(Builder.createBoldSpan('Size: '));
     size.innerHTML += roster.battleSize;
@@ -359,7 +376,7 @@ class Builder {
     element.innerHTML = content;
 
     return element;
-  } 
+  }
 
   static createElementWithAttributes(tag, attributes = []) {
     const element = document.createElement(tag);
