@@ -8,10 +8,10 @@ class Interpreter {
       name: Interpreter.getRosterName(contents),
       battleSize: Interpreter.getBattleSize(contents),
       faction: Interpreter.getFaction(contents),
-      detachment: Interpreter.getDetachment(contents),
+      detachment: Interpreter.getDetachment(contents, Interpreter.getRules(contents)),
       units: Interpreter.getUnits(contents),
       rules: Interpreter.getRules(contents),
-    }
+    };
   }
 
   static getRosterName(html) {
@@ -110,8 +110,8 @@ class Interpreter {
           const rowText = Interpreter.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
-          } 
-          
+          }
+
           const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
           let matches = rowText.match(/(.|\n)*?<td.*?>((.|\n)*?)<\/td>/g);
           matches = matches.map((match) => match.replace(/<\/?td.*?>/g, '').trim());
@@ -121,7 +121,7 @@ class Interpreter {
           const W = matches[4] || '';
           const LD = matches[5] || '';
           const OC = matches[6] || '';
-              
+
           stats.push({
             name,
             M,
@@ -152,8 +152,8 @@ class Interpreter {
           const rowText = Interpreter.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
-          } 
-          
+          }
+
           const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
           let matches = rowText.match(/(.|\n)*?<td.*?>((.|\n)*?)<\/td>/g);
           matches = matches.map((match) => match.replace(/<\/?td.*?>/g, '').trim());
@@ -164,7 +164,7 @@ class Interpreter {
           const armorPenetration = matches[5] || '';
           const damage = matches[6] || '';
           const keywords = matches[7].replace('-', '').split(',').filter((keyword) => !!keyword) || '';
-              
+
           weapons.push({
             name,
             range,
@@ -211,11 +211,11 @@ class Interpreter {
           const rowText = Interpreter.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
-          } 
-          
+          }
+
           const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
           const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
-    
+
           abilities.push({
             name,
             description,
@@ -303,7 +303,7 @@ class Interpreter {
     return name;
   }
 
-  static getDetachment(html) {
+  static getDetachment(html, rules) {
     let name = '';
     let abilities = [];
 
@@ -313,8 +313,9 @@ class Interpreter {
       'h4',
       'Detachment',
       (summaryElement) => {
+        console.log(summaryElement);
         name = Interpreter.getDetachmentName(summaryElement);
-        abilities = Interpreter.getDetachmentAbilities(summaryElement);
+        abilities = Interpreter.getDetachmentAbilities(summaryElement, rules);
       },
     );
 
@@ -339,32 +340,33 @@ class Interpreter {
     return name;
   }
 
-  static getDetachmentAbilities(html) {
+  static getDetachmentAbilities(html, allRules) {
     Logger.log('Finding detachment abilites...');
-    const abilities = [];
 
-    const tableRows = html.querySelectorAll('tr');
-    tableRows.forEach((tableRow) => {
-      const rowText = Interpreter.getStringFromHtml(tableRow);
-      if (rowText.includes('<th>')) {
-        return;
-      } 
-      
-      const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
-      const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
+    const detachmentRulesHtml = html.querySelector('p.rule-names > .italic');
 
-      abilities.push({
-        name,
-        description,
-      });
+    const abilities = allRules.filter((rule) => rule.name === detachmentRulesHtml.innerHTML);
+    // console.log(ability);
+    // tableRows.forEach((tableRow) => {
+    //   const rowText = Interpreter.getStringFromHtml(tableRow);
+    //   if (rowText.includes('<th>')) {
+    //     return;
+    //   }
+    //   console.log('rowText', rowText);
+    //   const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
+    //   const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
 
-      Logger.logRosterValue(`${name}: ${description}`);
-    });
+    //   abilities.push({
+    //     name,
+    //     description,
+    //   });
+
+    //   Logger.logRosterValue(`${name}: ${description}`);
+    // });
 
     if (!abilities.length) {
       Logger.warn('No detachment abilities found!');
     }
-
     return abilities;
   }
 
@@ -436,7 +438,7 @@ class Interpreter {
     const battleSizeElement = html.querySelector('li.force > ul > li.category p');
     let battleSize = Interpreter.getStringFromHtml(battleSizeElement);
     battleSize = battleSize.replaceAll(/<span.*?<\/span>/g, '');
-    
+
     Logger.logRosterValue(battleSize);
 
     return battleSize;
@@ -496,7 +498,7 @@ class Interpreter {
     if (htmlElement) {
       return true;
     } else {
-      Logger.warn('Attempted to parse value from nullish element!')
+      Logger.warn('Attempted to parse value from nullish element!');
     }
   }
 }
