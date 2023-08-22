@@ -13,11 +13,7 @@ class Sanitizer {
      * - Better styles for toolips
      * - Fix missing space between commas in abilities and keywords
      *  Where to get stratagems?
-     * - Fix movement stat showing : instead of "
      * - Fix CORE abilities, show faction abilities (different values in real datasheet compared to here)
-     * - Add extra graphics elements
-     * 
-     *  Super later on:
      * - check small mobile portait mode
      * 
      */
