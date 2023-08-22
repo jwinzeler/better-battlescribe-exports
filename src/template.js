@@ -275,12 +275,12 @@ div.overview-info {
   line-height: 1.25rem;
 }
 
-span.bold {
-  font-weight: 500;
+.small {
+  font-size: 0.75rem;
 }
 
-span.small {
-  font-size: 0.75rem;
+.capitalize {
+  text-transform: capitalize;
 }
 
 div.divider {
@@ -337,6 +337,12 @@ div.page.active {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
+  table-layout: fixed;
+}
+
+.datasheet-body .column-left th:first-child,
+.datasheet-body .column-left td:first-child {
+  width: 40%;
 }
 
 .datasheet-body tr:nth-child(odd) {
@@ -349,7 +355,7 @@ div.page.active {
   font-weight: 400;
 }
 
-.datasheet-body th:nth-child(2) {
+.datasheet-body th:first-child {
   text-align: left;
 }
 
@@ -360,10 +366,6 @@ div.page.active {
 }
 
 .datasheet-body td:first-child {
-  width: 2rem;
-}
-
-.datasheet-body td:nth-child(2) {
   text-align: left;
 }
 
@@ -384,7 +386,7 @@ div.page.active {
   padding: .5rem;
   border-radius: 0 0 50% 50%;
   top: -.25rem;
-  left: -3rem;
+  right: 1rem;
   border: 2px solid var(--border-datasheet);
 }
 
@@ -428,6 +430,15 @@ div.page.active {
   justify-content: center;
   align-items: center;
   border: 2px solid var(--border-datasheet);
+}
+
+.stats-model-name {
+  display: flex;
+  align-items: center;
+}
+
+.stats-model-name.first {
+  margin-top: 1rem;
 }
 
 .tooltip-on-hover {
@@ -652,11 +663,6 @@ div#overview-page.active {
 
   .datasheet-body .column-left th:first-child,
   .datasheet-body .column-left td:first-child {
-    display: none;
-  }
-
-  .datasheet-body .column-left th:nth-child(2),
-  .datasheet-body .column-left td:nth-child(2) {
     width: 60%;
   }
 
@@ -668,16 +674,36 @@ div#overview-page.active {
   .column-right .column-padding {
     padding-top: 0;
   }
+
   div#overview-page.active {
     display: block;
   }
+
   div#overview-page .left-column,
   div#overview-page .right-column {
     flex-basis: 100%;
   }
+
   #overview-page .visibility-button {
     display:block;
-  }  
+  }
+
+  .stats-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .stats-model-name {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+
+  .stats-model-name.first {
+    margin-top: 0;
+  }
 }
 
 /* Landscape */
@@ -685,6 +711,7 @@ div#overview-page.active {
   aside {
     width: 50%;
   }
+
   .datasheet header {
     display: flex;
     align-items: center;
