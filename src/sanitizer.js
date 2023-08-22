@@ -1,7 +1,9 @@
 class Sanitizer {
   static sanitize(roster) {
     Logger.log('Sanitizing data...');
+    roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
+    roster = this.removeDuplicateStatlines(roster);
     roster = this.addTooltips(roster, roster.rules);
     roster = this.flattenSelections(roster);
     roster = this.addSidebarSelections(roster);
@@ -11,12 +13,7 @@ class Sanitizer {
      * - Better styles for toolips
      * - Fix missing space between commas in abilities and keywords
      *  Where to get stratagems?
-     * - Fix Stats for multiple stat units (e.g. zoanthropes)
-     * - Fix movement stat showing : instead of "
      * - Fix CORE abilities, show faction abilities (different values in real datasheet compared to here)
-     * - Add extra graphics elements
-     * 
-     *  Super later on:
      * - check small mobile portait mode
      * 
      */
@@ -24,6 +21,48 @@ class Sanitizer {
     Logger.log('Finished sanitizing data.');
 
     return roster;
+  }
+
+  static removeDuplicateStatlines(roster) {
+    const isDuplicateStat = (stats, compareStats) => Object.keys(stats).every((key) => {
+      if (key === 'name') {
+        return compareStats[key] !== stats[key];
+      } else {
+        return compareStats[key] === stats[key];
+      }
+    });
+
+    return {
+      ...roster,
+      units: roster.units.map((unit) => ({
+        ...unit,
+        stats: unit.stats.reduce((newStats, current) => {
+          const duplicateStat = newStats.find((stats) => isDuplicateStat(stats, current));
+
+          if (duplicateStat) {
+            duplicateStat.name += `, ${current.name}`;
+          } else {
+            newStats.push(current);
+          }
+          
+          return newStats;
+        }, []),
+      })),
+    };
+  }
+
+  static cleanUpText(roster) {
+    return this.mutateEachStringInObject(roster, (string) => {
+      return string
+        .replace(/(\w)- *?(\w)/g, '$1-$2') // Remove extra spaces with inline dashes (a- b -> a-b)
+        .replace(/  */g, ' ') // Remove double (or more) spaces
+        .replace(/ +\n */g, '\n') // Remove extra spaces around line separators
+        .replace(/ +, */g, ', ') // Remove spaces before and after commas, leave only 1 after
+        .replace(/([A-Z]{3,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
+        // Replace uppercase words with bold capitalized versions
+        .replace(/^(\d):$/g, '$1"') // replace mistake in movement data where : was placed instead of "
+        .trim();
+    });
   }
 
   static addSidebarSelections(roster) {
@@ -93,7 +132,7 @@ class Sanitizer {
           abilityNames: addNestedTooltips(unit.abilities.abilityNames),
           abilities: unit.abilities.abilities.map((ability) => ({
             ...ability,
-            name: addTooltip(ability.name),
+            description: addTooltip(ability.description),
           })),
         },
         keywords: addNestedTooltips(unit.keywords),
@@ -119,6 +158,18 @@ class Sanitizer {
 
   static removeDuplicateFromArray(array) {
     return array.filter((element, index) => array.indexOf(array.find((compareElement) => this.isDeepEqual(compareElement, element))) === index);
+  }
+
+  static mutateEachStringInObject(object, callback) {
+    Object.keys(object).forEach((key) => {
+      if (this.isObject(object[key])) {
+        return this.mutateEachStringInObject(object[key], callback);
+      } else if (typeof object[key] === 'string') {
+        object[key] = callback(object[key]) || '';
+      }
+    });
+
+    return object;
   }
 
   static isDeepEqual(object1, object2) {

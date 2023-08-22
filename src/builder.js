@@ -131,9 +131,8 @@ class Builder {
 
     if (unit.rangedWeapons.length) {
       rangedWeaponsTable = this.createTable([
-        ['', 'RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
+        ['RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
         ...unit.rangedWeapons.map((weapon) => ([
-          '',
           `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
@@ -147,9 +146,8 @@ class Builder {
 
     if (unit.meleeWeapons.length) {
       meleeWeaponsTable = this.createTable([
-        ['', 'MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
+        ['MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
         ...unit.meleeWeapons.map((weapon) => ([
-          '',
           `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
@@ -245,20 +243,23 @@ class Builder {
         <div class="unit-name">
           ${unit.name}
         </div>
-        <div class="stats-wrapper">
-          ${unit.stats.map((stats) => `
+          ${unit.stats.map((stats, index) => `
+          <div class="stats-wrapper">
             ${Object.keys(stats).filter((stat) => stat !== 'name').map((stat) => `
               <div class="stat">
-                <div class="stat-name">
-                  ${stat}
-                </div>
+                ${index === 0 ? `
+                  <div class="stat-name">
+                    ${stat}
+                  </div>
+                ` : ''}
                 <div class="stat-value">
                   ${stats[stat]}
                 </div>
               </div>
             `).join('')}
+            ${unit.stats.length > 1 ? `<div class="stats-model-name${index === 0 ? ' first' : ''}">${stats.name}</div>` : ''}
+            </div>
           `).join('')}
-        </div>
       </header>
     `;
   }
