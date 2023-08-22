@@ -3,14 +3,11 @@ class Sanitizer {
     Logger.log('Sanitizing data...');
     roster = Sanitizer.removeDuplicateUnits(roster);
     roster = Sanitizer.addTooltips(roster, roster.rules);
+    roster = Sanitizer.flattenSelections(roster);
+    roster = Sanitizer.addSidebarSelections(roster);
 
     /**
      * 
-     * 
-     * 
-     * - Only show important selections
-     *  Warlord
-     *  If a datasheet is duplicated with different selections (Acidfex + rupturefex)
      * - Better styles for toolips
      * - Fix missing space between commas in abilities and keywords
      * - Build overview page
@@ -30,22 +27,89 @@ class Sanitizer {
     return roster;
   }
 
-  static addTooltips(object, rules) {
-    const objKeys = Object.keys(object);
+  static addSidebarSelections(roster) {
+    return {
+      ...roster,
+      units: roster.units.map((unit, index) => {
+        const duplicateUnit = roster.units.find((compareUnit, compareIndex) => compareUnit.name === unit.name && compareIndex !== index);
+        console.log(duplicateUnit);
 
-    objKeys.forEach((key) => {
-      if (Sanitizer.isObject(object[key])) {
-        object[key] = Sanitizer.addTooltips(object[key], rules);
-      } else {
-        rules.forEach((rule) => {
-          if (object[key].includes(rule.name)) {
-            object[key] = object[key].replace(rule.name, Builder.getTooltip(rule.name, rule.description));
-          }
-        });
-      }
+        return {
+          ...unit,
+          sidebarSelections: unit.selections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.selections.find((duplicateSelection) => Sanitizer.isDeepEqual(duplicateSelection, selection))),
+        }
+      }),
+    };
+  }
+
+  static flattenSelections(roster) {
+    return {
+      ...roster,
+      units: roster.units.map((unit) => ({
+        ...unit,
+        selections: 
+        unit.selections.reduce((newSelections, selections) => {
+          selections.forEach((selection) => {
+            const duplicateSelection = newSelections.find((newSelection) => selection.includes(newSelection.name) || newSelection.name.includes(selection));
+            const regex = /^(?:(\d+)x)? ?(.*)$/;
+            const matches = regex.exec(selection);
+            const count = parseInt(matches[1]) || 1;
+            const name = matches[2];
+            
+            if (duplicateSelection) {
+              duplicateSelection.count += count;
+            } else {
+              newSelections.push({
+                name,
+                count,
+              });
+            }
+          });
+
+          return newSelections;
+        }, []),
+      })),
+    };
+  }
+
+  static addTooltips(roster, rules) {
+    const addNestedTooltips = (strings) => strings.map((string) => addTooltips(string));
+    const addTooltips = (strings) => strings.map((string) => addTooltip(string));
+    
+    const addTooltip = (string) => {
+      rules.forEach((rule) => {
+        if (string.includes(rule.name)) {
+          string = string.replace(rule.name, Builder.getTooltip(rule.name, rule.description));
+        }
+      });
+
+      return string;
+    }
+
+    return ({
+      ...roster,
+      units: roster.units.map((unit) => ({
+        ...unit,
+        abilities: {
+          ...unit.abilities,
+          abilityNames: addNestedTooltips(unit.abilities.abilityNames),
+          abilities: unit.abilities.abilities.map((ability) => ({
+            ...ability,
+            name: addTooltip(ability.name),
+          })),
+        },
+        keywords: addNestedTooltips(unit.keywords),
+        meleeWeapons: unit.meleeWeapons.map((weapon) => ({
+          ...weapon,
+          keywords: addTooltips(weapon.keywords),
+        })),
+        rangedWeapons: unit.rangedWeapons.map((weapon) => ({
+          ...weapon,
+          keywords: addTooltips(weapon.keywords),
+        })),
+        ruleKeys: addNestedTooltips(unit.ruleKeys),
+      })),
     });
-
-    return object;
   }
 
   static removeDuplicateUnits(roster) {
