@@ -244,6 +244,7 @@ button {
   font-size: 1.25rem;
   text-transform: capitalize;
   font-weight: 300;
+  min-height: 100px;
 }
 
 button:hover {
@@ -593,7 +594,7 @@ div.rules .rule-row {
     position: absolute;
     border: 1px solid var(--border-primary);
     background: var(--background-primary);
-    height: 30px;
+    min-height: 30px;
     width: 30px;
     padding: 0;
     border-radius: 50%;

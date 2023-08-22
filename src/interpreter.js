@@ -163,7 +163,7 @@ class Interpreter {
           const strength = matches[4] || '';
           const armorPenetration = matches[5] || '';
           const damage = matches[6] || '';
-          const keywords = matches[7].replace('-', '').split(',').filter((keyword) => !!keyword) || '';
+          const keywords = matches[7].replace('-', '').split(',').map((keyword) => keyword.trim()).filter((keyword) => !!keyword) || '';
 
           weapons.push({
             name,
@@ -486,7 +486,7 @@ class Interpreter {
 
   static getArrayFromHtml(htmlElement, separator = ',') {
     if (Interpreter.elementExists(htmlElement)) {
-      return htmlElement.innerHTML.trim().split(separator);
+      return htmlElement.innerHTML.trim().split(separator).map((keyword) => keyword.trim());
     } else {
       return [];
     }

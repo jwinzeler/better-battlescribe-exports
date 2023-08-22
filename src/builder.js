@@ -22,7 +22,7 @@ class Builder {
 
   static getMain(roster, armyRules) {
     const overviewPage = Builder.getOverviewPage(armyRules);
-    const unitPages = roster.units.map((unit) => Builder.getUnitPage(unit));
+    const unitPages = roster.units.map((unit, index) => Builder.getUnitPage(unit, index));
 
     return `
       <main>
@@ -84,8 +84,8 @@ class Builder {
     `;
   }
 
-  static getUnitPage(unit) {
-    const id = Builder.stringToId(unit.name);
+  static getUnitPage(unit, index) {
+    const id = Builder.stringToId(unit.name + index);
 
     return `
       <div id="${id}-page" class="page">
@@ -256,24 +256,24 @@ class Builder {
       <aside>
         ${Builder.getToggleAsideButton('X', 'close')}
         ${Builder.getOverviewButton(roster)}
-        ${roster.units.map((unit) => Builder.getUnitButton(unit)).join('')}
+        ${roster.units.map((unit, index) => Builder.getUnitButton(unit, index)).join('')}
       </aside>
     `;
   }
 
-  static getUnitButton(unit) {
-    const id = Builder.stringToId(unit.name);
+  static getUnitButton(unit, index) {
+    const id = Builder.stringToId(unit.name + index);
 
     return `
       <button onclick="togglePage('${id}-page')" id="${id}-button">
         ${unit.name}
-        <div class="overview-info">
-          ${unit.selections.map((selection) => `
+        ${unit.sidebarSelections.length ? `
+          <div class="overview-info">
             <div>
-              <span class="bold">Selections: </span>${selection.join('')}
+              ${unit.sidebarSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
             </div>
-          `).join('')}
-        </div>
+          </div>
+        ` : ''}        
       </button>
     `;
   }
@@ -320,18 +320,13 @@ class Builder {
   }
 
   static getTooltip(text, description) {
-    return `
-      <span class="tooltip-on-hover">
-        ${text}
-        <div class="tooltip">
-          <span class="bold">
-            ${text}:¨
-          </span>
-          <br />
-          ${description}
-        </div>
-      </span>
-    `;
+    return `<span class="tooltip-on-hover">${text}<div class="tooltip">
+        <span class="bold">
+          ${text}:
+        </span>
+        <br />
+        ${description}
+      </div></span>`;
   }
 
   static stringToId(string) {
