@@ -1,3 +1,8 @@
+// TODO 
+// color the stratagems
+//
+//
+
 class HardcodeArmyRules {
 	static data = {
 		imperium_adeptus_mechanicus: {
