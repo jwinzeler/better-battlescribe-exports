@@ -7,16 +7,15 @@ class Main {
     console.log(sanitizedRoster);
     
     const output = Builder.getOutput(sanitizedRoster);
-    console.log(output);
     
     const download = document.getElementById('downloadButton');
-    const blob = window.URL.createObjectURL(new Blob([output.innerHTML]), { type: "text/html"});
+    const blob = window.URL.createObjectURL(new Blob([output]), { type: "text/html"});
     download.setAttribute('href', blob);
     download.setAttribute('download', `${roster.name} actually usable.html`);
 
     const preview = document.getElementById('preview').contentWindow.document;
     preview.open();
-    preview.write(output.innerHTML);
+    preview.write(output);
     preview.close();
   }
 }
