@@ -241,6 +241,7 @@ button {
   font-size: 1.25rem;
   text-transform: capitalize;
   font-weight: 300;
+  min-height: 100px;
 }
 
 button:hover {
