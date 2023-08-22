@@ -1,15 +1,10 @@
-// TODO 
-// color the stratagems
-//
-//
-
 class HardcodeArmyRules {
 	static data = {
 		imperium_adeptus_mechanicus: {
 			army_rules: [{
 				name: `DOCTRINA IMPERATIVES`,
 				description: `At the start of the battle round, you can select one of the
-			Doctrina Imperatives below. Until the end of the battle
+			Doctrina Imperatives below.\t\t Until the end of the battle
 			round, that Doctrina Imperative is active for your army, and
 			all units from your army that have the Doctrina Imperatives
 			ability gain the relevant abilities shown below.

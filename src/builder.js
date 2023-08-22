@@ -50,17 +50,21 @@ class Builder {
   static getRules(name, id, rules) {
     const rulesHtml = rules.map((rule) => `<div class='rule-row header'>${rule.name.toUpperCase()}</div><div class='rule-row'>${rule.description}</div>`);
     return `
-        <div id="${id}">
-          <h4>${name}</h4>
+        <div id="${id}" class='rules visible'>
+          <h4><span>${name}</span><span onclick="toggleRulesVisibility('${id}')" class="visibility-button">-</span></h4>
           ${rulesHtml.join('')}
         </div>
     `;
   }
 
+  static getStratagemThemeClass(when) {
+    if (when.toLowerCase().includes('opponent')) return "enemy-turn";
+    return when.toLowerCase().includes('your') ? "your-turn" : "both-turn";
+  }
+
   static getStratagems(stratagems) {
-    const stratagemsHtml = stratagems.map((gem) => {
-      return `
-      <div class="stratagem">
+    const stratagemsHtml = stratagems.map((gem) => `
+      <div class="stratagem ${Builder.getStratagemThemeClass(gem.when)}">
         <div class='rule-row header'>${gem.name.toUpperCase()}</div>
         <div class='rule-row'><b>When: </b>${gem.when}</div>
         <div class='rule-row'><b>Target: </b>${gem.target}</div>
@@ -68,8 +72,7 @@ class Builder {
         ${gem.restrictions ? `<div class='rule-row'><b>Restrictions: </b>${gem.restrictions}</div>` : ""}
         <div class='cost'>${gem.cost} CP</div>
       </div>
-      `;
-    });
+      `);
 
     return `
         <div id="stratagems">
