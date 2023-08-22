@@ -8,7 +8,7 @@ class Interpreter {
       name: Interpreter.getRosterName(contents),
       battleSize: Interpreter.getBattleSize(contents),
       faction: Interpreter.getFaction(contents),
-      detachment: Interpreter.getDetachment(contents, Interpreter.getRules(contents)),
+      detachment: Interpreter.getDetachment(contents),
       units: Interpreter.getUnits(contents),
       rules: Interpreter.getRules(contents),
     };
