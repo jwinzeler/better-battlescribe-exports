@@ -561,6 +561,11 @@ div.rules .rule-row {
 
 #overview-page .visibility-button {
   display:none;
+  border: 1px solid;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  text-align: center;
 }
 
 /* Phones */
