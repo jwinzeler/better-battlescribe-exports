@@ -486,7 +486,7 @@ class Interpreter {
 
   static getArrayFromHtml(htmlElement, separator = ',') {
     if (Interpreter.elementExists(htmlElement)) {
-      return htmlElement.innerHTML.trim().split(separator).map((keyword) => keyword.trim();
+      return htmlElement.innerHTML.trim().split(separator).map((keyword) => keyword.trim());
     } else {
       return [];
     }

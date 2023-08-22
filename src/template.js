@@ -198,6 +198,9 @@ html, body {
   --border-datasheet: #3e1844;
   --background-datasheet-header: ##1F2123;
   --sidebar-width: 200px;
+  --your-turn-stratagem-color: #0e4d6b;
+  --both-turn-stratagem-color: #1d6357;
+  --enemy-turn-stratagem-color: #a11217;
   margin: 0;
   background: var(--background-primary);
   box-sizing: border-box;
@@ -452,6 +455,119 @@ button.toggle-aside {
   display: none;
 }
 
+div#overview-page.active {
+  padding: 2rem;
+  display: flex;
+  column-gap: 1rem;
+  color: var(--text-datasheet);
+  background: var(--background-datasheet);
+  height: 100%;
+}
+
+#overview-page .left-column,
+#overview-page .right-column {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: calc(50% - 0.5rem);
+}
+
+#overview-page h4 {
+  color: var(--text-primary);
+  background: var(--background-primary);
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0;
+}
+
+#overview-page .rule-row {
+  margin-bottom: 0.5rem;
+}
+#overview-page .rule-row.header {
+  font-weight: bold;
+}
+
+#overview-page .stratagems-wrapper {
+  display: flex;
+  gap: 5px;
+  flex-flow: row wrap;
+  width: 100%;  
+}
+
+#overview-page .stratagem {
+  border: 1px solid;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 45%;
+}
+
+#overview-page .cost {
+  color: var(--text-primary);
+  background: var(--background-primary);
+  padding: 0.5rem;
+  display: block;
+  width: 2.5rem;
+  text-align: center;
+  border-radius: 0 0 0 50%;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#overview-page .enemy-turn .cost {
+  background: var(--enemy-turn-stratagem-color);
+}
+#overview-page .stratagem.enemy-turn{
+  border-color: var(--enemy-turn-stratagem-color);
+}
+#overview-page .stratagem.enemy-turn .header,
+#overview-page .stratagem.enemy-turn b  {
+  color: var(--enemy-turn-stratagem-color);
+}
+
+#overview-page .your-turn .cost {
+  background: var(--your-turn-stratagem-color);
+}
+#overview-page .stratagem.your-turn {
+  border-color: var(--your-turn-stratagem-color);
+}
+#overview-page .stratagem.your-turn .header,
+#overview-page .stratagem.your-turn b  {
+  color: var(--your-turn-stratagem-color);
+}
+
+#overview-page .both-turn .cost {
+  background: var(--both-turn-stratagem-color);
+}
+#overview-page .stratagem.both-turn {
+  border-color: var(--both-turn-stratagem-color);
+}
+#overview-page .stratagem.both-turn .header,
+#overview-page .stratagem.both-turn b  {
+  color: var(--both-turn-stratagem-color);
+}
+
+div.rules.visible .rule-row {
+  display: block;
+}
+
+div.rules .rule-row {
+  display: none;
+}
+
+#overview-page .visibility-button {
+  display:none;
+  border: 1px solid;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+}
+
 /* Phones */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
   main {
@@ -482,7 +598,8 @@ button.toggle-aside {
     display: block;
     position: absolute;
     border: 1px solid var(--border-primary);
-    height: 30px;
+    background: var(--background-primary);
+    min-height: 30px;
     width: 30px;
     padding: 0;
     border-radius: 50%;
@@ -529,6 +646,16 @@ button.toggle-aside {
   .column-right .column-padding {
     padding-top: 0;
   }
+  div#overview-page.active {
+    display: block;
+  }
+  div#overview-page .left-column,
+  div#overview-page .right-column {
+    flex-basis: 100%;
+  }
+  #overview-page .visibility-button {
+    display:block;
+  }  
 }
 
 /* Landscape */
@@ -565,4 +692,11 @@ togglePage = (id) => {
   document.getElementById(id)?.classList.add('active');
   toggleAside();
 };
-`.replaceAll(/[\n\s]/g, '');
+changeVisibilityText = (id, isVisible) => {
+  document.querySelector('#'+id+' .visibility-button').innerHTML = isVisible ? "-" : "+";   
+};
+toggleRulesVisibility = (id) => {
+  document.querySelector('#'+id).classList.toggle('visible');
+  changeVisibilityText(id, document.querySelector('#'+id).classList.contains('visible'))
+};
+`.replaceAll(/[\n]/g, '');
