@@ -620,6 +620,7 @@ div#overview-page.active {
     position: absolute;
     border: 1px solid var(--border-primary);
     background: var(--background-primary);
+    color: var(--text-primary);
     min-height: 30px;
     width: 30px;
     padding: 0;
