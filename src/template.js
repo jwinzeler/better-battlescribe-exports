@@ -337,7 +337,6 @@ div.page.active {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
-  table-layout: fixed;
 }
 
 .datasheet-body .column-left th:first-child,
@@ -693,7 +692,6 @@ div#overview-page.active {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    width: 100%;
   }
 
   .stats-model-name {
@@ -718,12 +716,18 @@ div#overview-page.active {
     justify-content: space-between;
     flex-direction: row;
   }
+  .main-stats-wrapper {
+    width: 320px;
+  }
 }
 
 /* Portrait */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: portrait) {
   aside {
     width: 90%;
+  }
+  .stats-wrapper {
+    width: 100%;
   }
 }
 
