@@ -213,6 +213,10 @@ html, body {
   user-select: none;
 }
 
+b {
+  font-weight: 500;
+}
+
 body {
   display: flex;
   flex-direction: row;
@@ -230,9 +234,10 @@ main {
   height: 100vh;
   overflow-y: scroll;
   width: calc(100% - var(--sidebar-width));
+  background: var(--background-datasheet);
 }
 
-button {
+.sidebar-button {
   appearance: unset;
   border: none;
   border-bottom: 1px solid var(--border-primary);
@@ -247,16 +252,20 @@ button {
   min-height: 100px;
 }
 
-button:hover {
+.sidebar-button:hover {
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
 
-button.overview {
+.sidebar-button.overview {
   border-bottom: 1px solid var(--border-primary);
   font-size: 1.25rem;
   padding: 1rem .5rem;
   text-align: center;
+}
+
+.sidebar-button.active {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 div.overview-info {
@@ -297,15 +306,14 @@ div.page.active {
 
 .datasheet header {
   padding: 2rem;
+  background: var(--background-primary);
 }
 
 .datasheet-body {
   height: 100%;
-  background: var(--background-datasheet);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  overflow-y: scroll;
 }
 
 .datasheet-body .column-left {
@@ -455,6 +463,32 @@ button.toggle-aside {
   display: none;
 }
 
+details.title-details {
+  padding: .5rem 0;
+}
+
+.title-details > summary {
+  color: var(--text-primary);
+  background: var(--background-primary);
+  padding: 0.5rem;
+  margin-bottom: .5rem;
+}
+
+summary {
+  font-weight: 500;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.content-details > summary {
+  margin-bottom: 1rem;
+}
+
+details.content-details {
+  padding: 0 .5rem;
+  margin-bottom: .5rem;
+}
+
 div#overview-page.active {
   padding: 2rem;
   display: flex;
@@ -471,22 +505,12 @@ div#overview-page.active {
   flex-basis: calc(50% - 0.5rem);
 }
 
-#overview-page h4 {
-  color: var(--text-primary);
-  background: var(--background-primary);
-  padding: 0.5rem;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0;
-}
-
 #overview-page .rule-row {
   margin-bottom: 0.5rem;
 }
 #overview-page .rule-row.header {
-  font-weight: bold;
+  font-weight: 500;
 }
-
 #overview-page .stratagems-wrapper {
   display: flex;
   gap: 5px;
@@ -496,7 +520,6 @@ div#overview-page.active {
 
 #overview-page .stratagem {
   border: 1px solid;
-  margin-bottom: 0.5rem;
   padding: 0.5rem;
   position: relative;
   flex-grow: 1;
@@ -512,7 +535,7 @@ div#overview-page.active {
   width: 2.5rem;
   text-align: center;
   border-radius: 0 0 0 50%;
-  font-weight: bold;
+  font-weight: 500;
   position: absolute;
   top: 0;
   right: 0;
@@ -521,9 +544,11 @@ div#overview-page.active {
 #overview-page .enemy-turn .cost {
   background: var(--enemy-turn-stratagem-color);
 }
+
 #overview-page .stratagem.enemy-turn{
   border-color: var(--enemy-turn-stratagem-color);
 }
+
 #overview-page .stratagem.enemy-turn .header,
 #overview-page .stratagem.enemy-turn b  {
   color: var(--enemy-turn-stratagem-color);
@@ -532,9 +557,11 @@ div#overview-page.active {
 #overview-page .your-turn .cost {
   background: var(--your-turn-stratagem-color);
 }
+
 #overview-page .stratagem.your-turn {
   border-color: var(--your-turn-stratagem-color);
 }
+
 #overview-page .stratagem.your-turn .header,
 #overview-page .stratagem.your-turn b  {
   color: var(--your-turn-stratagem-color);
@@ -543,20 +570,14 @@ div#overview-page.active {
 #overview-page .both-turn .cost {
   background: var(--both-turn-stratagem-color);
 }
+
 #overview-page .stratagem.both-turn {
   border-color: var(--both-turn-stratagem-color);
 }
+
 #overview-page .stratagem.both-turn .header,
 #overview-page .stratagem.both-turn b  {
   color: var(--both-turn-stratagem-color);
-}
-
-div.rules.visible .rule-row {
-  display: block;
-}
-
-div.rules .rule-row {
-  display: none;
 }
 
 #overview-page .visibility-button {
@@ -599,6 +620,7 @@ div.rules .rule-row {
     position: absolute;
     border: 1px solid var(--border-primary);
     background: var(--background-primary);
+    color: var(--text-primary);
     min-height: 30px;
     width: 30px;
     padding: 0;
@@ -689,14 +711,12 @@ toggleAside = () => {
 };
 togglePage = (id) => {
   document.querySelectorAll('.page').forEach((page) => page.classList.remove('active'));
-  document.getElementById(id)?.classList.add('active');
+  document.getElementById(id + '-page')?.classList.add('active');
+  document.querySelectorAll('.sidebar-button').forEach((button) => button.classList.remove('active'));
+  document.getElementById(id + '-button')?.classList.add('active');
   toggleAside();
 };
 changeVisibilityText = (id, isVisible) => {
   document.querySelector('#'+id+' .visibility-button').innerHTML = isVisible ? "-" : "+";   
-};
-toggleRulesVisibility = (id) => {
-  document.querySelector('#'+id).classList.toggle('visible');
-  changeVisibilityText(id, document.querySelector('#'+id).classList.contains('visible'))
 };
 `.replaceAll(/[\n]/g, '');
