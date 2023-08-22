@@ -451,8 +451,8 @@ button.toggle-aside {
   display: none;
 }
 
-/* Iphone */
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
+/* Phones */
+@media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
   main {
     width: 100%;
   }
@@ -493,18 +493,60 @@ button.toggle-aside {
     left: 5px;
     right: auto;
   }
+
+  .datasheet header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .datasheet-body {
+    flex-direction: column;
+    flex-wrap: initial;
+  }
+
+  .datasheet-body .column-left table {
+    margin-bottom: 0.5rem;
+  }
+
+  .datasheet-body .column-left th:first-child,
+  .datasheet-body .column-left td:first-child {
+    display: none;
+  }
+
+  .datasheet-body .column-left th:nth-child(2),
+  .datasheet-body .column-left td:nth-child(2) {
+    width: 60%;
+  }
+
+  .column-right .column-padding,
+  .column-left .column-padding {
+    padding-bottom: 0;
+  }
+
+  .column-right .column-padding {
+    padding-top: 0;
+  }
 }
 
 /* Landscape */
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (orientation: landscape) {
+@media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: landscape) {
   aside {
     width: 50%;
   }
+  .datasheet header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+  }
 }
+
 /* Portrait */
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (orientation: portrait) {
+@media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: portrait) {
   aside {
-    width: 70%;
+    width: 90%;
   }
 }
 

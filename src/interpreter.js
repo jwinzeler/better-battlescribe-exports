@@ -340,33 +340,32 @@ class Interpreter {
     return name;
   }
 
-  static getDetachmentAbilities(html, allRules) {
+  static getDetachmentAbilities(html) {
     Logger.log('Finding detachment abilites...');
+    const abilities = [];
 
-    const detachmentRulesHtml = html.querySelector('p.rule-names > .italic');
+    const tableRows = html.querySelectorAll('tr');
+    tableRows.forEach((tableRow) => {
+      const rowText = Interpreter.getStringFromHtml(tableRow);
+      if (rowText.includes('<th>')) {
+        return;
+      }
 
-    const abilities = allRules.filter((rule) => rule.name === detachmentRulesHtml.innerHTML);
-    // console.log(ability);
-    // tableRows.forEach((tableRow) => {
-    //   const rowText = Interpreter.getStringFromHtml(tableRow);
-    //   if (rowText.includes('<th>')) {
-    //     return;
-    //   }
-    //   console.log('rowText', rowText);
-    //   const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
-    //   const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
+      const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
+      const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
 
-    //   abilities.push({
-    //     name,
-    //     description,
-    //   });
+      abilities.push({
+        name,
+        description,
+      });
 
-    //   Logger.logRosterValue(`${name}: ${description}`);
-    // });
+      Logger.logRosterValue(`${name}: ${description}`);
+    });
 
     if (!abilities.length) {
       Logger.warn('No detachment abilities found!');
     }
+
     return abilities;
   }
 
