@@ -21,7 +21,7 @@ class Builder {
   }
 
   static getMain(roster, armyRules) {
-    const overviewPage = Builder.getOverviewPage(armyRules);
+    const overviewPage = armyRules ? Builder.getOverviewPage(armyRules) : '';
     const unitPages = roster.units.map((unit, index) => Builder.getUnitPage(unit, index));
 
     return `

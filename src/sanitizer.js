@@ -10,7 +10,6 @@ class Sanitizer {
      * 
      * - Better styles for toolips
      * - Fix missing space between commas in abilities and keywords
-     * - Build overview page
      *  Where to get stratagems?
      * - Fix Stats for multiple stat units (e.g. zoanthropes)
      * - Fix movement stat showing : instead of "
@@ -37,7 +36,7 @@ class Sanitizer {
         return {
           ...unit,
           sidebarSelections: unit.selections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.selections.find((duplicateSelection) => Sanitizer.isDeepEqual(duplicateSelection, selection))),
-        }
+        };
       }),
     };
   }
@@ -47,27 +46,27 @@ class Sanitizer {
       ...roster,
       units: roster.units.map((unit) => ({
         ...unit,
-        selections: 
-        unit.selections.reduce((newSelections, selections) => {
-          selections.forEach((selection) => {
-            const duplicateSelection = newSelections.find((newSelection) => selection.includes(newSelection.name) || newSelection.name.includes(selection));
-            const regex = /^(?:(\d+)x)? ?(.*)$/;
-            const matches = regex.exec(selection);
-            const count = parseInt(matches[1]) || 1;
-            const name = matches[2];
-            
-            if (duplicateSelection) {
-              duplicateSelection.count += count;
-            } else {
-              newSelections.push({
-                name,
-                count,
-              });
-            }
-          });
+        selections:
+          unit.selections.reduce((newSelections, selections) => {
+            selections.forEach((selection) => {
+              const duplicateSelection = newSelections.find((newSelection) => selection.includes(newSelection.name) || newSelection.name.includes(selection));
+              const regex = /^(?:(\d+)x)? ?(.*)$/;
+              const matches = regex.exec(selection);
+              const count = parseInt(matches[1]) || 1;
+              const name = matches[2];
 
-          return newSelections;
-        }, []),
+              if (duplicateSelection) {
+                duplicateSelection.count += count;
+              } else {
+                newSelections.push({
+                  name,
+                  count,
+                });
+              }
+            });
+
+            return newSelections;
+          }, []),
       })),
     };
   }
@@ -75,7 +74,7 @@ class Sanitizer {
   static addTooltips(roster, rules) {
     const addNestedTooltips = (strings) => strings.map((string) => addTooltips(string));
     const addTooltips = (strings) => strings.map((string) => addTooltip(string));
-    
+
     const addTooltip = (string) => {
       rules.forEach((rule) => {
         if (string.includes(rule.name)) {
@@ -84,7 +83,7 @@ class Sanitizer {
       });
 
       return string;
-    }
+    };
 
     return ({
       ...roster,
