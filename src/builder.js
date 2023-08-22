@@ -35,10 +35,10 @@ class Builder {
 
   static getOverviewPage(armyRules) {
     return `
-        <div id="overview-page" class="page">
+        <div id="overview-page" class="page active">
           <div class="left-column">
-            ${Builder.getRules('Army rules', 'army-rules', armyRules.army_rules)}
-            ${Builder.getRules('Detachment rules', 'detachment-rules', armyRules.detachment_rules)}
+            ${Builder.getRules('Army rules', armyRules.army_rules)}
+            ${Builder.getRules('Detachment rules', armyRules.detachment_rules)}
           </div>
           <div class="right-column">
             ${Builder.getStratagems(armyRules.stratagems)}
@@ -47,13 +47,23 @@ class Builder {
     `;
   }
 
-  static getRules(name, id, rules) {
-    const rulesHtml = rules.map((rule) => `<div class='rule-row header'>${rule.name.toUpperCase()}</div><div class='rule-row'>${rule.description}</div>`);
+  static getRules(name, rules) {
     return `
-        <div id="${id}" class='rules visible'>
-          <h4><span>${name}</span><span onclick="toggleRulesVisibility('${id}')" class="visibility-button">-</span></h4>
-          ${rulesHtml.join('')}
-        </div>
+      <div>
+        <details class="title-details" open>
+          <summary>
+            ${name}
+          </summary>
+          ${rules.map((rule) => `
+            <details class="content-details" open>
+              <summary>
+                ${rule.name.toLowerCase()}
+              </summary>
+              ${rule.description}
+            </details>
+          `).join('')}
+        </details>
+      </div>
     `;
   }
 
@@ -63,24 +73,26 @@ class Builder {
   }
 
   static getStratagems(stratagems) {
-    const stratagemsHtml = stratagems.map((gem) => `
-      <div class="stratagem ${Builder.getStratagemThemeClass(gem.when)}">
-        <div class='rule-row header'>${gem.name.toUpperCase()}</div>
-        <div class='rule-row'><b>When: </b>${gem.when}</div>
-        <div class='rule-row'><b>Target: </b>${gem.target}</div>
-        <div class='rule-row'><b>Effect: </b>${gem.effect}</div>
-        ${gem.restrictions ? `<div class='rule-row'><b>Restrictions: </b>${gem.restrictions}</div>` : ""}
-        <div class='cost'>${gem.cost} CP</div>
+    const stratagemsHtml = stratagems.map((stratagem) => `
+      <div class="stratagem ${Builder.getStratagemThemeClass(stratagem.when)}">
+        <div class='rule-row header'>${stratagem.name.toUpperCase()}</div>
+        <div class='rule-row'><b>When: </b>${stratagem.when}</div>
+        <div class='rule-row'><b>Target: </b>${stratagem.target}</div>
+        <div class='rule-row'><b>Effect: </b>${stratagem.effect}</div>
+        ${stratagem.restrictions ? `<div class='rule-row'><b>Restrictions: </b>${stratagem.restrictions}</div>` : ""}
+        <div class='cost'>${stratagem.cost} CP</div>
       </div>
       `);
 
     return `
-        <div id="stratagems">
-          <h4>Stratagems</h4>
+        <details class="title-details" id="stratagems" open>
+          <summary>
+            Stratagems
+          </summary>
           <div class="stratagems-wrapper">
-          ${stratagemsHtml.join('')}
+            ${stratagemsHtml.join('')}
           </div>
-        </div>
+        </details>
     `;
   }
 
@@ -122,7 +134,7 @@ class Builder {
         ['', 'RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
         ...unit.rangedWeapons.map((weapon) => ([
           '',
-          `${weapon.name}${weapon.keywords.length ? `<br /><span class="bold small">[${weapon.keywords.join(', ')}]` : ''}</span>`,
+          `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
           weapon.skill,
@@ -138,7 +150,7 @@ class Builder {
         ['', 'MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
         ...unit.meleeWeapons.map((weapon) => ([
           '',
-          `${weapon.name}${weapon.keywords.length ? `<br /><span class="bold small">[${weapon.keywords.join(', ')}]` : ''}</span>`,
+          `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
           weapon.skill,
@@ -181,7 +193,7 @@ class Builder {
     ];
 
     if (unit.ruleKeys) {
-      tableData.push([`CORE: <span class="bold">${unit.ruleKeys.join(', ')}</span>`]);
+      tableData.push([`CORE: <b>${unit.ruleKeys.join(', ')}</b>`]);
     }
 
     if (unit.abilities.abilities) {
@@ -189,7 +201,7 @@ class Builder {
         ...unit.abilities.abilities
           .filter((ability) => ability.name !== "Invulnerable Save")
           .map((ability) => ([
-            `<span class="bold">${ability.name}: </span>${ability.description}`,
+            `<b>${ability.name}: </b>${ability.description}`,
           ]),
           ),
       );
@@ -206,7 +218,7 @@ class Builder {
   static getBottomColumn(unit) {
     return `
       <div class="keywords">
-        KEYWORDS: <span class="bold">${unit.keywords.join(', ')}</span>
+        KEYWORDS: <b>${unit.keywords.join(', ')}</b>
       </div>
     `;
   }
@@ -265,7 +277,7 @@ class Builder {
     const id = Builder.stringToId(unit.name + index);
 
     return `
-      <button onclick="togglePage('${id}-page')" id="${id}-button">
+      <button class="sidebar-button" onclick="togglePage('${id}')" id="${id}-button">
         ${unit.name}
         ${unit.sidebarSelections.length ? `
           <div class="overview-info">
@@ -280,17 +292,17 @@ class Builder {
 
   static getOverviewButton(roster) {
     return `
-      <button onclick="togglePage('overview-page')" id="overview-button">
+      <button class="sidebar-button"  onclick="togglePage('overview')" id="overview-button">
         ${roster.name}
         <div class="overview-info">
           <div>
-            <span class="bold">Faction: </span>${roster.faction.name}
+            <b>Faction: </b>${roster.faction.name}
           </div>
           <div>
-            <span class="bold">Detachment: </span>${roster.detachment.name}
+            <b>Detachment: </b>${roster.detachment.name}
           </div>
           <div>
-            <span class="bold">Size: </span>${roster.battleSize}
+            <b>Size: </b>${roster.battleSize}
           </div>
         </div>
       </button>
