@@ -1,6 +1,6 @@
 class Main {
   static run(file) {
-    const roster = Interpreter.read(file);
+    const roster = Parser.read(file);
     console.log(roster);
 
     const sanitizedRoster = Sanitizer.sanitize(roster);
