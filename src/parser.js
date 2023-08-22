@@ -1,23 +1,23 @@
-class Interpreter {
+class Parser {
   static read(file) {
     Logger.log(`Reading file...`);
     const contents = document.createElement('div');
     contents.innerHTML = file;
 
     return {
-      name: Interpreter.getRosterName(contents),
-      battleSize: Interpreter.getBattleSize(contents),
-      faction: Interpreter.getFaction(contents),
-      detachment: Interpreter.getDetachment(contents),
-      units: Interpreter.getUnits(contents),
-      rules: Interpreter.getRules(contents),
+      name: this.getRosterName(contents),
+      battleSize: this.getBattleSize(contents),
+      faction: this.getFaction(contents),
+      detachment: this.getDetachment(contents),
+      units: this.getUnits(contents),
+      rules: this.getRules(contents),
     };
   }
 
   static getRosterName(html) {
     Logger.log('Finding roster name...');
     const nameElement = html.querySelector('h1');
-    let name = Interpreter.getStringFromHtml(nameElement);
+    let name = this.getStringFromHtml(nameElement);
     name = name.replaceAll(/(.*?)\(.*?$/g, '$1').trim();
     Logger.logRosterValue(name);
 
@@ -29,13 +29,13 @@ class Interpreter {
 
     const rules = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'div.summary',
       'h2',
       'Selection Rules',
       (summaryElement) => summaryElement.querySelectorAll('p').forEach((ruleHtml) => {
-        const rawRule = Interpreter.getStringFromHtml(ruleHtml);
+        const rawRule = this.getStringFromHtml(ruleHtml);
         const regex = /<span.*?>(.*?):<\/span>((.|\n)*)$/gm;
         const name = rawRule.replaceAll(regex, '$1').trim() || '';
         const description = rawRule.replaceAll(regex, '$2').replaceAll('()', '').trim() || '';
@@ -61,7 +61,7 @@ class Interpreter {
 
     let units = [];
 
-    Interpreter.forEachElementNotContainingText(
+    this.forEachElementNotContainingText(
       html,
       'li.force > ul > li.category',
       'h3',
@@ -69,7 +69,7 @@ class Interpreter {
       (categoryElement) => {
         const unitElements = categoryElement.querySelectorAll('ul > li.rootselection');
         unitElements.forEach((unitElement) => {
-          const unit = Interpreter.getUnit(unitElement);
+          const unit = this.getUnit(unitElement);
           units.push(unit);
         });
       }
@@ -84,22 +84,22 @@ class Interpreter {
 
   static getUnit(html) {
     return {
-      name: Interpreter.getUnitName(html),
-      pts: Interpreter.getUnitPoints(html),
-      selections: Interpreter.getUnitSelections(html),
-      keywords: Interpreter.getUnitKeywords(html),
-      ruleKeys: Interpreter.getUnitRulekeys(html),
-      abilities: Interpreter.getUnitAbilities(html),
-      meleeWeapons: Interpreter.getUnitWeapons(html, 'Melee Weapons'),
-      rangedWeapons: Interpreter.getUnitWeapons(html, 'Ranged Weapons'),
-      stats: Interpreter.getUnitStats(html),
+      name: this.getUnitName(html),
+      pts: this.getUnitPoints(html),
+      selections: this.getUnitSelections(html),
+      keywords: this.getUnitKeywords(html),
+      ruleKeys: this.getUnitRulekeys(html),
+      abilities: this.getUnitAbilities(html),
+      meleeWeapons: this.getUnitWeapons(html, 'Melee Weapons'),
+      rangedWeapons: this.getUnitWeapons(html, 'Ranged Weapons'),
+      stats: this.getUnitStats(html),
     };
   }
 
   static getUnitStats(html) {
     const stats = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'table',
       'th',
@@ -107,7 +107,7 @@ class Interpreter {
       (weaponsElement) => {
         const tableRows = weaponsElement.querySelectorAll('tr');
         tableRows.forEach((tableRow) => {
-          const rowText = Interpreter.getStringFromHtml(tableRow);
+          const rowText = this.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
           }
@@ -141,7 +141,7 @@ class Interpreter {
   static getUnitWeapons(html, type) {
     const weapons = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'table',
       'th',
@@ -149,7 +149,7 @@ class Interpreter {
       (weaponsElement) => {
         const tableRows = weaponsElement.querySelectorAll('tr');
         tableRows.forEach((tableRow) => {
-          const rowText = Interpreter.getStringFromHtml(tableRow);
+          const rowText = this.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
           }
@@ -185,13 +185,13 @@ class Interpreter {
   static getUnitAbilities(html) {
     const abilityNames = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'p',
       'span',
       'Abilities',
       (abilitiesElement) => {
-        let ability = Interpreter.getArrayFromHtml(abilitiesElement);
+        let ability = this.getArrayFromHtml(abilitiesElement);
         ability[0] = ability[0].replaceAll(/<span.*?>(.*?)<\/span>(.*?)$/g, '$2').trim();
         ability = ability.map((category) => category.replaceAll(/<\/?span.*?>/g, '').trim());
         abilityNames.push(ability);
@@ -200,7 +200,7 @@ class Interpreter {
 
     const abilities = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'table',
       'th',
@@ -208,7 +208,7 @@ class Interpreter {
       (abilitiesElement) => {
         const tableRows = abilitiesElement.querySelectorAll('tr');
         tableRows.forEach((tableRow) => {
-          const rowText = Interpreter.getStringFromHtml(tableRow);
+          const rowText = this.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
           }
@@ -233,13 +233,13 @@ class Interpreter {
   static getUnitRulekeys(html) {
     const ruleKeys = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'p',
       'span',
       'Rules',
       (rulesElement) => {
-        let ruleKey = Interpreter.getArrayFromHtml(rulesElement);
+        let ruleKey = this.getArrayFromHtml(rulesElement);
         ruleKey[0] = ruleKey[0].replaceAll(/<span.*?>(.*?)<\/span>(.*?)$/g, '$2').trim();
         ruleKey = ruleKey.map((category) => category.replaceAll(/<\/?span.*?>/g, '').trim());
         ruleKeys.push(ruleKey);
@@ -252,13 +252,13 @@ class Interpreter {
   static getUnitKeywords(html) {
     const keywords = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'p',
       'span',
       'Categories',
       (categoriesElement) => {
-        let keyword = Interpreter.getArrayFromHtml(categoriesElement);
+        let keyword = this.getArrayFromHtml(categoriesElement);
         keyword[0] = keyword[0].replaceAll(/<span.*?>(.*?)<\/span>(.*?)$/g, '$2').trim();
         keyword = keyword.map((category) => category.replaceAll(/<\/?span.*?>/g, '').trim());
         keywords.push(keyword);
@@ -271,13 +271,13 @@ class Interpreter {
   static getUnitSelections(html) {
     const selections = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'p', // Finds selections of "sub units" as well!
       'span',
       'Selections',
       (selectionsElement) => {
-        let selection = Interpreter.getArrayFromHtml(selectionsElement);
+        let selection = this.getArrayFromHtml(selectionsElement);
         selection[0] = selection[0].replaceAll(/<span.*?>(.*?)<\/span>(.*?)$/g, '$2').trim();
         selections.push(selection);
       },
@@ -288,7 +288,7 @@ class Interpreter {
 
   static getUnitPoints(html) {
     const pointsElement = html.querySelector('h4');
-    let points = Interpreter.getStringFromHtml(pointsElement);
+    let points = this.getStringFromHtml(pointsElement);
     points = points.replaceAll(/.*\[(.*?)\]/g, '$1').trim();
 
     return points;
@@ -296,7 +296,7 @@ class Interpreter {
 
   static getUnitName(html) {
     const nameElement = html.querySelector('h4');
-    let name = Interpreter.getStringFromHtml(nameElement);
+    let name = this.getStringFromHtml(nameElement);
     name = name.replaceAll(/\[.*?\]/g, '').trim();
     Logger.logRosterValue(name);
 
@@ -307,14 +307,14 @@ class Interpreter {
     let name = '';
     let abilities = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'li.force > ul > li.category > ul > li.rootselection',
       'h4',
       'Detachment',
       (summaryElement) => {
-        name = Interpreter.getDetachmentName(summaryElement);
-        abilities = Interpreter.getDetachmentAbilities(summaryElement);
+        name = this.getDetachmentName(summaryElement);
+        abilities = this.getDetachmentAbilities(summaryElement);
       },
     );
 
@@ -327,7 +327,7 @@ class Interpreter {
   static getDetachmentName(html) {
     Logger.log('Finding detachment name...');
     const nameElement = html.querySelector('p');
-    let name = Interpreter.getStringFromHtml(nameElement);
+    let name = this.getStringFromHtml(nameElement);
     name = name.replaceAll(/<span.*?<\/span>/g, '');
 
     if (!name) {
@@ -345,7 +345,7 @@ class Interpreter {
 
     const tableRows = html.querySelectorAll('tr');
     tableRows.forEach((tableRow) => {
-      const rowText = Interpreter.getStringFromHtml(tableRow);
+      const rowText = this.getStringFromHtml(tableRow);
       if (rowText.includes('<th>')) {
         return;
       }
@@ -370,16 +370,16 @@ class Interpreter {
 
   static getFaction(html) {
     return {
-      name: Interpreter.getFactioName(html),
-      points: Interpreter.getFactionPoints(html),
-      rules: Interpreter.getFactionRules(html),
+      name: this.getFactioName(html),
+      points: this.getFactionPoints(html),
+      rules: this.getFactionRules(html),
     };
   }
 
   static getFactioName(html) {
     Logger.log('Finding faction name...');
     const factionElement = html.querySelector('li.force > h2');
-    const faction = Interpreter.getStringFromHtml(factionElement);
+    const faction = this.getStringFromHtml(factionElement);
     const name = faction.replaceAll(/^.*?\(([^\)]*?)\).*?$/g, '$1').trim();
     Logger.logRosterValue(name);
 
@@ -389,7 +389,7 @@ class Interpreter {
   static getFactionPoints(html) {
     Logger.log('Finding faction points...');
     const factionElement = html.querySelector('li.force > h2');
-    const faction = Interpreter.getStringFromHtml(factionElement);
+    const faction = this.getStringFromHtml(factionElement);
     const points = faction.replaceAll(
       /^.*?\[([^\)]*?)\].*?$/g,
       '$1'.replaceAll(',', '').replaceAll('pts', '')
@@ -404,13 +404,13 @@ class Interpreter {
 
     const rules = [];
 
-    Interpreter.ifElementContainsElementMatchingText(
+    this.ifElementContainsElementMatchingText(
       html,
       'div.summary',
       'h2',
       'Force Rules',
       (summaryElement) => summaryElement.querySelectorAll('p').forEach((ruleHtml) => {
-        const rawRule = Interpreter.getStringFromHtml(ruleHtml);
+        const rawRule = this.getStringFromHtml(ruleHtml);
         const regex = /<span.*?>(.*?):<\/span>((.|\n)*)$/gm;
         const name = rawRule.replaceAll(regex, '$1').trim() || '';
         const description = rawRule.replaceAll(regex, '$2').replaceAll('()', '').trim() || '';
@@ -434,7 +434,7 @@ class Interpreter {
   static getBattleSize(html) {
     Logger.log('Finding battle size...');
     const battleSizeElement = html.querySelector('li.force > ul > li.category p');
-    let battleSize = Interpreter.getStringFromHtml(battleSizeElement);
+    let battleSize = this.getStringFromHtml(battleSizeElement);
     battleSize = battleSize.replaceAll(/<span.*?<\/span>/g, '');
 
     Logger.logRosterValue(battleSize);
@@ -453,7 +453,7 @@ class Interpreter {
     summaryElements.forEach((summaryElement) => {
       const text = summaryElement.querySelector(childSelector);
 
-      if (!Interpreter.getStringFromHtml(text).includes(matchingText)) {
+      if (!this.getStringFromHtml(text).includes(matchingText)) {
         callBack(summaryElement);
       }
     });
@@ -470,14 +470,14 @@ class Interpreter {
     summaryElements.forEach((summaryElement) => {
       const text = summaryElement.querySelector(childSelector);
 
-      if (Interpreter.getStringFromHtml(text).includes(matchingText)) {
+      if (this.getStringFromHtml(text).includes(matchingText)) {
         callBack(summaryElement);
       }
     });
   }
 
   static getStringFromHtml(htmlElement) {
-    if (Interpreter.elementExists(htmlElement)) {
+    if (this.elementExists(htmlElement)) {
       return htmlElement.innerHTML.trim();
     } else {
       return '';
@@ -485,7 +485,7 @@ class Interpreter {
   }
 
   static getArrayFromHtml(htmlElement, separator = ',') {
-    if (Interpreter.elementExists(htmlElement)) {
+    if (this.elementExists(htmlElement)) {
       return htmlElement.innerHTML.trim().split(separator).map((keyword) => keyword.trim());
     } else {
       return [];

@@ -5,12 +5,12 @@ class Builder {
     <html>
       <head>
         <title>${roster.name}</title>
-        ${Builder.getMetaTags(roster)}
+        ${this.getMetaTags(roster)}
       </head>
       <body>
         <div id="backdrop"></div>
-        ${Builder.getAside(roster)}
-        ${Builder.getMain(roster, armyRules)}
+        ${this.getAside(roster)}
+        ${this.getMain(roster, armyRules)}
       </body>
     </html>
     `;
@@ -21,12 +21,12 @@ class Builder {
   }
 
   static getMain(roster, armyRules) {
-    const overviewPage = armyRules ? Builder.getOverviewPage(armyRules) : '';
-    const unitPages = roster.units.map((unit, index) => Builder.getUnitPage(unit, index));
+    const overviewPage = armyRules ? this.getOverviewPage(armyRules) : '';
+    const unitPages = roster.units.map((unit, index) => this.getUnitPage(unit, index));
 
     return `
       <main>
-        ${Builder.getToggleAsideButton('<', 'open')}
+        ${this.getToggleAsideButton('<', 'open')}
         ${overviewPage}
         ${unitPages.join('')}
       </main>
@@ -37,11 +37,11 @@ class Builder {
     return `
         <div id="overview-page" class="page active">
           <div class="left-column">
-            ${Builder.getRules('Army rules', armyRules.army_rules)}
-            ${Builder.getRules('Detachment rules', armyRules.detachment_rules)}
+            ${this.getRules('Army rules', armyRules.army_rules)}
+            ${this.getRules('Detachment rules', armyRules.detachment_rules)}
           </div>
           <div class="right-column">
-            ${Builder.getStratagems(armyRules.stratagems)}
+            ${this.getStratagems(armyRules.stratagems)}
           </div>
         </div>
     `;
@@ -74,7 +74,7 @@ class Builder {
 
   static getStratagems(stratagems) {
     const stratagemsHtml = stratagems.map((stratagem) => `
-      <div class="stratagem ${Builder.getStratagemThemeClass(stratagem.when)}">
+      <div class="stratagem ${this.getStratagemThemeClass(stratagem.when)}">
         <div class='rule-row header'>${stratagem.name.toUpperCase()}</div>
         <div class='rule-row'><b>When: </b>${stratagem.when}</div>
         <div class='rule-row'><b>Target: </b>${stratagem.target}</div>
@@ -97,26 +97,26 @@ class Builder {
   }
 
   static getUnitPage(unit, index) {
-    const id = Builder.stringToId(unit.name + index);
+    const id = this.stringToId(unit.name + index);
 
     return `
       <div id="${id}-page" class="page">
         <div class="datasheet">
-          ${Builder.getDatasheetHeader(unit)}
+          ${this.getDatasheetHeader(unit)}
           <div class="datasheet-body">
             <div class="column-left">
               <div class="column-padding">
-                ${Builder.getLeftColumn(unit)}
+                ${this.getLeftColumn(unit)}
               </div>
             </div>
             <div class="column-right">
               <div class="column-padding">
-                ${Builder.getRightColumn(unit)}
+                ${this.getRightColumn(unit)}
               </div>
             </div>
             <div class="column-bottom">
               <div class="column-padding">
-                ${Builder.getBottomColumn(unit)}
+                ${this.getBottomColumn(unit)}
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ class Builder {
     let meleeWeaponsTable = '';
 
     if (unit.rangedWeapons.length) {
-      rangedWeaponsTable = Builder.createTable([
+      rangedWeaponsTable = this.createTable([
         ['', 'RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
         ...unit.rangedWeapons.map((weapon) => ([
           '',
@@ -146,7 +146,7 @@ class Builder {
     }
 
     if (unit.meleeWeapons.length) {
-      meleeWeaponsTable = Builder.createTable([
+      meleeWeaponsTable = this.createTable([
         ['', 'MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
         ...unit.meleeWeapons.map((weapon) => ([
           '',
@@ -207,7 +207,7 @@ class Builder {
       );
     }
 
-    const abilitiesTable = Builder.createTable(tableData);
+    const abilitiesTable = this.createTable(tableData);
 
     return `
       ${invulnerableSaveAbilityHtml}
@@ -266,15 +266,15 @@ class Builder {
   static getAside(roster) {
     return `
       <aside>
-        ${Builder.getToggleAsideButton('X', 'close')}
-        ${Builder.getOverviewButton(roster)}
-        ${roster.units.map((unit, index) => Builder.getUnitButton(unit, index)).join('')}
+        ${this.getToggleAsideButton('X', 'close')}
+        ${this.getOverviewButton(roster)}
+        ${roster.units.map((unit, index) => this.getUnitButton(unit, index)).join('')}
       </aside>
     `;
   }
 
   static getUnitButton(unit, index) {
-    const id = Builder.stringToId(unit.name + index);
+    const id = this.stringToId(unit.name + index);
 
     return `
       <button class="sidebar-button" onclick="togglePage('${id}')" id="${id}-button">

@@ -1,10 +1,10 @@
 class Sanitizer {
   static sanitize(roster) {
     Logger.log('Sanitizing data...');
-    roster = Sanitizer.removeDuplicateUnits(roster);
-    roster = Sanitizer.addTooltips(roster, roster.rules);
-    roster = Sanitizer.flattenSelections(roster);
-    roster = Sanitizer.addSidebarSelections(roster);
+    roster = this.removeDuplicateUnits(roster);
+    roster = this.addTooltips(roster, roster.rules);
+    roster = this.flattenSelections(roster);
+    roster = this.addSidebarSelections(roster);
 
     /**
      * 
@@ -31,11 +31,10 @@ class Sanitizer {
       ...roster,
       units: roster.units.map((unit, index) => {
         const duplicateUnit = roster.units.find((compareUnit, compareIndex) => compareUnit.name === unit.name && compareIndex !== index);
-        console.log(duplicateUnit);
 
         return {
           ...unit,
-          sidebarSelections: unit.selections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.selections.find((duplicateSelection) => Sanitizer.isDeepEqual(duplicateSelection, selection))),
+          sidebarSelections: unit.selections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.selections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
         };
       }),
     };
@@ -114,12 +113,12 @@ class Sanitizer {
   static removeDuplicateUnits(roster) {
     return {
       ...roster,
-      units: Sanitizer.removeDuplicateFromArray(roster.units),
+      units: this.removeDuplicateFromArray(roster.units),
     };
   }
 
   static removeDuplicateFromArray(array) {
-    return array.filter((element, index) => array.indexOf(array.find((compareElement) => Sanitizer.isDeepEqual(compareElement, element))) === index);
+    return array.filter((element, index) => array.indexOf(array.find((compareElement) => this.isDeepEqual(compareElement, element))) === index);
   }
 
   static isDeepEqual(object1, object2) {
@@ -133,9 +132,9 @@ class Sanitizer {
       const value1 = object1[key];
       const value2 = object2[key];
 
-      const isObjects = Sanitizer.isObject(value1) && Sanitizer.isObject(value2);
+      const isObjects = this.isObject(value1) && this.isObject(value2);
 
-      if ((isObjects && !Sanitizer.isDeepEqual(value1, value2)) ||
+      if ((isObjects && !this.isDeepEqual(value1, value2)) ||
         (!isObjects && value1 !== value2)
       ) {
         return false;
