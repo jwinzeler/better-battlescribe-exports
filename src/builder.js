@@ -59,7 +59,9 @@ class Builder {
               <summary>
                 ${rule.name.toLowerCase()}
               </summary>
+              <p class="description">
               ${rule.description}
+              </p>
             </details>
           `).join('')}
         </details>
@@ -243,6 +245,7 @@ class Builder {
         <div class="unit-name">
           ${unit.name}
         </div>
+        <div class="main-stats-wrapper">
           ${unit.stats.map((stats, index) => `
           <div class="stats-wrapper">
             ${Object.keys(stats).filter((stat) => stat !== 'name').map((stat) => `
@@ -260,6 +263,7 @@ class Builder {
             ${unit.stats.length > 1 ? `<div class="stats-model-name${index === 0 ? ' first' : ''}">${stats.name}</div>` : ''}
             </div>
           `).join('')}
+          </div>
       </header>
     `;
   }
