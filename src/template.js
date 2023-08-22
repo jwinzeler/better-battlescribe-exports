@@ -442,11 +442,126 @@ div.page.active {
   font-weight: 300;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
+
+#backdrop {
+  display: none;
+}
+
+button.toggle-aside {
+  display: none;
+}
+
+/* Phones */
+@media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
+  main {
+    width: 100%;
+  }
+
+  aside {
+    position: absolute;
+    z-index: 10;
+    background: var(--background-primary);
+  }
+
+  #backdrop.visible {
+    display: block;
+    z-index: 9;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: grey;
+    opacity: 75%;
+  }
+
+  aside:not(.visible) {
+    display: none;
+  }
+
+  button.toggle-aside {
+    display: block;
+    position: absolute;
+    border: 1px solid var(--border-primary);
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    border-radius: 50%;
+    right: 5px;
+    top: 5px;
+  }
+
+  button#open {
+    left: 5px;
+    right: auto;
+  }
+
+  .datasheet header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .datasheet-body {
+    flex-direction: column;
+    flex-wrap: initial;
+  }
+
+  .datasheet-body .column-left table {
+    margin-bottom: 0.5rem;
+  }
+
+  .datasheet-body .column-left th:first-child,
+  .datasheet-body .column-left td:first-child {
+    display: none;
+  }
+
+  .datasheet-body .column-left th:nth-child(2),
+  .datasheet-body .column-left td:nth-child(2) {
+    width: 60%;
+  }
+
+  .column-right .column-padding,
+  .column-left .column-padding {
+    padding-bottom: 0;
+  }
+
+  .column-right .column-padding {
+    padding-top: 0;
+  }
+}
+
+/* Landscape */
+@media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: landscape) {
+  aside {
+    width: 50%;
+  }
+  .datasheet header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+}
+
+/* Portrait */
+@media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: portrait) {
+  aside {
+    width: 90%;
+  }
+}
+
 `.replaceAll(/[\n]/g, '');
 
 const script = `
+toggleAside = () => {
+  [
+    document.querySelector('aside'),
+    document.querySelector('#backdrop')
+  ].forEach((el) => el.classList.toggle('visible'));  
+};
 togglePage = (id) => {
   document.querySelectorAll('.page').forEach((page) => page.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
-}
+  toggleAside();
+};
 `.replaceAll(/[\n\s]/g, '');

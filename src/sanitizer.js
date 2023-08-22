@@ -19,7 +19,9 @@ class Sanitizer {
      * - Fix movement stat showing : instead of "
      * - Fix CORE abilities, show faction abilities (different values in real datasheet compared to here)
      * - Add extra graphics elements
-     * - Add mobile styles :D
+     * 
+     *  Super later on:
+     * - check small mobile portait mode
      * 
      */
 
@@ -61,15 +63,15 @@ class Sanitizer {
 
     const objKeys1 = Object.keys(object1);
     const objKeys2 = Object.keys(object2);
-  
+
     if (objKeys1.length !== objKeys2.length) return false;
-  
+
     for (var key of objKeys1) {
       const value1 = object1[key];
       const value2 = object2[key];
-  
+
       const isObjects = Sanitizer.isObject(value1) && Sanitizer.isObject(value2);
-  
+
       if ((isObjects && !Sanitizer.isDeepEqual(value1, value2)) ||
         (!isObjects && value1 !== value2)
       ) {
@@ -78,7 +80,7 @@ class Sanitizer {
     }
     return true;
   };
-  
+
   static isObject(object) {
     return object != null && typeof object === "object";
   };

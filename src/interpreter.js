@@ -11,7 +11,7 @@ class Interpreter {
       detachment: Interpreter.getDetachment(contents),
       units: Interpreter.getUnits(contents),
       rules: Interpreter.getRules(contents),
-    }
+    };
   }
 
   static getRosterName(html) {
@@ -110,8 +110,8 @@ class Interpreter {
           const rowText = Interpreter.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
-          } 
-          
+          }
+
           const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
           let matches = rowText.match(/(.|\n)*?<td.*?>((.|\n)*?)<\/td>/g);
           matches = matches.map((match) => match.replace(/<\/?td.*?>/g, '').trim());
@@ -121,7 +121,7 @@ class Interpreter {
           const W = matches[4] || '';
           const LD = matches[5] || '';
           const OC = matches[6] || '';
-              
+
           stats.push({
             name,
             M,
@@ -152,8 +152,8 @@ class Interpreter {
           const rowText = Interpreter.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
-          } 
-          
+          }
+
           const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
           let matches = rowText.match(/(.|\n)*?<td.*?>((.|\n)*?)<\/td>/g);
           matches = matches.map((match) => match.replace(/<\/?td.*?>/g, '').trim());
@@ -164,7 +164,7 @@ class Interpreter {
           const armorPenetration = matches[5] || '';
           const damage = matches[6] || '';
           const keywords = matches[7].replace('-', '').split(',').filter((keyword) => !!keyword) || '';
-              
+
           weapons.push({
             name,
             range,
@@ -211,11 +211,11 @@ class Interpreter {
           const rowText = Interpreter.getStringFromHtml(tableRow);
           if (rowText.includes('<th>')) {
             return;
-          } 
-          
+          }
+
           const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
           const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
-    
+
           abilities.push({
             name,
             description,
@@ -348,8 +348,8 @@ class Interpreter {
       const rowText = Interpreter.getStringFromHtml(tableRow);
       if (rowText.includes('<th>')) {
         return;
-      } 
-      
+      }
+
       const name = rowText.replaceAll(/<td.+?>(.*?)<\/td>(.|\n)*/g, '$1').trim() || '';
       const description = rowText.replaceAll(/(.|\n)*?<td>((.|\n)*?)<\/td>(.|\n)*$/gm, '$2').trim() || '';
 
@@ -436,7 +436,7 @@ class Interpreter {
     const battleSizeElement = html.querySelector('li.force > ul > li.category p');
     let battleSize = Interpreter.getStringFromHtml(battleSizeElement);
     battleSize = battleSize.replaceAll(/<span.*?<\/span>/g, '');
-    
+
     Logger.logRosterValue(battleSize);
 
     return battleSize;
@@ -496,7 +496,7 @@ class Interpreter {
     if (htmlElement) {
       return true;
     } else {
-      Logger.warn('Attempted to parse value from nullish element!')
+      Logger.warn('Attempted to parse value from nullish element!');
     }
   }
 }
