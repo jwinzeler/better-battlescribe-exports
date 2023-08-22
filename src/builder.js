@@ -1,131 +1,132 @@
 class Builder {
   static getOutput(roster) {
     Logger.log('Building .html file...');
-    const html = Builder.createElementWithAttributes('html');
-
-    const head = Builder.getHead(roster);
-    html.appendChild(head);
-
-    const body = Builder.getBody(roster);
-    html.appendChild(body);
+    const html = `
+    <html>
+      <head>
+        <title>${roster.name}</title>
+        ${Builder.getMetaTags(roster)}
+      </head>
+      <body>
+        <div id="backdrop"></div>
+        ${Builder.getAside(roster)}
+        ${Builder.getMain(roster)}
+      </body>
+    </html>
+    `;
 
     Logger.log('Finished .html file.');
 
     return html;
   }
 
-  static getBody(roster) {
-    const body = Builder.createElementWithAttributes('body');
+  static getMain(roster) {
+    const overviewPage = Builder.getOverviewPage(roster);
+    const unitPages = roster.units.map((unit) => Builder.getUnitPage(unit));
 
-    const asideAndBackdrop = Builder.getAsideAndBackdrop(roster);
-    asideAndBackdrop.forEach((el) => body.appendChild(el));
-
-    const main = Builder.getMain(roster);
-    body.appendChild(main);
-
-    return body;
+    return `
+      <main>
+        ${Builder.getToggleAsideButton('<', 'open')}
+        ${overviewPage}
+        ${unitPages.join('')}
+      </main>
+    `;
   }
 
-  static getMain(roster) {
-    const main = Builder.createElementWithAttributes('main');
-
-    /*const overview = Builder.getOverviewPage(roster);
-    main.appendChild(overview);*/
-
-    const openAside = Builder.getToggleAsideButton('<', 'open');
-    main.appendChild(openAside);
-
-    roster.units.forEach((unit) => {
-      const page = Builder.getUnitPage(unit);
-      main.appendChild(page);
-    });
-
-    return main;
+  static getOverviewPage(roster) {
+    return '';
   }
 
   static getUnitPage(unit) {
     const id = Builder.stringToId(unit.name);
-    const page = Builder.createElementWithAttributes('div', [
-      { attribute: 'id', value: `${id}-page` },
-      { attribute: 'class', value: 'page' },
-    ]);
-    const datasheet = Builder.getDatasheet(unit);
-    page.appendChild(datasheet);
 
-    return page;
+    return `
+      <div id="${id}-page" class="page">
+        <div class="datasheet">
+          ${Builder.getDatasheetHeader(unit)}
+          <div class="datasheet-body">
+            <div class="column-left">
+              <div class="column-padding">
+                ${Builder.getLeftColumn(unit)}
+              </div>
+            </div>
+            <div class="column-right">
+              <div class="column-padding">
+                ${Builder.getRightColumn(unit)}
+              </div>
+            </div>
+            <div class="column-bottom">
+              <div class="column-padding">
+                ${Builder.getBottomColumn(unit)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  static getDatasheet(unit) {
-    const datasheet = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'datasheet' },
-    ]);
+  static getLeftColumn(unit) {
+    let rangedWeaponsTable = '';
+    let meleeWeaponsTable = '';
 
-    const header = Builder.getDatasheetHeader(unit);
-    datasheet.appendChild(header);
+    if (unit.rangedWeapons.length) {
+      rangedWeaponsTable = Builder.createTable([
+        ['', 'RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
+        ...unit.rangedWeapons.map((weapon) => ([
+          '',
+          `${weapon.name}${weapon.keywords.length ? `<br /><span class="bold small">[${weapon.keywords.join(', ')}]` : ''}</span>`,
+          weapon.range,
+          weapon.attacks,
+          weapon.skill,
+          weapon.strength,
+          weapon.armorPenetration,
+          weapon.damage,
+        ])),
+      ]);
+    }
 
-    const body = Builder.getDatasheetBody(unit);
-    datasheet.appendChild(body);
+    if (unit.meleeWeapons.length) {
+      meleeWeaponsTable = Builder.createTable([
+        ['', 'MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
+        ...unit.meleeWeapons.map((weapon) => ([
+          '',
+          `${weapon.name}${weapon.keywords.length ? `<br /><span class="bold small">[${weapon.keywords.join(', ')}]` : ''}</span>`,
+          weapon.range,
+          weapon.attacks,
+          weapon.skill,
+          weapon.strength,
+          weapon.armorPenetration,
+          weapon.damage,
+        ])),
+      ]);
+    }
 
-    return datasheet;
-  }
-
-  static getDatasheetBody(unit) {
-    const body = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'datasheet-body' },
-    ]);
-
-    const columnLeft = Builder.getLeftColumn(unit);
-    body.appendChild(columnLeft);
-
-    const columnRight = Builder.getRightColumn(unit);
-    body.appendChild(columnRight);
-
-    const columnBottom = Builder.getBottomColumn(unit);
-    body.appendChild(columnBottom);
-
-    return body;
-  }
-
-  static getBottomColumn(unit) {
-    const columnBottom = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'column-bottom' },
-    ]);
-
-    const columnPadding = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'column-padding' },
-    ]);
-
-    const keywordsEl = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'keywords' },
-    ]);
-    keywordsEl.innerHTML = 'KEYWORDS: ';
-
-    const keywords = Builder.createBoldSpan(unit.keywords.join(', '));
-    keywordsEl.appendChild(keywords);
-
-    columnPadding.appendChild(keywordsEl);
-
-    columnBottom.appendChild(columnPadding);
-
-    return columnBottom;
+    return `
+      ${rangedWeaponsTable}
+      ${meleeWeaponsTable}
+    `;
   }
 
   static getRightColumn(unit) {
-    const columnRight = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'column-right' },
-    ]);
+    const invulnerableSaveAbility = unit.abilities.abilities.find((ability) => ability.name === "Invulnerable Save");
+    let invulnerableSaveAbilityHtml = '';
 
-    const columnPadding = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'column-padding' },
-    ]);
-
-    const invulnFound = unit.abilities.abilities.find((ability) => ability.name === "Invulnerable Save");
-    if (invulnFound) {
-      const invulnTable = Builder.createTable([
-        [invulnFound.name, `<div>${invulnFound.description.replace(/.*?([\d]+\+).*?$/g, '$1')}</div>`],
-      ]);
-      invulnTable.querySelector('th:nth-child(2)').setAttribute('class', 'invuln');
-      columnPadding.appendChild(invulnTable);
+    if (invulnerableSaveAbility) {
+      invulnerableSaveAbilityHtml = `
+        <table>
+          <tr>
+            <th>
+              ${invulnerableSaveAbility.name}
+            </th>
+            <th class="invuln">
+              <div>
+                ${invulnerableSaveAbility.description.replace(/.*?([\d]+\+).*?$/g, '$1')}
+              </div>
+            </th>
+          </tr>
+        </table>
+      `;
     }
 
     const tableData = [
@@ -147,254 +148,146 @@ class Builder {
       );
     }
 
-    const unitTable = Builder.createTable(tableData);
-    columnPadding.appendChild(unitTable);
+    const abilitiesTable = Builder.createTable(tableData);
 
-    columnRight.appendChild(columnPadding);
-
-    return columnRight;
+    return `
+      ${invulnerableSaveAbilityHtml}
+      ${abilitiesTable}
+    `;
   }
 
-  static getLeftColumn(unit) {
-    const columnLeft = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'column-left' },
-    ]);
-
-    const columnPadding = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'column-padding' },
-    ]);
-
-    if (unit.rangedWeapons.length) {
-      const rangedTable = Builder.createTable([
-        ['', 'RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
-        ...unit.rangedWeapons.map((weapon) => ([
-          '',
-          `${weapon.name}${weapon.keywords.length ? `<br /><span class="bold small">[${weapon.keywords.join(', ')}]` : ''}</span>`,
-          weapon.range,
-          weapon.attacks,
-          weapon.skill,
-          weapon.strength,
-          weapon.armorPenetration,
-          weapon.damage,
-        ])),
-      ]);
-      columnPadding.appendChild(rangedTable);
-    }
-
-    if (unit.meleeWeapons.length) {
-      const meleeTable = Builder.createTable([
-        ['', 'MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
-        ...unit.meleeWeapons.map((weapon) => ([
-          '',
-          `${weapon.name}${weapon.keywords.length ? `<br /><span class="bold small">[${weapon.keywords.join(', ')}]` : ''}</span>`,
-          weapon.range,
-          weapon.attacks,
-          weapon.skill,
-          weapon.strength,
-          weapon.armorPenetration,
-          weapon.damage,
-        ])),
-      ]);
-      columnPadding.appendChild(meleeTable);
-    }
-
-    columnLeft.appendChild(columnPadding);
-
-    return columnLeft;
+  static getBottomColumn(unit) {
+    return `
+      <div class="keywords">
+        KEYWORDS: <span class="bold">${unit.keywords.join(', ')}</span>
+      </div>
+    `;
   }
 
   static createTable(data) {
-    const table = Builder.createElementWithAttributes('table');
-
-    data.forEach((row, index) => {
-      const rowEl = Builder.createElementWithAttributes('tr');
-
-      row.forEach((column) => {
-        const cell = Builder.createElementWithAttributes(index ? 'td' : 'th');
-        cell.innerHTML = column;
-        rowEl.appendChild(cell);
-      });
-
-      table.appendChild(rowEl);
-    });
-
-    return table;
+    return `
+      <table>
+        ${data.map((row, index) => `
+          <tr>
+            ${row.map((column) => `
+              <${index ? 'td' : 'th' }>
+                ${column}
+              </${index ? 'td' : 'th' }>
+            `).join('')}
+          </tr>
+        `).join('')}
+      </table>
+    `;
   }
 
   static getDatasheetHeader(unit) {
-    const header = Builder.createElementWithAttributes('header');
-
-    const name = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'unit-name' },
-    ]);
-    name.innerHTML = unit.name;
-    header.appendChild(name);
-
-    const statsWrapper = Builder.createElementWithAttributes('div', [
-      { attribute: 'class', value: 'stats-wrapper' },
-    ]);
-    unit.stats.forEach((stats) => {
-      Object.keys(stats).forEach((stat) => {
-        if (stat === 'name') {
-          return;
-        }
-
-        const statEl = Builder.createElementWithAttributes('div', [
-          { attribute: 'class', value: 'stat' },
-        ]);
-        const statName = Builder.createElementWithAttributes('div', [
-          { attribute: 'class', value: 'stat-name' },
-        ]);
-        statName.innerHTML = stat;
-        statEl.appendChild(statName);
-        const statValue = Builder.createElementWithAttributes('div', [
-          { attribute: 'class', value: 'stat-value' },
-        ]);
-        statValue.innerHTML = stats[stat];
-        statEl.appendChild(statValue);
-        statsWrapper.appendChild(statEl);
-      });
-    });
-    header.appendChild(statsWrapper);
-
-    return header;
+    return `
+      <header>
+        <div class="unit-name">
+          ${unit.name}
+        </div>
+        <div class="stats-wrapper">
+          ${unit.stats.map((stats) => `
+            ${Object.keys(stats).filter((stat) => stat !== 'name').map((stat) => `
+              <div class="stat">
+                <div class="stat-name">
+                  ${stat}
+                </div>
+                <div class="stat-value">
+                  ${stats[stat]}
+                </div>
+              </div>
+            `).join('')}
+          `).join('')}
+        </div>
+      </header>
+    `;
   }
 
-  static getAsideAndBackdrop(roster) {
-    const aside = Builder.createElementWithAttributes('aside');
-    const backdrop = Builder.createElementWithAttributes('div', [{ attribute: 'id', value: 'backdrop' }]);
-
-    const close = Builder.getToggleAsideButton('X', 'close');
-    aside.appendChild(close);
-
-    const overview = Builder.getOverviewButton(roster);
-    aside.appendChild(overview);
-
-    roster.units.forEach((unit) => {
-      const button = Builder.getUnitButton(unit);
-      aside.appendChild(button);
-    });
-
-    return [aside, backdrop];
+  static getAside(roster) {
+    return `
+      <aside>
+        ${Builder.getToggleAsideButton('X', 'close')}
+        ${Builder.getOverviewButton(roster)}
+        ${roster.units.map((unit) => Builder.getUnitButton(unit)).join('')}
+      </aside>
+    `;
   }
 
   static getUnitButton(unit) {
     const id = Builder.stringToId(unit.name);
-    const button = Builder.createElementWithAttributes('button', [
-      { attribute: 'onclick', value: `togglePage('${id}-page')` },
-      { attribute: 'id', value: `${id}-button` },
-    ]);
-    button.innerHTML = unit.name;
 
-    const info = Builder.createElementWithAttributes('div', [{ attribute: 'class', value: 'overview-info' }]);
-
-    unit.selections.forEach((selection) => {
-      const selectionElement = Builder.createElementWithAttributes('div');
-      selectionElement.appendChild(Builder.createBoldSpan('Selections: '));
-      selectionElement.innerHTML += selection.join(', ');
-      info.appendChild(selectionElement);
-    });
-
-    button.appendChild(info);
-
-    return button;
-  }
-
-  static getToggleAsideButton(text, id) {
-    const button = Builder.createElementWithAttributes('button', [
-      { attribute: 'onclick', value: "toggleAside()" },
-      { attribute: 'class', value: 'toggle-aside' },
-      { attribute: 'id', value: `${id}` },
-    ]);
-    button.innerHTML = `${text}`;
-    return button;
+    return `
+      <button onclick="togglePage('${id}-page')" id="${id}-button">
+        ${unit.name}
+        <div class="overview-info">
+          ${unit.selections.map((selection) => `
+            <div>
+              <span class="bold">Selections: </span>${selection.join('')}
+            </div>
+          `).join('')}
+        </div>
+      </button>
+    `;
   }
 
   static getOverviewButton(roster) {
-    const button = Builder.createElementWithAttributes('button', [
-      { attribute: 'onclick', value: "togglePage('overview-page')" },
-      { attribute: 'id', value: `overview-button` },
-    ]);
-    button.innerHTML = roster.name;
-
-    const info = Builder.createElementWithAttributes('div', [{ attribute: 'class', value: 'overview-info' }]);
-
-    const faction = Builder.createElementWithAttributes('div');
-    faction.appendChild(Builder.createBoldSpan('Faction: '));
-    faction.innerHTML += roster.faction.name;
-    info.appendChild(faction);
-
-    const detachment = Builder.createElementWithAttributes('div');
-    detachment.appendChild(Builder.createBoldSpan('Detachment: '));
-    detachment.innerHTML += roster.detachment.name;
-    info.appendChild(detachment);
-
-    const size = Builder.createElementWithAttributes('div');
-    size.appendChild(Builder.createBoldSpan('Size: '));
-    size.innerHTML += roster.battleSize;
-    info.appendChild(size);
-
-    button.appendChild(info);
-
-    return button;
+    return `
+      <button onclick="togglePage('overview-page')" id="overview-button">
+        ${roster.name}
+        <div class="overview-info">
+          <div>
+            <span class="bold">Faction: </span>${roster.faction.name}
+          </div>
+          <div>
+            <span class="bold">Detachment: </span>${roster.detachment.name}
+          </div>
+          <div>
+            <span class="bold">Size: </span>${roster.battleSize}
+          </div>
+        </div>
+      </button>
+    `;
   }
 
-  static getHead(roster) {
-    const head = Builder.createElementWithAttributes('head');
-
-    head.appendChild(Builder.createElementWithAttributes('meta', [
-      { attribute: 'charset', value: 'UTF-8' },
-    ]));
-    head.appendChild(Builder.createElementWithAttributes('meta', [
-      { attribute: 'name', value: 'viewport' },
-      { attribute: 'content', value: 'width=device-width, initial-scale=1.0' },
-    ]));
-    head.appendChild(Builder.createElementWithAttributes('meta', [
-      { attribute: 'http-equiv', value: 'X-UA-Compatible' },
-      { attribute: 'content', value: 'ie=edge' },
-    ]));
-    head.appendChild(Builder.createElementWithContent('style', css));
-    head.appendChild(Builder.createElementWithContent('script', script));
-    head.appendChild(Builder.createElementWithContent('title', roster.name));
-
-    return head;
+  static getToggleAsideButton(text, id) {
+    return `
+      <button onclick="toggleAside()" class="toggle-aside" id="${id}">
+        ${text}
+      </button>
+    `;
   }
 
-  static stringToId(string) {
-    return string.replace(/[\n\s]/g, '-');
-  }
-
-  static createBoldSpan(content) {
-    const span = Builder.createElementWithAttributes('span', [{ attribute: 'class', value: 'bold' }]);
-    span.innerHTML = content;
-
-    return span;
-  }
-
-  static createElementWithContent(tag, content = '') {
-    const element = document.createElement(tag);
-    element.innerHTML = content;
-
-    return element;
-  }
-
-  static createElementWithAttributes(tag, attributes = []) {
-    const element = document.createElement(tag);
-    attributes.forEach(({ attribute, value }) => {
-      element.setAttribute(attribute, value);
-    });
-
-    return element;
-  }
-
-  static createElementwithAttributesAndContent(tag, attributes = [], content = '') {
-    const element = Builder.createElementWithAttributes(tag, attributes);
-    element.innerHTML = content;
-
-    return element;
+  static getMetaTags() {
+    return `
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <style>
+        ${css}
+      </style>
+      <script>
+        ${script}
+      </script>
+    `;
   }
 
   static getTooltip(text, description) {
-    return `<span class="tooltip-on-hover">${text}<div class="tooltip"><span class="bold">${text}:</span><br />${description}</div></span>`;
+    return `
+      <span class="tooltip-on-hover">
+        ${text}
+        <div class="tooltip">
+          <span class="bold">
+            ${text}:¨
+          </span>
+          <br />
+          ${description}
+        </div>
+      </span>
+    `;
+  }
+
+  static stringToId(string) {
+    return string.replace(/[\n\s]/g, '-').toLowerCase();
   }
 }
