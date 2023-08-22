@@ -5,11 +5,13 @@ class Main {
 
     const sanitizedRoster = Sanitizer.sanitize(roster);
     console.log(sanitizedRoster);
-    
-    const output = Builder.getOutput(sanitizedRoster);
-    
+
+    const armyData = HardcodeArmyRules.get(sanitizedRoster.faction.name);
+
+    const output = Builder.getOutput(sanitizedRoster, armyData);
+
     const download = document.getElementById('downloadButton');
-    const blob = window.URL.createObjectURL(new Blob([output]), { type: "text/html"});
+    const blob = window.URL.createObjectURL(new Blob([output]), { type: "text/html" });
     download.setAttribute('href', blob);
     download.setAttribute('download', `${roster.name} actually usable.html`);
 

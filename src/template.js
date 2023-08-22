@@ -451,6 +451,67 @@ button.toggle-aside {
   display: none;
 }
 
+div#overview-page.active {
+  padding: 2rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--text-datasheet);
+  background: var(--background-datasheet);
+  height: 100%;
+}
+
+#overview-page .left-column,
+#overview-page .right-column {
+  flex: 1;
+}
+
+#overview-page h4 {
+  color: var(--text-primary);
+  background: var(--background-primary);
+  padding: 0.5rem;
+}
+
+#overview-page .rule-row {
+  margin-bottom: 0.5rem;
+}
+#overview-page .rule-row.header {
+  font-weight: bold;
+}
+
+#overview-page .stratagems-wrapper {
+  display: flex;
+  gap: 5px;
+  flex-flow: row wrap;
+  width: 100%;  
+}
+
+#overview-page .stratagem {
+  border: 1px solid;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 45%;
+}
+
+#overview-page .cost {
+  color: var(--text-primary);
+  background: var(--background-primary);
+  padding: 0.5rem;
+  display: block;
+  width: 2.5rem;
+  text-align: center;
+  border-radius: 0 0 0 50%;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+
+
 /* Phones */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
   main {
