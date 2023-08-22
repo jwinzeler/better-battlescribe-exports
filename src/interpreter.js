@@ -303,7 +303,7 @@ class Interpreter {
     return name;
   }
 
-  static getDetachment(html, rules) {
+  static getDetachment(html) {
     let name = '';
     let abilities = [];
 
@@ -313,9 +313,8 @@ class Interpreter {
       'h4',
       'Detachment',
       (summaryElement) => {
-        console.log(summaryElement);
         name = Interpreter.getDetachmentName(summaryElement);
-        abilities = Interpreter.getDetachmentAbilities(summaryElement, rules);
+        abilities = Interpreter.getDetachmentAbilities(summaryElement);
       },
     );
 
