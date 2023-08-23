@@ -44,7 +44,7 @@ class Sanitizer {
           } else {
             newStats.push(current);
           }
-          
+
           return newStats;
         }, []),
       })),
@@ -58,7 +58,7 @@ class Sanitizer {
         .replace(/  */g, ' ') // Remove double (or more) spaces
         .replace(/ +\n */g, '\n') // Remove extra spaces around line separators
         .replace(/ +, */g, ', ') // Remove spaces before and after commas, leave only 1 after
-        .replace(/([A-Z]{3,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
+        .replace(/([A-Z]{5,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
         // Replace uppercase words with bold capitalized versions
         .replace(/^(\d):$/g, '$1"') // replace mistake in movement data where : was placed instead of "
         .trim();

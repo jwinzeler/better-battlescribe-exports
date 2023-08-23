@@ -280,7 +280,6 @@ class Builder {
 
   static getUnitButton(unit, index) {
     const id = this.stringToId(unit.name + index);
-
     return `
       <button class="sidebar-button" onclick="togglePage('${id}')" id="${id}-button">
         ${unit.name}
@@ -347,6 +346,6 @@ class Builder {
   }
 
   static stringToId(string) {
-    return string.replace(/[\n\s]/g, '-').toLowerCase();
+    return string.replace(/[\n\s]/g, '-').replace(/(<([^>]+)>)/ig, '').toLowerCase();
   }
 }
