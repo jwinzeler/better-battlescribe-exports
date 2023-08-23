@@ -1,10 +1,18 @@
 class Sanitizer {
-  static sanitize(roster) {
-    Logger.log('Sanitizing data...');
+  static sanitizeOverview(data, roster) {
+    Logger.log('Sanitizing overview...');
+    data = this.cleanUpText(data);
+    data = this.addTooltipsToOverview(data, roster.rules);
+    Logger.log('Finished sanitizing overview.');
+    return data;
+  }
+
+  static sanitizeRoster(roster) {
+    Logger.log('Sanitizing roster...');
     roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
     roster = this.removeDuplicateStatlines(roster);
-    roster = this.addTooltips(roster, roster.rules);
+    roster = this.addTooltipsToRoster(roster, roster.rules);
     roster = this.flattenSelections(roster);
     roster = this.addSidebarSelections(roster);
 
@@ -18,7 +26,7 @@ class Sanitizer {
      * 
      */
 
-    Logger.log('Finished sanitizing data.');
+    Logger.log('Finished sanitizing roster.');
 
     return roster;
   }
@@ -109,7 +117,37 @@ class Sanitizer {
     };
   }
 
-  static addTooltips(roster, rules) {
+  static addTooltipsToOverview(data, rules) {
+    const addTooltip = (string) => {
+      rules.forEach((rule) => {
+        console.log(string);
+        if (string.includes(rule.name)) {
+          string = string.replace(rule.name, Builder.getTooltip(rule.name, rule.description));
+        }
+      });
+
+      return string;
+    };
+    return ({
+      ...data,
+      army_rules: data.army_rules.map((rule) => ({
+        ...rule,
+        description: addTooltip(rule.description),
+      })),
+      detachment_rules: data.detachment_rules.map((rule) => ({
+        ...rule,
+        description: addTooltip(rule.description),
+      })),
+      stratagems: data.stratagems.map((stratagem) => ({
+        ...stratagem,
+        when: addTooltip(stratagem.when),
+        target: addTooltip(stratagem.target),
+        effect: addTooltip(stratagem.effect),
+      })),
+    });
+  }
+
+  static addTooltipsToRoster(roster, rules) {
     const addNestedTooltips = (strings) => strings.map((string) => addTooltips(string));
     const addTooltips = (strings) => strings.map((string) => addTooltip(string));
 

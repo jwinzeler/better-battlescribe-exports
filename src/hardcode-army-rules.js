@@ -217,13 +217,16 @@ class HardcodeArmyRules {
 				name: `BLESSINGS OF KHORNE`,
 				description: `If your Army Faction is World Eaters, at the start of the battle round, you can make a Blessings of Khorne roll. To do so, roll eight D6. You can then use those dice to activate up to two Blessings of Khorne from the Blessings of Khorne list (see right). Each Blessing of Khorne specifies the dice results it requires (where a number is specified, a double or triple of that value or higher is required). You can only activate each Blessing of Khorne once per battle round. Any unused dice from the Blessings of Khorne roll are then discarded. Once activated, each Blessing of Khorne applies to all units from your army with this ability until the end of the battle round.
 	  
+
 				RAGE-FUELLED INVIGORATION (DOUBLE 1+)
+				
 				■ Add 2" to the Move characteristic of models in this unit WRATHFUL DEVOTION  (DOUBLE 1+)
 				■ Models in this unit have the Feel No Pain 6+ ability. If models in this unit already have the Feel No Pain ability, add 1 to their Feel No Pain rolls. MARTIAL EXCELLENCE  (DOUBLE 3+)
 				■ Melee weapons equipped by models in this unit have the [SUSTAINED HITS 1] ability. TOTAL CARNAGE  (DOUBLE 4+ OR ANY TRIPLE)
 				■ Each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6: on a 4+, do not remove it from play. The destroyed model can fight after the attacking model’s unit has finished making its attacks, and is then removed from play
 				
 				WARP BLADES  (DOUBLE 5+ OR ANY TRIPLE)
+				
 				■ Melee weapons equipped by models in this unit have the [LETHAL HITS] ability. UNBRIDLED BLOODLUST  (DOUBLE 6 OR TRIPLE 4+)
 				■ This unit is eligible to declare a charge in a turn in which it Advanced.`
 			},
@@ -235,8 +238,8 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'GORY MASSACRE',
-					when: `Fight phase.',
-				target: 'One World Eaters unit from
+					when: `Fight phase.`,
+					target: `One World Eaters unit from
 				your army that made a Charge move this
 				turn and destroyed one or more enemy
 				units this phase`,

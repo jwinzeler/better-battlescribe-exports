@@ -3,10 +3,10 @@ class Main {
     const roster = Parser.read(file);
     console.log(roster);
 
-    const sanitizedRoster = Sanitizer.sanitize(roster);
+    const sanitizedRoster = Sanitizer.sanitizeRoster(roster);
     console.log(sanitizedRoster);
 
-    const armyData = HardcodeArmyRules.get(sanitizedRoster.faction.name);
+    const armyData = Sanitizer.sanitizeOverview(HardcodeArmyRules.get(sanitizedRoster.faction.name), sanitizedRoster);
 
     const output = Builder.getOutput(sanitizedRoster, armyData);
 
