@@ -499,6 +499,10 @@ details.content-details {
   margin-bottom: .5rem;
 }
 
+details.content-details .description {
+  white-space: pre-line;
+}
+
 div#overview-page.active {
   padding: 2rem;
   display: flex;
