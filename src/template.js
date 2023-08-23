@@ -475,6 +475,7 @@ button.toggle-aside {
 
 details.title-details {
   padding: .5rem 0;
+  color: var(--text-datasheet);
 }
 
 .title-details > summary {

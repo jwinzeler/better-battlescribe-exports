@@ -199,19 +199,41 @@ class Builder {
     if (unit.abilities.abilities) {
       tableData.push(
         ...unit.abilities.abilities
-          .filter((ability) => ability.name !== "Invulnerable Save")
+          .filter((ability) => !['Invulnerable Save', 'Leader'].includes(ability.name))
           .map((ability) => ([
             `<b>${ability.name}: </b>${ability.description}`,
           ]),
-          ),
+        ),
       );
     }
 
     const abilitiesTable = this.createTable(tableData);
 
+    const extraSectionData = [
+      ['EXTRA'],
+      /*[`
+        <b>Model Composition:</b><br />
+        ${unit.selections.map((selections) => `${selections.join(', ')}<br />`)}
+      `],*/
+      [`
+        <b>Unit Composition:</b><br />
+        ${unit.flatSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
+      `],
+    ];
+
+    const leaderAbility = unit.abilities.abilities.find((ability) => ability.name === "Leader");
+    if (leaderAbility) {
+      extraSectionData.push(
+        [`<b>${leaderAbility.name}: </b>${leaderAbility.description}`]
+      );
+    }
+
+    const extraSection = this.createTable(extraSectionData);
+
     return `
       ${invulnerableSaveAbilityHtml}
       ${abilitiesTable}
+      ${extraSection}
     `;
   }
 
