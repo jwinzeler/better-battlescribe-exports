@@ -84,7 +84,7 @@ class Sanitizer {
       ...roster,
       units: roster.units.map((unit) => ({
         ...unit,
-        selections:
+        flatSelections:
           unit.selections.reduce((newSelections, selections) => {
             selections.forEach((selection) => {
               const duplicateSelection = newSelections.find((newSelection) => selection.includes(newSelection.name) || newSelection.name.includes(selection));
