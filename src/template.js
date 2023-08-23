@@ -213,6 +213,30 @@ html, body {
   user-select: none;
 }
 
+body.xenos_tyranids {
+  --border-datasheet: #3e1844;
+  --text-datasheet: #382638;
+  --background-primary: #382638;
+}
+
+body.imperium_adeptus_mechanicus {
+  --border-datasheet: #9F322A;
+  --text-datasheet: #4e2522;
+  --background-primary: #4e2522;
+}
+
+body.imperium_adeptus_astartes_deathwatch {
+  --border-datasheet: #41494E;
+  --text-datasheet: #1b2830;
+  --background-primary: #1b2830;
+}
+
+body.chaos_world_eaters {
+  --border-datasheet: #531415;
+  --text-datasheet: #411818;
+  --background-primary: #411818;
+}
+
 b {
   font-weight: 500;
 }

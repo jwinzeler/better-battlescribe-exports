@@ -7,7 +7,7 @@ class Builder {
         <title>${roster.name}</title>
         ${this.getMetaTags(roster)}
       </head>
-      <body>
+      <body class="${roster.faction.name.toLowerCase().replace(/- /g, '').replace(/ /g, '_')}">
         <div id="backdrop"></div>
         ${this.getAside(roster)}
         ${this.getMain(roster, armyRules)}
