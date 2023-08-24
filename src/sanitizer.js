@@ -73,7 +73,7 @@ class Sanitizer {
 
         return {
           ...unit,
-          sidebarSelections: unit.selections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.selections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
+          sidebarSelections: unit.flatSelections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.flatSelections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
         };
       }),
     };
@@ -153,6 +153,19 @@ class Sanitizer {
     return {
       ...roster,
       units: this.removeDuplicateFromArray(roster.units),
+      armyComposition: roster.units.map((unit) => ({
+        name: unit.name,
+        count: 1,
+        points: unit.pts,
+      })).reduce((units, unit) => {
+        if (units.some((u) => u.name === unit.name)) {
+          units.find((u) => u.name === unit.name).count++;
+        } else {
+          units.push(unit);
+        }
+
+        return units;
+      }, []),
     };
   }
 
