@@ -21,7 +21,7 @@ class Builder {
   }
 
   static getMain(roster, armyRules) {
-    const overviewPage = armyRules ? this.getOverviewPage(armyRules) : '';
+    const overviewPage = armyRules ? this.getOverviewPage(roster, armyRules) : '';
     const unitPages = roster.units.map((unit, index) => this.getUnitPage(unit, index));
 
     return `
@@ -33,12 +33,13 @@ class Builder {
     `;
   }
 
-  static getOverviewPage(armyRules) {
+  static getOverviewPage(roster, armyRules) {
     return `
         <div id="overview-page" class="page active">
           <div class="left-column">
             ${this.getRules('Army rules', armyRules.army_rules)}
             ${this.getRules('Detachment rules', armyRules.detachment_rules)}
+            ${this.getArmyComposition(roster)}
           </div>
           <div class="right-column">
             ${this.getStratagems(armyRules.stratagems)}
@@ -67,6 +68,35 @@ class Builder {
         </details>
       </div>
     `;
+  }
+
+  static getArmyComposition(roster) {
+    return `
+    <div>
+      <details class="title-details">
+        <summary>Army Composition</summary>
+        <table class="army-comp">
+          <tr>
+            <th>Count</th>
+            <th>Unit</th>
+            <th>Cost</th>
+          </tr>
+          ${roster.armyComposition.map((unit) => `
+            <tr>
+              <td>${unit.count}</td>
+              <td>${unit.name}</td>
+              <td>${unit.points.replace('pts', '')}</td>
+            </tr>
+          `).join('')}
+          <tr>
+            <th></th>
+            <th>Total</th>
+            <th>${roster.faction.points.replace('pts', '')}</td>
+          </tr>
+        </table>
+      </details>
+    </div>
+  `;
   }
 
   static getStratagemThemeClass(when) {

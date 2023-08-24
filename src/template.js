@@ -628,6 +628,32 @@ div#overview-page.active {
   text-align: center;
 }
 
+table.army-comp {
+  color: var(--text-datasheet);
+}
+
+table.army-comp tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+table.army-comp th:nth-of-type(1),
+table.army-comp td:nth-of-type(1) {
+  text-align: left;
+  width: 25%;
+}
+
+table.army-comp th:nth-of-type(2),
+table.army-comp td:nth-of-type(2) {
+  text-align: center;
+  width: 50%;
+}
+
+table.army-comp th:nth-of-type(3),
+table.army-comp td:nth-of-type(3) {
+  text-align: right;
+  width: 25%;
+}
+
 /* Phones */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
   main {
