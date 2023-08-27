@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <title>Battlescribe Pretty Html</title>
+    <title>Suicide Overwatch - Better Battlescribe Exports</title>
   </head>
   <body>
     <div class="wrapper">
+      <p>
+        Export your roster from Battlescribe as .html and upload it here to convert it into an actually usable format.<br />
+        Use <b>Download</b> if you want to download the converted roster.<br />
+        Use <b>Open</b> if you want to directly use the converted roster in fullscreen.
+      </p>
       <details open>
         <summary>File</summary>
-        <input id="fileInput" type="file" />
-        <a id="downloadButton"><button>Download</button></a>
+        <div class="buttons-wrapper">
+          <input id="fileInput" type="file" />
+          <a id="downloadButton"><button>Download</button></a>
+          <a id="openButton"><button>Open</button></a>
+        </div>
       </details>
       <details>
         <summary>Log</summary>
