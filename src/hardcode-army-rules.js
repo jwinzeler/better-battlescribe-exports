@@ -215,32 +215,54 @@ class HardcodeArmyRules {
 		chaos_world_eaters: {
 			army_rules: [{
 				name: `BLESSINGS OF KHORNE`,
-				description: `If your Army Faction is World Eaters, at the start of the battle round, you can make a Blessings of Khorne roll. To do so, roll eight D6. You can then use those dice to activate up to two Blessings of Khorne from the Blessings of Khorne list (see right). Each Blessing of Khorne specifies the dice results it requires (where a number is specified, a double or triple of that value or higher is required). You can only activate each Blessing of Khorne once per battle round. Any unused dice from the Blessings of Khorne roll are then discarded. Once activated, each Blessing of Khorne applies to all units from your army with this ability until the end of the battle round.
+        description: `If your Army Faction is World Eaters, at the start of the battle round, you can make a Blessings of Khorne roll. To do so, roll eight D6. 
+        
+        You can then use those dice to activate up to two Blessings of Khorne from the Blessings of Khorne list (see below). 
+
+        Each Blessing of Khorne specifies the dice results it requires (where a number is specified, a double or triple of that value or higher is required). 
+
+        You can only activate each Blessing of Khorne once per battle round. Any unused dice from the Blessings of Khorne roll are then discarded. 
+
+        Once activated, each Blessing of Khorne applies to all units from your army with this ability until the end of the battle round.
 	  
-				RAGE-FUELLED INVIGORATION (DOUBLE 1+)
-				■ Add 2" to the Move characteristic of models in this unit WRATHFUL DEVOTION  (DOUBLE 1+)
-				■ Models in this unit have the Feel No Pain 6+ ability. If models in this unit already have the Feel No Pain ability, add 1 to their Feel No Pain rolls. MARTIAL EXCELLENCE  (DOUBLE 3+)
-				■ Melee weapons equipped by models in this unit have the [SUSTAINED HITS 1] ability. TOTAL CARNAGE  (DOUBLE 4+ OR ANY TRIPLE)
+				<b><u>RAGE-FUELLED INVIGORATION</u></b>
+        DOUBLE 1+
+				■ Add 2" to the Move characteristic of models in this unit 
+
+        <b><u>WRATHFUL DEVOTION</u></b>
+        DOUBLE 1+
+				■ Models in this unit have the Feel No Pain 6+ ability. If models in this unit already have the Feel No Pain ability, add 1 to their Feel No Pain rolls.
+
+        <b><u>MARTIAL EXCELLENCE</u></b>
+        DOUBLE 3+
+				■ Melee weapons equipped by models in this unit have the [SUSTAINED HITS 1] ability. 
+
+        <b><u>TOTAL CARNAGE</u></b>
+        DOUBLE 4+ OR ANY TRIPLE
 				■ Each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6: on a 4+, do not remove it from play. The destroyed model can fight after the attacking model’s unit has finished making its attacks, and is then removed from play
 				
-				WARP BLADES  (DOUBLE 5+ OR ANY TRIPLE)
-				■ Melee weapons equipped by models in this unit have the [LETHAL HITS] ability. UNBRIDLED BLOODLUST  (DOUBLE 6 OR TRIPLE 4+)
+				<b><u>WARP BLADES</u></b>
+        DOUBLE 5+ OR ANY TRIPLE
+				■ Melee weapons equipped by models in this unit have the [LETHAL HITS] ability. 
+
+        <b><u>UNBRIDLED BLOODLUST</u></b>
+        DOUBLE 6 OR TRIPLE 4+
 				■ This unit is eligible to declare a charge in a turn in which it Advanced.`
 			},
 			],
 			detachment_rules: [{
 				name: `RELENTLESS RAGE - BERZERKER WARBAND`,
-				description: `Each time a World Eaters unit from your army is selected to fight, if that unit made a Charge move this turn, until the end of the phase, add 1 to the Strength and Attacks characteristics of melee weapons equipped by models in that unit..`
+				description: `Each time a World Eaters unit from your army is selected to fight, if that unit made a Charge move this turn, until the end of the phase, add 1 to the Strength and Attacks characteristics of melee weapons equipped by models in that unit.`
 			}],
 			stratagems: [
 				{
 					name: 'GORY MASSACRE',
-					when: `Fight phase.',
-				target: 'One World Eaters unit from
+					when: `Fight phase.`,
+				  target: `One World Eaters unit from
 				your army that made a Charge move this
 				turn and destroyed one or more enemy
 				units this phase`,
-					effect: `In your opponent’s next
+					effect: `In your opponent's next
 				Command phase, each enemy unit within
 				6" of your unit must take a Battle-shock
 				test. If the unit taking that test is Below
@@ -319,6 +341,116 @@ class HardcodeArmyRules {
 				roll for it. Instead, until the end of the
 				phase, add 6" to the Move characteristic
 				of models in your unit.`,
+					cost: 1,
+				},
+			]
+    },
+    imperium_adeptus_custodes: {
+			army_rules: [{
+				name: `MARTIAL KA'TAH`,
+        description: `At the start of the Fight phase, select one Ka'tah Stance from the list below to be active for your army until the end of the phase.
+
+        While a Ka'tah Stance is active for your army, each unit from your army with this ability gains the relevant ability.
+	  
+				<b><u>KAPTARIS STANCE</u></b>
+        
+				■ Each time a melee attack targets this unit, subtract 1 from the Hit roll 
+
+        <b><u>DACATARAI STANCE</u></b>
+
+				■ Melee weapons equipped by models in this unit have the [SUSTAINED HITS 1] ability.
+
+        <b><u>RENDAX STANCE</u></b>
+
+				■ Melee weapons equipped by models in this unit have the [LETHAL HITS] ability.`
+			},
+			],
+			detachment_rules: [{
+				name: `SHIELD HOST - AEGIS OF THE EMPEROR`,
+				description: `<b>Adeptus Custodes</b> models from your army have the Feel No Pain 4+ ability against mortal wounds.`
+			}],
+			stratagems: [
+				{
+					name: 'SLAYERS OF NIGHTMARES',
+					when: `Fight phase.`,
+				  target: `One Adeptus Custodes unit from
+          your army that has not been selected to
+          fight this phase`,
+					effect: `Until the end of the phase, each
+          time a model in your unit makes an attack
+          that targets a Monster or Vehicle unit,
+          add 1 to the Wound roll.`,
+					cost: 1,
+				},
+				{
+					name: 'UNWAVERING SENTINELS',
+					when: `Start of the Fight phase.`,
+					target: `One Adeptus Custodes unit
+          from your army (excluding Anathema
+          Psykana units) that is within range of an
+          objective marker.`,
+					effect: `Until the end of the phase, your
+          unit has the Fights First ability.`,
+					cost: 2,
+				},
+				{
+					name: 'AVENGE THE FALLEN',
+					when: `Start of the Fight phase.`,
+					target: `One Adeptus Custodes unit
+          from your army that is below its Starting
+          Strength and has not been selected to
+          fight this phase.`,
+					effect: `Until the end of the phase, add
+          1 to the Attacks characteristic of melee
+          weapons equipped by models in that
+          unit. If that unit is Below Half-strength,
+          until the end of the phase, add 2 to the
+          Attacks characteristic of those melee
+          weapons instead.`,
+					cost: 1,
+				},
+				{
+					name: 'ARCANE GENETIC ALCHEMY',
+					when: `Your opponent's Shooting phase or
+          the Fight phase, just after an enemy unit
+          has selected its targets.`,
+          target: `One Adeptus Custodes Infantry
+          unit from your army (excluding Anathema
+          Psykana units) that was selected as
+          the target of one or more of that enemy
+          unit's attacks.`,
+					effect: `Until the end of the phase, each
+          time an attack is allocated to a model in
+          your unit, subtract 1 from the Damage
+          characteristic of that attack.`,
+					cost: 2,
+				},
+				{
+					name: 'VIGIL UNENDING',
+					when: `Your Command phase.`,
+					target: `One Adeptus Custodes Infantry
+          unit from your army (excluding Anathema
+          Psykana units).`,
+					effect: `One destroyed model (excluding
+            Character models) is returned to your
+            unit with its full wounds remaining.`,
+          restrictions: `: You cannot target the
+          same unit with this Stratagem more than
+          once per battle.`,
+					cost: 1,
+				},
+				{
+					name: 'SWORN GUARDIANS',
+					when: `Your Movement phase.`,
+					target: `One Adeptus Custodes unit from
+          your army (excluding Anathema Psykana
+          units) within range of an objective marker
+          you control.`,
+					effect: `That objective marker remains
+          under your control even if you have
+          no models within range of it, until your
+          opponent controls it at the start or end of
+          any turn.`,
 					cost: 1,
 				},
 			]
