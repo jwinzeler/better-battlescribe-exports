@@ -21,6 +21,7 @@ fileInput.addEventListener('change', (event) => {
 
   if (file?.type === 'text/html') {
     Logger.log(`Loading file: ${file.name}`);
+    Main.setupPreview(loader);
     fileReader.readAsText(file);
   } else {
     Logger.error(`No file or invalid file type selected.`);
