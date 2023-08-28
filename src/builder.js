@@ -165,7 +165,7 @@ class Builder {
       rangedWeaponsTable = this.createTable([
         ['RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
         ...unit.rangedWeapons.map((weapon) => ([
-          `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
+          `${weapon.name}${Array.isArray(weapon.keywords) ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
           weapon.skill,
@@ -180,7 +180,7 @@ class Builder {
       meleeWeaponsTable = this.createTable([
         ['MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
         ...unit.meleeWeapons.map((weapon) => ([
-          `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
+          `${weapon.name}${Array.isArray(weapon.keywords) ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
           weapon.skill,
@@ -233,7 +233,7 @@ class Builder {
           .map((ability) => ([
             `<b>${ability.name}: </b>${ability.description}`,
           ]),
-        ),
+          ),
       );
     }
 
@@ -245,10 +245,10 @@ class Builder {
         <b>Model Composition:</b><br />
         ${unit.selections.map((selections) => `${selections.join(', ')}<br />`)}
       `],*/
-      [`
-        <b>Unit Composition:</b><br />
-        ${unit.flatSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
-      `],
+      // [`
+      //   <b>Unit Composition:</b><br />
+      //   ${unit.flatSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
+      // `],
     ];
 
     const leaderAbility = unit.abilities.abilities.find((ability) => ability.name === "Leader");

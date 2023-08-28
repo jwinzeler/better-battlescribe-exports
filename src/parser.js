@@ -163,7 +163,7 @@ class Parser {
           const strength = matches[4] || '';
           const armorPenetration = matches[5] || '';
           const damage = matches[6] || '';
-          const keywords = matches[7].replace(/^-$/, '').split(',').map((keyword) => keyword.trim()).filter((keyword) => !!keyword) || '';
+          const keywords = matches[7].replace('-', '').split(',').map((keyword) => keyword.trim()).filter((keyword) => !!keyword) || '';
 
           weapons.push({
             name,

@@ -1,11 +1,12 @@
 class Sanitizer {
   static sanitize(roster) {
     Logger.log('Sanitizing data...');
+    console.log(roster);
     roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
     roster = this.removeDuplicateStatlines(roster);
-    roster = this.addTooltips(roster, roster.rules);
-    roster = this.flattenSelections(roster);
+    // roster = this.addTooltips(roster, roster.rules);
+    // roster = this.flattenSelections(roster);
     roster = this.addSidebarSelections(roster);
 
     /**
@@ -73,7 +74,8 @@ class Sanitizer {
 
         return {
           ...unit,
-          sidebarSelections: unit.flatSelections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.flatSelections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
+          // sidebarSelections: unit.flatSelections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.flatSelections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
+          sidebarSelections: unit,
         };
       }),
     };
@@ -86,6 +88,7 @@ class Sanitizer {
         ...unit,
         flatSelections:
           unit.selections.reduce((newSelections, selections) => {
+            console.log(selections);
             selections.forEach((selection) => {
               const duplicateSelection = newSelections.find((newSelection) => selection.includes(newSelection.name) || newSelection.name.includes(selection));
               const regex = /^(?:(\d+)x)? ?(.*)$/;
