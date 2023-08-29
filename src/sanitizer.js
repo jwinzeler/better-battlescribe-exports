@@ -1,12 +1,11 @@
 class Sanitizer {
   static sanitize(roster) {
     Logger.log('Sanitizing data...');
-    console.log(roster);
     roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
     roster = this.removeDuplicateStatlines(roster);
-    // roster = this.addTooltips(roster, roster.rules);
-    // roster = this.flattenSelections(roster);
+    roster = this.addTooltips(roster, roster.rules);
+    roster = this.flattenSelections(roster);
     roster = this.addSidebarSelections(roster);
 
     /**
@@ -56,7 +55,7 @@ class Sanitizer {
     return this.mutateEachStringInObject(roster, (string) => {
       return string
         .replace(/(\w)- *?(\w)/g, '$1-$2') // Remove extra spaces with inline dashes (a- b -> a-b)
-        .replace(/  */g, ' ') // Remove double (or more) spaces
+        .replace(/'/g, "") // Remove ' in name  TODO
         .replace(/ +\n */g, '\n') // Remove extra spaces around line separators
         .replace(/ +, */g, ', ') // Remove spaces before and after commas, leave only 1 after
         .replace(/([A-Z]{5,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
@@ -74,8 +73,7 @@ class Sanitizer {
 
         return {
           ...unit,
-          // sidebarSelections: unit.flatSelections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.flatSelections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
-          sidebarSelections: unit,
+          sidebarSelections: unit.flatSelections.filter(() => !!duplicateUnit).filter((selection) => !duplicateUnit.flatSelections.find((duplicateSelection) => this.isDeepEqual(duplicateSelection, selection))),
         };
       }),
     };
@@ -88,7 +86,6 @@ class Sanitizer {
         ...unit,
         flatSelections:
           unit.selections.reduce((newSelections, selections) => {
-            console.log(selections);
             selections.forEach((selection) => {
               const duplicateSelection = newSelections.find((newSelection) => selection.includes(newSelection.name) || newSelection.name.includes(selection));
               const regex = /^(?:(\d+)x)? ?(.*)$/;
@@ -114,7 +111,8 @@ class Sanitizer {
 
   static addTooltips(roster, rules) {
     const addNestedTooltips = (strings) => strings.map((string) => addTooltips(string));
-    const addTooltips = (strings) => strings.map((string) => addTooltip(string));
+    const addTooltips = (strings) => strings?.map((string) => addTooltip(string));
+
 
     const addTooltip = (string) => {
       rules.forEach((rule) => {

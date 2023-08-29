@@ -17,13 +17,11 @@ class Logger {
 
   static log(message) {
     this.writeToElement(`<span class="log">${message}</span>`);
-    console.log(message);
   }
 
   static logArray(array) {
     array.forEach(element => {
       this.writeToElement(`<span class="log">>&nbsp;&nbsp;&nbsp;&nbsp;${JSON.stringify(element)}</span>`);
-      console.log(JSON.stringify(element));
     });
   }
 
