@@ -22,6 +22,7 @@ fileInput.addEventListener('change', (event) => {
   if (file?.type === 'text/html') {
     Logger.log(`Loading file: ${file.name}`);
     fileType = 'html';
+    Main.setupPreview(loader);
     fileReader.readAsText(file);
   } else if (file?.name.includes('.rosz') || file?.name.includes('.ros')) {
     Logger.log(`Loading file: ${file.name}`);
