@@ -245,10 +245,10 @@ class Builder {
         <b>Model Composition:</b><br />
         ${unit.selections.map((selections) => `${selections.join(', ')}<br />`)}
       `],*/
-      // [`
-      //   <b>Unit Composition:</b><br />
-      //   ${unit.flatSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
-      // `],
+      [`
+        <b>Unit Composition:</b><br />
+        ${unit.flatSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
+      `],
     ];
 
     const leaderAbility = unit.abilities.abilities.find((ability) => ability.name === "Leader");
