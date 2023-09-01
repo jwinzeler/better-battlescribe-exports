@@ -4,7 +4,6 @@ class Builder {
     const html = `
     <html>
       <head>
-        <script src="https://wurfl.io/wurfl.js"></script>
         <title>${roster.name}</title>
         ${this.getMetaTags(roster)}
       </head>
