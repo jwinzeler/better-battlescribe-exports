@@ -662,17 +662,17 @@ table.army-comp td:nth-of-type(3) {
 
 /* Phones */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
-  body:not(.tablet) main {
+  body.smartphone main {
     width: 100%;
   }
 
-  body:not(.tablet) aside {
+  body.smartphone aside {
     position: absolute;
     z-index: 10;
     background: var(--background-primary);
   }
 
-  body:not(.tablet) #backdrop.visible {
+  body.smartphone #backdrop.visible {
     display: block;
     z-index: 9;
     position: absolute;
@@ -682,11 +682,11 @@ table.army-comp td:nth-of-type(3) {
     opacity: 75%;
   }
 
-  body:not(.tablet) aside:not(.visible) {
+  body.smartphone aside:not(.visible) {
     display: none;
   }
 
-  body:not(.tablet) button.toggle-aside {
+  body.smartphone button.toggle-aside {
     display: block;
     position: absolute;
     border: 1px solid var(--border-primary);
@@ -700,96 +700,96 @@ table.army-comp td:nth-of-type(3) {
     top: 5px;
   }
 
-  body:not(.tablet) button#open {
+  body.smartphone button#open {
     left: 5px;
     right: auto;
   }
 
-  body:not(.tablet) .datasheet header {
+  body.smartphone .datasheet header {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1rem;
   }
 
-  body:not(.tablet) .datasheet-body {
+  body.smartphone .datasheet-body {
     flex-direction: column;
     flex-wrap: initial;
   }
 
-  body:not(.tablet) .datasheet-body .column-left table {
+  body.smartphone .datasheet-body .column-left table {
     margin-bottom: 0.5rem;
   }
 
-  body:not(.tablet) .datasheet-body .column-left th:first-child,
-  body:not(.tablet) .datasheet-body .column-left td:first-child {
+  body.smartphone .datasheet-body .column-left th:first-child,
+  body.smartphone .datasheet-body .column-left td:first-child {
     width: 60%;
   }
 
-  body:not(.tablet) .column-right .column-padding,
-  body:not(.tablet) .column-left .column-padding {
+  body.smartphone .column-right .column-padding,
+  body.smartphone .column-left .column-padding {
     padding-bottom: 0;
   }
 
-  body:not(.tablet) .column-right .column-padding {
+  body.smartphone .column-right .column-padding {
     padding-top: 0;
   }
 
-  body:not(.tablet) div#overview-page.active {
+  body.smartphone div#overview-page.active {
     display: block;
   }
 
-  body:not(.tablet) div#overview-page .left-column,
-  body:not(.tablet) div#overview-page .right-column {
+  body.smartphone div#overview-page .left-column,
+  body.smartphone div#overview-page .right-column {
     flex-basis: 100%;
   }
 
-  body:not(.tablet) #overview-page .visibility-button {
+  body.smartphone #overview-page .visibility-button {
     display:block;
   }
 
-  body:not(.tablet) .stats-wrapper {
+  body.smartphone .stats-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  body:not(.tablet) .stats-model-name {
+  body.smartphone .stats-model-name {
     flex-basis: 100%;
     justify-content: center;
   }
 
-  body:not(.tablet) .stats-model-name.first {
+  body.smartphone .stats-model-name.first {
     margin-top: 0;
   }
 }
 
 /* Landscape */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: landscape) {
-  body:not(.tablet) aside {
+  body.smartphone aside {
     width: 50%;
   }
 
-  body:not(.tablet) .datasheet header {
+  body.smartphone .datasheet header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
   }
 
-  body:not(.tablet) .main-stats-wrapper {
+  body.smartphone .main-stats-wrapper {
     width: 320px;
   }
 }
 
 /* Portrait */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: portrait) {
-  body:not(.tablet) aside {
+  body.smartphone aside {
     width: 90%;
   }
 
-  body:not(.tablet) .stats-wrapper {
+  body.smartphone .stats-wrapper {
     width: 100%;
   }
 }
