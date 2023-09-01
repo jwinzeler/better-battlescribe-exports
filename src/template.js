@@ -237,6 +237,12 @@ body.chaos_world_eaters {
   --background-primary: #411818;
 }
 
+body.aeldari_craftworlds {
+  --border-datasheet: #1f767d;
+  --text-datasheet: #023539;
+  --background-primary: #023539;
+}
+
 b {
   font-weight: 500;
 }
