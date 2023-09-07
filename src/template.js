@@ -808,6 +808,7 @@ togglePage = (id) => {
   document.getElementById(id + '-page')?.classList.add('active');
   document.querySelectorAll('.sidebar-button').forEach((button) => button.classList.remove('active'));
   document.getElementById(id + '-button')?.classList.add('active');
+  document.getElementsByTagName('main')[0].scrollTop = 0;
   toggleAside();
 };
 changeVisibilityText = (id, isVisible) => {

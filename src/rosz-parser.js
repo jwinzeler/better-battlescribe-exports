@@ -14,14 +14,20 @@ class RoszParser {
     Logger.log(`Reading ROSZ file...`);
     const xmldata = await this.unzip(file);
     const { roster } = new X2JS().xml_str2json(xmldata);
-    return {
+    const parsedRoster = {
       name: this.getRosterName(roster),
       battleSize: this.getBattleSize(roster.forces.force.selections),
       faction: this.getFaction(roster),
-      rules: this.getOtherRules(roster.forces.force.selections),
+      rules: this.gatherAllRules(roster),
       detachment: this.getDetachment(roster.forces.force.selections),
       units: this.getUnits(roster.forces),
     };
+    const armyData = {
+      ...HardcodeArmyRules.get(parsedRoster.faction.name),
+      ...(parsedRoster.faction?.rules?.length ? { army_rules: parsedRoster.faction.rules } : {}),
+      ...(parsedRoster.detachment?.rules?.length ? { detachment_rules: parsedRoster.detachment.rules } : {})
+    };
+    return { ...parsedRoster, armyData };
   }
 
   static getRosterName({ _name }) {
@@ -62,21 +68,32 @@ class RoszParser {
     };
   }
 
-  static getRules(selection) {
-    return selection
-      .filter(({ rules }) => !!rules)
-      .reduce((accumulator, { rules }) => [...accumulator, ...(Array.isArray(rules.rule) ? rules.rule : [rules.rule])], [])
+  static getRules(unparsedRules, formatted = false) {
+    if (!formatted) {
+      unparsedRules = unparsedRules
+        .filter(({ rules }) => !!rules)
+        .reduce((accumulator, { rules }) => [...accumulator, ...this.getArray(rules.rule)], []);
+    }
+    return unparsedRules
       .filter((rule, index, array) => array.findIndex(rule2 => (rule2.description === rule.description)) === index)
       .map(({ _name, description, _page }) => ({ name: _name, description, _page }));
   }
 
-  static getOtherRules({ selection }) {
-    Logger.log('Finding other rules...');
-    const rules = this.getRules(selection);
-    if (!rules.length) {
-      Logger.warn('No other rules found!');
-    }
-
+  static gatherAllRules(roster) {
+    Logger.log('Gathering all rules...');
+    const gatherRules = (obj, rules) => {
+      for (var property in obj) {
+        if (property === 'rules') {
+          rules.push(...(this.getArray(obj[property].rule).flat(1)));
+        } else if (typeof obj[property] == "object") {
+          gatherRules(obj[property], rules);
+        }
+      }
+      return rules;
+    };
+    const unparsedRules = gatherRules(roster, []);
+    const rules = this.getRules(unparsedRules, true);
+    if (!rules.length) { Logger.warn('No rules found!'); }
     return rules;
   }
 
@@ -93,17 +110,15 @@ class RoszParser {
   }
 
   static getUnit(unit) {
-    console.log(unit._name, unit);
     return {
       name: unit._name,
       pts: `${Number(unit.costs.cost._value)}`,
       keywords: [unit.categories.category.map(({ _name }) => _name)],
-      selectionsFull: unit.selections?.selection,
-      selections: unit.selections ? [this.getArray(unit.selections?.selection).map(({ _name }) => _name)] : [],
-      stats: this.getUnitStats(unit._name, unit.profiles.profile),
-      meleeWeapons: this.getWeapons(unit.selections ? unit.selections.selection : unit.profiles.profile, 'Melee Weapons'),
-      rangedWeapons: this.getWeapons(unit.selections ? unit.selections.selection : unit.profiles.profile, 'Ranged Weapons'),
-      abilities: this.getAbilities(unit.profiles.profile),
+      selections: unit.selections ? [this.getArray(unit.selections?.selection).map(({ _name, _number }) => _number + "x" + _name)] : [],
+      stats: this.getUnitStats(unit),
+      meleeWeapons: this.getWeapons(unit, 'Melee Weapons'),
+      rangedWeapons: this.getWeapons(unit, 'Ranged Weapons'),
+      abilities: this.getAbilities(unit),
       ruleKeys: unit.rules ? this.getUnitRulekeys(unit.rules.rule) : [],
     };
   }
@@ -113,9 +128,9 @@ class RoszParser {
     return characteristic.filter(({ _name }) => _name === name).map(({ __text }) => __text)[0] || "";
   };
 
-  static getUnitStats(name, profiles) {
-    const stats = profiles
-      .filter(({ _name, _typeName }) => _name === name && ['unit', 'model'].includes(_typeName.toLowerCase()))
+  static getUnitStats(unit) {
+    const parseStats = (profiles, name) => profiles
+      .filter(({ _name, _typeName }) => name.includes(_name) && ['unit', 'model'].includes(_typeName.toLowerCase()))
       .map(profile => {
         const characteristic = profile.characteristics.characteristic;
         return {
@@ -128,6 +143,11 @@ class RoszParser {
           OC: this.getStat(characteristic, 'OC'),
         };
       });
+
+    let stats = unit?.profiles?.profile ? parseStats(unit.profiles.profile, unit._name) : [];
+    if (!stats.length) {
+      stats = parseStats(this.getArray(unit?.selections?.selection?.profiles?.profile), unit._name);
+    }
     return stats;
   }
 
@@ -135,41 +155,47 @@ class RoszParser {
   static getWeaponsProfile(selections, type) {
     return this.getArray(selections)
       .filter(selection => {
+        if (selection._typeName === type) return true;
         if (!selection.profiles || !selection.profiles.profile) return false;
         return this.getArray(selection.profiles.profile).filter(profile => profile._typeName === type).length > 0;
       })
       .map(selection => {
-        return this.getArray(selection.profiles.profile).map(profile => {
-          const characteristic = profile.characteristics.characteristic;
-          return {
-            name: profile._name,
-            range: this.getStat(characteristic, 'Range'),
-            attacks: this.getStat(characteristic, 'A'),
-            skill: this.getStat(characteristic, 'BS') || this.getStat(characteristic, 'WS'),
-            strength: this.getStat(characteristic, 'S'),
-            armorPenetration: this.getStat(characteristic, 'AP'),
-            damage: this.getStat(characteristic, 'D'),
-            keywords: this.getStat(characteristic, 'Keywords').split(','),
-          };
+        const getProfile = (name, characteristic) => ({
+          name,
+          range: this.getStat(characteristic, 'Range'),
+          attacks: this.getStat(characteristic, 'A'),
+          skill: this.getStat(characteristic, 'BS') || this.getStat(characteristic, 'WS'),
+          strength: this.getStat(characteristic, 'S'),
+          armorPenetration: this.getStat(characteristic, 'AP'),
+          damage: this.getStat(characteristic, 'D'),
+          keywords: this.getStat(characteristic, 'Keywords').split(',').filter(name => name !== '-' && name !== ''),
         });
+        if (selection?.profiles?.profile) {
+          return this.getArray(selection.profiles.profile).map(profile => getProfile(profile._name, profile.characteristics.characteristic));
+        } else {
+          return getProfile(selection._name, selection.characteristics.characteristic);
+        }
       });
   }
 
-  static getWeapons(selections, type) {
-    // If weapons comes
-    let weapons = this.getWeaponsProfile(selections, type) || [];
+  static getWeapons(unit, type) {
+    const toCheck = [];
+    let weapons = [];
+
+    toCheck.push(...this.getArray(unit.selections?.selection).filter(p => ['upgrade', type, 'unit', 'model'].includes(p._type)));
+    toCheck.push(...this.getArray(unit.profiles?.profile).filter(p => ['upgrade', type, 'unit', 'model'].includes(p._typeName)));
 
     // If models comes
-    if (!weapons.length) {
-      const models = this.getArray(selections);
-      models.filter(({ _type }) => ['unit', 'model'].includes(_type)).forEach((model) => {
-        const weaponProfileObj = model.selections ? model.selections.selection : model;
-        const weaponProfile = this.getWeaponsProfile(weaponProfileObj, type);
-        weapons.push(weaponProfile);
-      });
-    }
+    this.getArray(toCheck).filter(({ _type }) => ['unit', 'model'].includes(_type)).forEach((model) => {
+      const weaponProfileObj = model.selections ? model.selections.selection : model.profiles.profile;
+      const weaponProfile = this.getWeaponsProfile(weaponProfileObj, type);
+      weapons.push(weaponProfile);
+    });
 
-    //remove flatten arrays
+    // If weapons comes
+    weapons.push(...this.getWeaponsProfile(toCheck, type));
+
+    //flatten arrays
     weapons = Array.isArray(weapons[0]) ? weapons.flat(2) : weapons;
 
     //remove completely duplicated profiles 
@@ -178,18 +204,25 @@ class RoszParser {
   }
 
   static getArray(maybeArray) {
+    if (!maybeArray) return [];
     if (!Array.isArray(maybeArray)) return [maybeArray];
     return maybeArray;
   }
 
-  static getAbilities(profiles) {
-    const abilities = profiles.filter(({ _typeName }) => _typeName === 'Abilities').map(profile => {
-      const characteristic = profile.characteristics.characteristic;
+  static getAbilities(unit) {
+    const selectionProfiles = (unit?.selections?.selection ? this.getArray(unit.selections.selection) : [])
+      .filter(selection => selection._type === 'upgrade' && selection?.profiles?.profile)
+      .map(selection => selection.profiles.profile);
+
+    const abilities = [...(unit.profiles ? unit.profiles.profile : []), ...selectionProfiles].filter(({ _typeName }) => _typeName === 'Abilities').map(profile => {
       return {
         name: profile._name,
-        description: characteristic.__text
+        description: profile.characteristics.characteristic.__text
       };
     });
+
+
+
     return { abilities, abilityNames: [abilities.map(({ name }) => name)] };
   }
 

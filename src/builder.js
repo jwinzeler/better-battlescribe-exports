@@ -37,8 +37,8 @@ class Builder {
     return `
         <div id="overview-page" class="page active">
           <div class="left-column">
-            ${this.getRules('Army rules', armyRules.army_rules)}
-            ${this.getRules('Detachment rules', armyRules.detachment_rules)}
+            ${this.getRules('Army rules', armyRules.army_rules || [])}
+            ${this.getRules('Detachment rules', armyRules.detachment_rules || [])}
             ${this.getArmyComposition(roster)}
           </div>
           <div class="right-column">
@@ -165,7 +165,7 @@ class Builder {
       rangedWeaponsTable = this.createTable([
         ['RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
         ...unit.rangedWeapons.map((weapon) => ([
-          `${weapon.name}${Array.isArray(weapon.keywords) ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
+          `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
           weapon.skill,
@@ -180,7 +180,7 @@ class Builder {
       meleeWeaponsTable = this.createTable([
         ['MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
         ...unit.meleeWeapons.map((weapon) => ([
-          `${weapon.name}${Array.isArray(weapon.keywords) ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
+          `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
           weapon.range,
           weapon.attacks,
           weapon.skill,
@@ -223,7 +223,7 @@ class Builder {
     ];
 
     if (unit.ruleKeys) {
-      tableData.push([`CORE: <b>${unit.ruleKeys.join(', ')}</b>`]);
+      tableData.push([`CORE: <b>${unit.ruleKeys.flat(1).join(', ')}</b>`]);
     }
 
     if (unit.abilities.abilities) {
@@ -270,7 +270,7 @@ class Builder {
   static getBottomColumn(unit) {
     return `
       <div class="keywords">
-        KEYWORDS: <b>${unit.keywords.join(', ')}</b>
+        KEYWORDS: <b>${unit.keywords.flat(1).join(', ')}</b>
       </div>
     `;
   }
