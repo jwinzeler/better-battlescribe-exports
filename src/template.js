@@ -237,6 +237,12 @@ body.chaos_world_eaters {
   --background-primary: #411818;
 }
 
+body.aeldari_craftworlds {
+  --border-datasheet: #1f767d;
+  --text-datasheet: #023539;
+  --background-primary: #023539;
+}
+
 b {
   font-weight: 500;
 }
@@ -656,31 +662,31 @@ table.army-comp td:nth-of-type(3) {
 
 /* Phones */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) {
-  main {
+  body.smartphone main {
     width: 100%;
   }
 
-  aside {
+  body.smartphone aside {
     position: absolute;
     z-index: 10;
     background: var(--background-primary);
   }
 
-  #backdrop.visible {
+  body.smartphone #backdrop.visible {
     display: block;
     z-index: 9;
     position: absolute;
-    width: 100vw;
+    width: 100vw; 
     height: 100vh;
     background: grey;
     opacity: 75%;
   }
 
-  aside:not(.visible) {
+  body.smartphone aside:not(.visible) {
     display: none;
   }
 
-  button.toggle-aside {
+  body.smartphone button.toggle-aside {
     display: block;
     position: absolute;
     border: 1px solid var(--border-primary);
@@ -694,94 +700,96 @@ table.army-comp td:nth-of-type(3) {
     top: 5px;
   }
 
-  button#open {
+  body.smartphone button#open {
     left: 5px;
     right: auto;
   }
 
-  .datasheet header {
+  body.smartphone .datasheet header {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1rem;
   }
 
-  .datasheet-body {
+  body.smartphone .datasheet-body {
     flex-direction: column;
     flex-wrap: initial;
   }
 
-  .datasheet-body .column-left table {
+  body.smartphone .datasheet-body .column-left table {
     margin-bottom: 0.5rem;
   }
 
-  .datasheet-body .column-left th:first-child,
-  .datasheet-body .column-left td:first-child {
+  body.smartphone .datasheet-body .column-left th:first-child,
+  body.smartphone .datasheet-body .column-left td:first-child {
     width: 60%;
   }
 
-  .column-right .column-padding,
-  .column-left .column-padding {
+  body.smartphone .column-right .column-padding,
+  body.smartphone .column-left .column-padding {
     padding-bottom: 0;
   }
 
-  .column-right .column-padding {
+  body.smartphone .column-right .column-padding {
     padding-top: 0;
   }
 
-  div#overview-page.active {
+  body.smartphone div#overview-page.active {
     display: block;
   }
 
-  div#overview-page .left-column,
-  div#overview-page .right-column {
+  body.smartphone div#overview-page .left-column,
+  body.smartphone div#overview-page .right-column {
     flex-basis: 100%;
   }
 
-  #overview-page .visibility-button {
+  body.smartphone #overview-page .visibility-button {
     display:block;
   }
 
-  .stats-wrapper {
+  body.smartphone .stats-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .stats-model-name {
+  body.smartphone .stats-model-name {
     flex-basis: 100%;
     justify-content: center;
   }
 
-  .stats-model-name.first {
+  body.smartphone .stats-model-name.first {
     margin-top: 0;
   }
 }
 
 /* Landscape */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: landscape) {
-  aside {
+  body.smartphone aside {
     width: 50%;
   }
 
-  .datasheet header {
+  body.smartphone .datasheet header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
   }
-  .main-stats-wrapper {
+
+  body.smartphone .main-stats-wrapper {
     width: 320px;
   }
 }
 
 /* Portrait */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: portrait) {
-  aside {
+  body.smartphone aside {
     width: 90%;
   }
-  .stats-wrapper {
+
+  body.smartphone .stats-wrapper {
     width: 100%;
   }
 }

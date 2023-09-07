@@ -7,7 +7,7 @@ class Builder {
         <title>${roster.name}</title>
         ${this.getMetaTags(roster)}
       </head>
-      <body class="${roster.faction.name.toLowerCase().replace(/- /g, '').replace(/ /g, '_')}">
+      <body class="${roster.faction.name.toLowerCase().replace(/- /g, '').replace(/ /g, '_')} ${WURFL.form_factor.toLowerCase()}">
         <div id="backdrop"></div>
         ${this.getAside(roster)}
         ${this.getMain(roster, armyRules)}
@@ -399,5 +399,9 @@ class Builder {
 
   static stringToId(string) {
     return string.replace(/[\n\s]/g, '-').replace(/(<([^>]+)>)/ig, '').toLowerCase();
+  }
+
+  static isTablet() {
+    return (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   }
 }
