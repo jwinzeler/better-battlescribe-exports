@@ -158,38 +158,21 @@ class Builder {
   }
 
   static getLeftColumn(unit) {
-    let rangedWeaponsTable = '';
-    let meleeWeaponsTable = '';
+    const getWeaponTable = (name, weapons) => this.createTable([
+      [name, 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
+      ...weapons.map((weapon) => ([
+        `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
+        weapon.range,
+        weapon.attacks,
+        weapon.skill,
+        weapon.strength,
+        weapon.armorPenetration,
+        weapon.damage,
+      ])),
+    ]);
 
-    if (unit.rangedWeapons.length) {
-      rangedWeaponsTable = this.createTable([
-        ['RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
-        ...unit.rangedWeapons.map((weapon) => ([
-          `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
-          weapon.range,
-          weapon.attacks,
-          weapon.skill,
-          weapon.strength,
-          weapon.armorPenetration,
-          weapon.damage,
-        ])),
-      ]);
-    }
-
-    if (unit.meleeWeapons.length) {
-      meleeWeaponsTable = this.createTable([
-        ['MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
-        ...unit.meleeWeapons.map((weapon) => ([
-          `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
-          weapon.range,
-          weapon.attacks,
-          weapon.skill,
-          weapon.strength,
-          weapon.armorPenetration,
-          weapon.damage,
-        ])),
-      ]);
-    }
+    const rangedWeaponsTable = unit.rangedWeapons.length ? getWeaponTable('RANGED WEAPONS', unit.rangedWeapons) : '';
+    const meleeWeaponsTable = unit.meleeWeapons.length ? getWeaponTable('MELEE WEAPONS', unit.meleeWeapons) : '';
 
     return `
       ${rangedWeaponsTable}
