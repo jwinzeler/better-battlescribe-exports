@@ -151,56 +151,18 @@ class RoszParser {
     return stats;
   }
 
-  //TODO: this is fucked up
-  static getWeaponsProfile(selections, type) {
-    return this.getArray(selections)
-      .filter(selection => {
-        if (selection._typeName === type) return true;
-        if (!selection.profiles || !selection.profiles.profile) return false;
-        return this.getArray(selection.profiles.profile).filter(profile => profile._typeName === type).length > 0;
-      })
-      .map(selection => {
-        const getProfile = (name, characteristic) => ({
-          name,
-          range: this.getStat(characteristic, 'Range'),
-          attacks: this.getStat(characteristic, 'A'),
-          skill: this.getStat(characteristic, 'BS') || this.getStat(characteristic, 'WS'),
-          strength: this.getStat(characteristic, 'S'),
-          armorPenetration: this.getStat(characteristic, 'AP'),
-          damage: this.getStat(characteristic, 'D'),
-          keywords: this.getStat(characteristic, 'Keywords').split(',').filter(name => name !== '-' && name !== ''),
-        });
-        if (selection?.profiles?.profile) {
-          return this.getArray(selection.profiles.profile).map(profile => getProfile(profile._name, profile.characteristics.characteristic));
-        } else {
-          return getProfile(selection._name, selection.characteristics.characteristic);
-        }
-      });
-  }
 
   static getWeapons(unit, type) {
-    const toCheck = [];
-    let weapons = [];
-
-    toCheck.push(...this.getArray(unit.selections?.selection).filter(p => ['upgrade', type, 'unit', 'model'].includes(p._type)));
-    toCheck.push(...this.getArray(unit.profiles?.profile).filter(p => ['upgrade', type, 'unit', 'model'].includes(p._typeName)));
-
-    // If models comes
-    this.getArray(toCheck).filter(({ _type }) => ['unit', 'model'].includes(_type)).forEach((model) => {
-      const weaponProfileObj = model.selections ? model.selections.selection : model.profiles.profile;
-      const weaponProfile = this.getWeaponsProfile(weaponProfileObj, type);
-      weapons.push(weaponProfile);
-    });
-
-    // If weapons comes
-    weapons.push(...this.getWeaponsProfile(toCheck, type));
-
-    //flatten arrays
-    weapons = Array.isArray(weapons[0]) ? weapons.flat(2) : weapons;
-
-    //remove completely duplicated profiles 
-    weapons = weapons.filter((profile1, i, a) => a.findIndex(profile2 => (JSON.stringify(profile1) === JSON.stringify(profile2))) === i);
-    return weapons;
+    return this.findInObject(unit, type, []).map(({ _name, characteristics }) => ({
+      name: _name,
+      range: this.getStat(characteristics.characteristic, 'Range'),
+      attacks: this.getStat(characteristics.characteristic, 'A'),
+      skill: this.getStat(characteristics.characteristic, 'BS') || this.getStat(characteristics.characteristic, 'WS'),
+      strength: this.getStat(characteristics.characteristic, 'S'),
+      armorPenetration: this.getStat(characteristics.characteristic, 'AP'),
+      damage: this.getStat(characteristics.characteristic, 'D'),
+      keywords: this.getStat(characteristics.characteristic, 'Keywords').split(',').filter(name => name !== '-' && name !== ''),
+    }));
   }
 
   static getArray(maybeArray) {
@@ -210,19 +172,10 @@ class RoszParser {
   }
 
   static getAbilities(unit) {
-    const selectionProfiles = (unit?.selections?.selection ? this.getArray(unit.selections.selection) : [])
-      .filter(selection => selection._type === 'upgrade' && selection?.profiles?.profile)
-      .map(selection => selection.profiles.profile);
-
-    const abilities = [...(unit.profiles ? unit.profiles.profile : []), ...selectionProfiles].filter(({ _typeName }) => _typeName === 'Abilities').map(profile => {
-      return {
-        name: profile._name,
-        description: profile.characteristics.characteristic.__text
-      };
-    });
-
-
-
+    const abilities = this.findInObject(unit, 'Abilities', []).map(profile => ({
+      name: profile._name,
+      description: profile.characteristics.characteristic.__text
+    }));
     return { abilities, abilityNames: [abilities.map(({ name }) => name)] };
   }
 
@@ -243,5 +196,20 @@ class RoszParser {
       name,
       abilities
     };
+  }
+
+  static findInObject(obj, type, tempArray) {
+    Object.keys(obj).forEach((key) => {
+      if ((key === '_type' || key === '_typeName') && obj[key] === type) {
+        tempArray.push(obj);
+      } else if (Array.isArray(obj[key])) {
+        obj[key].forEach(a => {
+          this.findInObject(a, type, tempArray);
+        });
+      } else if (!Array.isArray(obj[key]) && typeof obj[key] === "object") {
+        this.findInObject(obj[key], type, tempArray);
+      }
+    });
+    return tempArray;
   }
 }
