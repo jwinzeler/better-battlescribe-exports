@@ -9,7 +9,7 @@ class Main {
     const sanitizedRoster = Sanitizer.sanitize(roster);
     const output = Builder.getOutput(sanitizedRoster);
 
-    ArmyConstructor.show(sanitizedRoster);
+    ArmyCustomizer.show(sanitizedRoster);
 
     this.setupPreview(output);
 

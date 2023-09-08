@@ -1,22 +1,22 @@
-class ArmyConstructor {
+class ArmyCustomizer {
 
 	static EMPTY_STATS = { name: 'New name', M: "0\"", T: "0", SV: "0+", W: "0", LD: "0+", OC: "0", };
 	static EMPTY_WEAPONS = (skill) => ({ name: 'New weapon', A: 0, [skill]: 0, S: 0, AP: 0, D: 0 });
 	static REQUIRED_WEAPON_KEYS = ['attacks', 'skill', 'strength', 'armorPenetration', 'damage'];
 
 	static show(roster) {
-		Logger.log('Building army constructor...');
+		Logger.log('Building army customizer...');
 
 		const html = `
 			<div>
 				<b>Roster name:</b>
-				<input value="${roster.name}" onchange="ArmyConstructor.changeRosterName(this.value)"/>
+				<input value="${roster.name}" onchange="ArmyCustomizer.changeRosterName(this.value)"/>
 			</div>
 			${this.buildUnitTable(roster.units)}
 		`;
-		document.getElementById('constructor').innerHTML = html;
+		document.getElementById('customizer').innerHTML = html;
 		TempStorage.setItem('tempRoster', roster);
-		Logger.log('Finished constructor.');
+		Logger.log('Finished customizer.');
 	}
 
 	static buildUnitTable(units) {
@@ -54,7 +54,7 @@ class ArmyConstructor {
 	}
 
 	static getAddButton(unitName, param) {
-		return `<button onclick="ArmyConstructor.addRow('${unitName}','${param}')">Add row</button>`;
+		return `<button onclick="ArmyCustomizer.addRow('${unitName}','${param}')">Add row</button>`;
 	}
 
 	static addStatsTable(unit) {
@@ -105,7 +105,7 @@ class ArmyConstructor {
 					${row.map((column) => `
 					<${index ? 'td' : 'th'}>
 
-					${index ? `<input value="${column.value}" onchange='ArmyConstructor.changeValue("${unitName}","${paramName}",${index - 1},"${column.param}",this.value)'/>` : column.value || column}
+					${index ? `<input value="${column.value}" onchange='ArmyCustomizer.changeValue("${unitName}","${paramName}",${index - 1},"${column.param}",this.value)'/>` : column.value || column}
 					
 					</${index ? 'input' : 'th'}>
 					`).join('')}
