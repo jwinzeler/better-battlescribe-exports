@@ -22,7 +22,6 @@ class RoszParser {
       detachment: this.getDetachment(roster.forces.force.selections),
       units: this.getUnits(roster.forces),
     };
-    console.log(parsedRoster);
     const armyData = {
       ...HardcodeArmyRules.get(parsedRoster.faction.name),
       ...(parsedRoster.faction?.rules?.length ? { army_rules: parsedRoster.faction.rules } : {}),
@@ -163,7 +162,7 @@ class RoszParser {
       armorPenetration: this.getStat(characteristics.characteristic, 'AP'),
       damage: this.getStat(characteristics.characteristic, 'D'),
       keywords: this.getStat(characteristics.characteristic, 'Keywords').split(',').filter(name => name !== '-' && name !== ''),
-    }));
+    })).filter((weapon1, i, a) => a.findIndex(weapon2 => (JSON.stringify(weapon1) === JSON.stringify(weapon2))) === i);
   }
 
   static getArray(maybeArray) {
