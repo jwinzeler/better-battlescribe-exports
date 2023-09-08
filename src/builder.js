@@ -37,8 +37,8 @@ class Builder {
     return `
         <div id="overview-page" class="page active">
           <div class="left-column">
-            ${this.getRules('Army rules', armyRules.army_rules)}
-            ${this.getRules('Detachment rules', armyRules.detachment_rules)}
+            ${this.getRules('Army rules', armyRules.army_rules || [])}
+            ${this.getRules('Detachment rules', armyRules.detachment_rules || [])}
             ${this.getArmyComposition(roster)}
           </div>
           <div class="right-column">
@@ -158,38 +158,21 @@ class Builder {
   }
 
   static getLeftColumn(unit) {
-    let rangedWeaponsTable = '';
-    let meleeWeaponsTable = '';
+    const getWeaponTable = (name, skill, weapons) => this.createTable([
+      [name, 'RANGE', 'A', skill, 'S', 'AP', 'D'],
+      ...weapons.map((weapon) => ([
+        `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
+        weapon.range,
+        weapon.attacks,
+        weapon.skill,
+        weapon.strength,
+        weapon.armorPenetration,
+        weapon.damage,
+      ])),
+    ]);
 
-    if (unit.rangedWeapons.length) {
-      rangedWeaponsTable = this.createTable([
-        ['RANGED WEAPONS', 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
-        ...unit.rangedWeapons.map((weapon) => ([
-          `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
-          weapon.range,
-          weapon.attacks,
-          weapon.skill,
-          weapon.strength,
-          weapon.armorPenetration,
-          weapon.damage,
-        ])),
-      ]);
-    }
-
-    if (unit.meleeWeapons.length) {
-      meleeWeaponsTable = this.createTable([
-        ['MELEE WEAPONS', 'RANGE', 'A', 'WS', 'S', 'AP', 'D'],
-        ...unit.meleeWeapons.map((weapon) => ([
-          `${weapon.name}${weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
-          weapon.range,
-          weapon.attacks,
-          weapon.skill,
-          weapon.strength,
-          weapon.armorPenetration,
-          weapon.damage,
-        ])),
-      ]);
-    }
+    const rangedWeaponsTable = unit.rangedWeapons.length ? getWeaponTable('RANGED WEAPONS', 'BS', unit.rangedWeapons) : '';
+    const meleeWeaponsTable = unit.meleeWeapons.length ? getWeaponTable('MELEE WEAPONS', 'WS', unit.meleeWeapons) : '';
 
     return `
       ${rangedWeaponsTable}
@@ -223,7 +206,7 @@ class Builder {
     ];
 
     if (unit.ruleKeys) {
-      tableData.push([`CORE: <b>${unit.ruleKeys.join(', ')}</b>`]);
+      tableData.push([`CORE: <b>${unit.ruleKeys.flat(1).join(', ')}</b>`]);
     }
 
     if (unit.abilities.abilities) {
@@ -270,7 +253,7 @@ class Builder {
   static getBottomColumn(unit) {
     return `
       <div class="keywords">
-        KEYWORDS: <b>${unit.keywords.join(', ')}</b>
+        KEYWORDS: <b>${unit.keywords.flat(1).join(', ')}</b>
       </div>
     `;
   }

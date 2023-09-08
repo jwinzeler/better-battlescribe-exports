@@ -56,6 +56,7 @@ class Sanitizer {
       return string
         .replace(/(\w)- *?(\w)/g, '$1-$2') // Remove extra spaces with inline dashes (a- b -> a-b)
         .replace(/  */g, ' ') // Remove double (or more) spaces
+        .replace(/'/g, "") // Remove ' in name  TODO
         .replace(/ +\n */g, '\n') // Remove extra spaces around line separators
         .replace(/ +, */g, ', ') // Remove spaces before and after commas, leave only 1 after
         .replace(/([A-Z]{5,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
@@ -111,7 +112,8 @@ class Sanitizer {
 
   static addTooltips(roster, rules) {
     const addNestedTooltips = (strings) => strings.map((string) => addTooltips(string));
-    const addTooltips = (strings) => strings.map((string) => addTooltip(string));
+    const addTooltips = (strings) => strings?.map((string) => addTooltip(string));
+
 
     const addTooltip = (string) => {
       rules.forEach((rule) => {

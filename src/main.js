@@ -1,8 +1,11 @@
 class Main {
-  static run(file) {
-    const roster = Parser.read(file);
+  static async run(file, fileType) {
+    //TODO: Looks shit
+    const isHtml = fileType === "html";
+    const roster = isHtml ? Parser.read(file) : await RoszParser.read(file);
+
     const sanitizedRoster = Sanitizer.sanitize(roster);
-    const armyData = HardcodeArmyRules.get(sanitizedRoster.faction.name);
+    const armyData = isHtml ? HardcodeArmyRules.get(sanitizedRoster.faction.name) : roster.armyData;
     const output = Builder.getOutput(sanitizedRoster, armyData);
 
     this.setupPreview(output);
