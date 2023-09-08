@@ -106,7 +106,7 @@ class RoszParser {
       Logger.warn('No units found!');
     }
 
-    return units.sort((a, b) => this.sortBy('_name', a, b));
+    return units.sort((a, b) => this.sortBy('name', a, b));
   }
 
   static getUnit(unit) {
