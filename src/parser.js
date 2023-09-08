@@ -3,14 +3,15 @@ class Parser {
     Logger.log(`Reading file...`);
     const contents = document.createElement('div');
     contents.innerHTML = file;
-
+    const faction = this.getFaction(contents);
     return {
       name: this.getRosterName(contents),
       battleSize: this.getBattleSize(contents),
-      faction: this.getFaction(contents),
+      faction,
       detachment: this.getDetachment(contents),
       units: this.getUnits(contents),
       rules: this.getRules(contents),
+      armyData: HardcodeArmyRules.get(faction.name)
     };
   }
 

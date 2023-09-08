@@ -16,18 +16,27 @@
         Use <b>Open</b> if you want to directly use the converted roster in fullscreen.
       </p>
       <details open>
-        <summary>File</summary>
+        <summary>Roster</summary>
         <div class="buttons-wrapper">
           <input id="fileInput" type="file" />
           <a id="downloadButton"><button>Download</button></a>
           <a id="openButton"><button>Open</button></a>
         </div>
+        <div id="history" hidden>
+          <h4>OR</h4>
+          <div id="history-list"></div>
+        </div>
       </details>
-      <details open>
+      <details>
         <summary>Log</summary>
         <div id="log-wrapper">
           <code id="log"></code>
         </div>
+      </details>
+      <details>
+        <summary>Customizer</summary>
+        <div id="customizer"></div>
+        <button onclick="Main.rerun(null, true)">Change</button>
       </details>
       <details open class="preview-wrapper">
         <summary>Preview</summary>
@@ -40,6 +49,9 @@
     <script src="https://wurfl.io/wurfl.js"></script>
     <script src="src/hardcode-army-rules.js"></script>
     <script src="src/template.js"></script>
+    <script src="src/temp-storage.js"></script>
+    <script src="src/roster-history.js"></script>
+    <script src="src/army-customizer.js"></script>
     <script src="src/logger.js"></script>
     <script src="src/parser.js"></script>
     <script src="src/sanitizer.js"></script>
