@@ -130,7 +130,7 @@ class RoszParser {
 
   static getUnitStats(unit) {
     const parseStats = (profiles, name) => profiles
-      .filter(({ _name, _typeName }) => name.includes(_name) && ['unit', 'model'].includes(_typeName.toLowerCase()))
+      .filter(({ _name, _typeName }) => (name.includes(_name) || _name.includes(name)) && ['unit', 'model'].includes(_typeName.toLowerCase()))
       .map(profile => {
         const characteristic = profile.characteristics.characteristic;
         return {
