@@ -158,8 +158,8 @@ class Builder {
   }
 
   static getLeftColumn(unit) {
-    const getWeaponTable = (name, weapons) => this.createTable([
-      [name, 'RANGE', 'A', 'BS', 'S', 'AP', 'D'],
+    const getWeaponTable = (name, skill, weapons) => this.createTable([
+      [name, 'RANGE', 'A', skill, 'S', 'AP', 'D'],
       ...weapons.map((weapon) => ([
         `${weapon.name}${Array.isArray(weapon.keywords) && weapon.keywords.length ? `<br /><b class="small">[${weapon.keywords.join(', ')}]` : ''}</b>`,
         weapon.range,
@@ -171,8 +171,8 @@ class Builder {
       ])),
     ]);
 
-    const rangedWeaponsTable = unit.rangedWeapons.length ? getWeaponTable('RANGED WEAPONS', unit.rangedWeapons) : '';
-    const meleeWeaponsTable = unit.meleeWeapons.length ? getWeaponTable('MELEE WEAPONS', unit.meleeWeapons) : '';
+    const rangedWeaponsTable = unit.rangedWeapons.length ? getWeaponTable('RANGED WEAPONS', 'BS', unit.rangedWeapons) : '';
+    const meleeWeaponsTable = unit.meleeWeapons.length ? getWeaponTable('MELEE WEAPONS', 'WS', unit.meleeWeapons) : '';
 
     return `
       ${rangedWeaponsTable}
