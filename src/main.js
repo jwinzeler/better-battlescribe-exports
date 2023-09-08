@@ -1,18 +1,32 @@
 class Main {
   static async run(file, fileType) {
-    //TODO: Looks shit
     const isHtml = fileType === "html";
-    const roster = isHtml ? Parser.read(file) : await RoszParser.read(file);
+    let roster = isHtml ? Parser.read(file) : await RoszParser.read(file);
+    this.build(roster);
+  }
 
+  static build(roster) {
     const sanitizedRoster = Sanitizer.sanitize(roster);
-    const armyData = isHtml ? HardcodeArmyRules.get(sanitizedRoster.faction.name) : roster.armyData;
-    const output = Builder.getOutput(sanitizedRoster, armyData);
+    const output = Builder.getOutput(sanitizedRoster);
+
+    ArmyConstructor.show(sanitizedRoster);
 
     this.setupPreview(output);
 
     const blob = window.URL.createObjectURL(new Blob([output], { type: 'text/html' }), { type: "text/html" });
     this.setupOpenButton(blob);
     this.setupDownloadButton(blob, roster.name);
+  }
+
+  static rerun() {
+    const roster = TempStorage.getItem('tempRoster');
+    if (roster) {
+      // console.log(JSON.parse(roster));
+      this.build(roster);
+      // localStorage.removeItem('tempRoster');
+    } else {
+      alert('nothing to build');
+    }
   }
 
   static setupDownloadButton(blob, name) {

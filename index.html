@@ -23,11 +23,16 @@
           <a id="openButton"><button>Open</button></a>
         </div>
       </details>
-      <details open>
+      <details>
         <summary>Log</summary>
         <div id="log-wrapper">
           <code id="log"></code>
         </div>
+      </details>
+      <details>
+        <summary>Constructor</summary>
+        <div id="constructor"></div>
+        <button onclick="Main.rerun()">Change</button>
       </details>
       <details open class="preview-wrapper">
         <summary>Preview</summary>
@@ -40,6 +45,8 @@
     <script src="https://wurfl.io/wurfl.js"></script>
     <script src="src/hardcode-army-rules.js"></script>
     <script src="src/template.js"></script>
+    <script src="src/temp-storage.js"></script>
+    <script src="src/army-constructor.js"></script>
     <script src="src/logger.js"></script>
     <script src="src/parser.js"></script>
     <script src="src/sanitizer.js"></script>

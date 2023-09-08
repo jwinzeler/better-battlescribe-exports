@@ -22,7 +22,6 @@ class RoszParser {
       detachment: this.getDetachment(roster.forces.force.selections),
       units: this.getUnits(roster.forces),
     };
-    console.log(parsedRoster);
     const armyData = {
       ...HardcodeArmyRules.get(parsedRoster.faction.name),
       ...(parsedRoster.faction?.rules?.length ? { army_rules: parsedRoster.faction.rules } : {}),

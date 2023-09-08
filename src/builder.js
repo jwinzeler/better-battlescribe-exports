@@ -1,5 +1,5 @@
 class Builder {
-  static getOutput(roster, armyRules) {
+  static getOutput(roster) {
     Logger.log('Building .html file...');
     const html = `
     <html>
@@ -10,7 +10,7 @@ class Builder {
       <body class="${roster.faction.name.toLowerCase().replace(/- /g, '').replace(/ /g, '_')} ${WURFL.form_factor.toLowerCase()}">
         <div id="backdrop"></div>
         ${this.getAside(roster)}
-        ${this.getMain(roster, armyRules)}
+        ${this.getMain(roster)}
       </body>
     </html>
     `;
@@ -20,8 +20,8 @@ class Builder {
     return html;
   }
 
-  static getMain(roster, armyRules) {
-    const overviewPage = armyRules ? this.getOverviewPage(roster, armyRules) : '';
+  static getMain(roster) {
+    const overviewPage = roster.armyData ? this.getOverviewPage(roster) : '';
     const unitPages = roster.units.map((unit, index) => this.getUnitPage(unit, index));
 
     return `
@@ -33,16 +33,16 @@ class Builder {
     `;
   }
 
-  static getOverviewPage(roster, armyRules) {
+  static getOverviewPage(roster) {
     return `
         <div id="overview-page" class="page active">
           <div class="left-column">
-            ${this.getRules('Army rules', armyRules.army_rules || [])}
-            ${this.getRules('Detachment rules', armyRules.detachment_rules || [])}
+            ${this.getRules('Army rules', roster.armyData.army_rules || [])}
+            ${this.getRules('Detachment rules', roster.armyData.detachment_rules || [])}
             ${this.getArmyComposition(roster)}
           </div>
           <div class="right-column">
-            ${this.getStratagems(armyRules.stratagems)}
+            ${this.getStratagems(roster.armyData.stratagems)}
           </div>
         </div>
     `;
