@@ -105,6 +105,7 @@ class Builder {
   }
 
   static getStratagems(stratagems) {
+    if (!stratagems) return '';
     const stratagemsHtml = stratagems.map((stratagem) => `
       <div class="stratagem ${this.getStratagemThemeClass(stratagem.when)}">
         <div class='rule-row header'>${stratagem.name.toUpperCase()}</div>
