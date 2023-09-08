@@ -278,3 +278,56 @@ details.second-level-details summary {
   display: flex;
   flex-direction: column;
 }
+
+.roster-history-box {
+  display: inline-block;
+  border: 1px solid #382638;
+  color: #382638;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+}
+.roster-history-box > .backdrop {
+  display: none;
+}
+
+.roster-history-box:hover > .backdrop {
+  background: rgb(56, 38, 56, 80%);
+  color: #dedee1;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.roster-history-box:hover > .backdrop > .load-wrapper {
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+}
+.roster-history-box:hover > .backdrop > .load-wrapper > b {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.roster-history-box:hover > .backdrop > .delete {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  background-color: #a00000;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.roster-history-box span {
+  display: block;
+}

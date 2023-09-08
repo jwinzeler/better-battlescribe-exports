@@ -32,3 +32,7 @@ fileInput.addEventListener('change', (event) => {
     Logger.error(`No file or invalid file type selected.`);
   }
 });
+
+window.onload = (() => {
+  RosterHistory.showList();
+});

@@ -5,7 +5,7 @@ class Main {
     this.build(roster);
   }
 
-  static build(roster) {
+  static build(roster, addToHistory = true) {
     const sanitizedRoster = Sanitizer.sanitize(roster);
     const output = Builder.getOutput(sanitizedRoster);
 
@@ -16,17 +16,17 @@ class Main {
     const blob = window.URL.createObjectURL(new Blob([output], { type: 'text/html' }), { type: "text/html" });
     this.setupOpenButton(blob);
     this.setupDownloadButton(blob, roster.name);
+
+    if (addToHistory) RosterHistory.add(sanitizedRoster);
   }
 
-  static rerun() {
-    const roster = TempStorage.getItem('tempRoster');
-    if (roster) {
-      // console.log(JSON.parse(roster));
-      this.build(roster);
-      // localStorage.removeItem('tempRoster');
-    } else {
-      alert('nothing to build');
+  static rerun(index = null, save = false) {
+    let roster = TempStorage.getItem('tempRoster');
+    if (index !== null) {
+      let historyStore = RosterHistory.get().history;
+      roster = historyStore[index];
     }
+    this.build(roster, save);
   }
 
   static setupDownloadButton(blob, name) {

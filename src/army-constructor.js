@@ -7,7 +7,13 @@ class ArmyConstructor {
 	static show(roster) {
 		Logger.log('Building army constructor...');
 
-		const html = `${this.buildUnitTable(roster.units)}`;
+		const html = `
+			<div>
+				<b>Roster name:</b>
+				<input value="${roster.name}" onchange="ArmyConstructor.changeRosterName(this.value)"/>
+			</div>
+			${this.buildUnitTable(roster.units)}
+		`;
 		document.getElementById('constructor').innerHTML = html;
 		TempStorage.setItem('tempRoster', roster);
 		Logger.log('Finished constructor.');
@@ -75,6 +81,12 @@ class ArmyConstructor {
 				[{ param: 'name', value: weapon.name }, ...Object.keys(weapon).filter(key => this.REQUIRED_WEAPON_KEYS.includes(key)).map(key => ({ param: key, value: weapon[key] }))]
 			])))}
 		</details>`;
+	}
+
+	static changeRosterName(rosterName) {
+		const roster = TempStorage.getItem('tempRoster');
+		roster.name = rosterName;
+		TempStorage.setItem('tempRoster', roster);
 	}
 
 	static changeValue(unitName, paramName, index, variableName, value) {
