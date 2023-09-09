@@ -123,9 +123,14 @@ class RoszParser {
   }
 
   static getSelections(unit) {
-    return [this.getArray(unit.selections?.selection)
+    //FIXME add recursivness
+    const selections = this.getArray(unit.selections?.selection)
+      .map((selection) => (selection.selections ? selection.selections.selection : selection))
+      .flat(1)
+      .filter(this.removeDuplication)
       .sort((a, b) => this.sortBy('_name', a, b))
-      .map(({ _name, _number }) => _number + "x" + _name)];
+      .map(({ _name, _number }) => _number + "x" + _name);
+    return [selections];
   }
 
   static getStat(characteristic, name) {
