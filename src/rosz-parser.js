@@ -106,7 +106,7 @@ class RoszParser {
       Logger.warn('No units found!');
     }
 
-    return units;
+    return units.sort((a, b) => this.sortBy('name', a, b));
   }
 
   static getUnit(unit) {
@@ -114,7 +114,7 @@ class RoszParser {
       name: unit._name,
       pts: `${Number(unit.costs.cost._value)}`,
       keywords: [unit.categories.category.map(({ _name }) => _name)],
-      selections: unit.selections ? [this.getArray(unit.selections?.selection).map(({ _name, _number }) => _number + "x" + _name)] : [],
+      selections: this.getSelections(unit),
       stats: this.getUnitStats(unit),
       meleeWeapons: this.getWeapons(unit, 'Melee Weapons'),
       rangedWeapons: this.getWeapons(unit, 'Ranged Weapons'),
@@ -123,9 +123,14 @@ class RoszParser {
     };
   }
 
+  static getSelections(unit) {
+    return [this.getArray(unit.selections?.selection)
+      .sort((a, b) => this.sortBy('_name', a, b))
+      .map(({ _name, _number }) => _number + "x" + _name)];
+  }
+
   static getStat(characteristic, name) {
-    if (!Array.isArray(characteristic)) characteristic = [characteristic];
-    return characteristic.filter(({ _name }) => _name === name).map(({ __text }) => __text)[0] || "";
+    return this.getArray(characteristic).filter(({ _name }) => _name === name).map(({ __text }) => __text)[0] || "";
   };
 
   static getUnitStats(unit) {
@@ -211,5 +216,13 @@ class RoszParser {
       }
     });
     return tempArray;
+  }
+
+  static sortBy(param, a, b) {
+    let fa = a[param].toLowerCase();
+    let fb = b[param].toLowerCase();
+    if (fa < fb) return -1;
+    if (fa > fb) return 1;
+    return 0;
   }
 }
