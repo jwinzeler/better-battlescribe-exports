@@ -105,7 +105,6 @@ class RoszParser {
     if (!units.length) {
       Logger.warn('No units found!');
     }
-
     return units.sort((a, b) => this.sortBy('name', a, b));
   }
 
@@ -134,26 +133,18 @@ class RoszParser {
   };
 
   static getUnitStats(unit) {
-    const parseStats = (profiles, name) => profiles
-      .filter(({ _name, _typeName }) => (name.includes(_name) || _name.includes(name)) && ['unit', 'model'].includes(_typeName.toLowerCase()))
-      .map(profile => {
-        const characteristic = profile.characteristics.characteristic;
-        return {
-          name,
-          M: this.getStat(characteristic, 'M'),
-          T: this.getStat(characteristic, 'T'),
-          SV: this.getStat(characteristic, 'SV'),
-          W: this.getStat(characteristic, 'W'),
-          LD: this.getStat(characteristic, 'LD'),
-          OC: this.getStat(characteristic, 'OC'),
-        };
-      });
-
-    let stats = unit?.profiles?.profile ? parseStats(unit.profiles.profile, unit._name) : [];
-    if (!stats.length) {
-      stats = parseStats(this.getArray(unit?.selections?.selection?.profiles?.profile), unit._name);
-    }
-    return stats;
+    return this.findInObject(unit, 'Unit', []).map(profile => {
+      const characteristic = profile.characteristics.characteristic;
+      return {
+        name: profile._name,
+        M: this.getStat(characteristic, 'M'),
+        T: this.getStat(characteristic, 'T'),
+        SV: this.getStat(characteristic, 'SV'),
+        W: this.getStat(characteristic, 'W'),
+        LD: this.getStat(characteristic, 'LD'),
+        OC: this.getStat(characteristic, 'OC'),
+      };
+    });
   }
 
 
