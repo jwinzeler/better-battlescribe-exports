@@ -158,7 +158,7 @@ class RoszParser {
       armorPenetration: this.getStat(characteristics.characteristic, 'AP'),
       damage: this.getStat(characteristics.characteristic, 'D'),
       keywords: this.getStat(characteristics.characteristic, 'Keywords').split(',').filter(name => name !== '-' && name !== ''),
-    })).filter((weapon1, i, a) => a.findIndex(weapon2 => (JSON.stringify(weapon1) === JSON.stringify(weapon2))) === i);
+    })).filter(this.removeDuplication);
   }
 
   static getArray(maybeArray) {
@@ -171,7 +171,7 @@ class RoszParser {
     const abilities = this.findInObject(unit, 'Abilities', []).map(profile => ({
       name: profile._name,
       description: profile.characteristics.characteristic.__text.replace(/\n/g, '<br>') // TODO Maybe not the best place for it
-    }));
+    })).filter(this.removeDuplication);
     return { abilities, abilityNames: [abilities.map(({ name }) => name)] };
   }
 
@@ -207,6 +207,10 @@ class RoszParser {
       }
     });
     return tempArray;
+  }
+
+  static removeDuplication(obj1, i, a) {
+    return a.findIndex(obj2 => (JSON.stringify(obj1) === JSON.stringify(obj2))) === i;
   }
 
   static sortBy(param, a, b) {
