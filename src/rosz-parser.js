@@ -170,7 +170,7 @@ class RoszParser {
   static getAbilities(unit) {
     const abilities = this.findInObject(unit, 'Abilities', []).map(profile => ({
       name: profile._name,
-      description: profile.characteristics.characteristic.__text
+      description: profile.characteristics.characteristic.__text.replace(/\n/g, '<br>') // TODO Maybe not the best place for it
     }));
     return { abilities, abilityNames: [abilities.map(({ name }) => name)] };
   }
