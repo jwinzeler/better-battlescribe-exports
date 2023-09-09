@@ -1,12 +1,11 @@
 class ArmyCustomizer {
 
 	static EMPTY_STATS = { name: 'New name', M: "0\"", T: "0", SV: "0+", W: "0", LD: "0+", OC: "0", };
-	static EMPTY_WEAPONS = (skill) => ({ name: 'New weapon', A: 0, [skill]: 0, S: 0, AP: 0, D: 0 });
+	static EMPTY_WEAPONS = { name: 'New weapon', attacks: 0, skill: 0, strength: 0, armorPenetration: 0, damage: 0 };
 	static REQUIRED_WEAPON_KEYS = ['attacks', 'skill', 'strength', 'armorPenetration', 'damage'];
 
 	static show(roster) {
 		Logger.log('Building army customizer...');
-
 		const html = `
 			<div>
 				<b>Roster name:</b>
@@ -35,18 +34,17 @@ class ArmyCustomizer {
 		const roster = TempStorage.getItem('tempRoster');
 		const unitIndex = roster.units.map(u => u.name).indexOf(unitName);
 		const paramArray = roster.units[unitIndex][paramName];
-		let value = '';
-
+		let value = {};
 		switch (paramName) {
 			default:
 			case 'stats':
 				value = Object.assign({ ...this.EMPTY_STATS });
 				break;
-			case 'meleeWeapon':
-				value = Object.assign({ ...this.EMPTY_WEAPONS('WS') });
+			case 'meleeWeapons':
+				value = Object.assign({ ...this.EMPTY_WEAPONS });
 				break;
-			case 'rangedWeapon':
-				value = Object.assign({ ...this.EMPTY_WEAPONS('BS') });
+			case 'rangedWeapons':
+				value = Object.assign({ ...this.EMPTY_WEAPONS });
 				break;
 		}
 		roster.units[unitIndex][paramName][paramArray.length] = value;
@@ -75,7 +73,7 @@ class ArmyCustomizer {
 		<details class='third-level-details'>
 			<summary>${name}</summary>
 			${this.getAddButton(unit.name, param)}
-			${unit.meleeWeapons.map(weapon => (
+			${unit[param].map(weapon => (
 			this.createTableWithInputs(unit.name, param, [
 				['Name', 'A', skill, 'S', 'AP', 'D'],
 				[{ param: 'name', value: weapon.name }, ...Object.keys(weapon).filter(key => this.REQUIRED_WEAPON_KEYS.includes(key)).map(key => ({ param: key, value: weapon[key] }))]
