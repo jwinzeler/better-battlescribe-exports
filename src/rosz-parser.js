@@ -123,6 +123,7 @@ class RoszParser {
   }
 
   static getSelections(unit) {
+    //FIXME add recursivness
     const selections = this.getArray(unit.selections?.selection)
       .map((selection) => (selection.selections ? selection.selections.selection : selection))
       .flat(1)
