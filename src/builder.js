@@ -371,11 +371,12 @@ class Builder {
 
   static getTooltip(text, description) {
     return `<span class="tooltip-on-hover">${text}<div class="tooltip">
-        <span class="bold">
-          ${text}:
-        </span>
-        <br />
-        ${description}
+        <div class="title">
+          ${text}
+        </div>
+        <div class="description">
+          ${description}
+        </div>
       </div></span>`;
   }
 
