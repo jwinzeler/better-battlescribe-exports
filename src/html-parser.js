@@ -1,4 +1,4 @@
-class Parser {
+class HtmlParser {
   static read(file) {
     Logger.log(`Reading file...`);
     const contents = document.createElement('div');

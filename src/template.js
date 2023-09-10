@@ -794,9 +794,43 @@ table.army-comp td:nth-of-type(3) {
   }
 }
 
+.death-button{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  height: 2.5rem;
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+.sidebar-button.dead {
+  background: rgba(105,105,105, 0.50);
+  text-decoration: line-through;
+}
+
+.sidebar-button.dead:hover {
+  background: rgba(105,105,105, 0.60);
+}
 `.replaceAll(/[\n]/g, '');
 
 const script = `
+toggleDeath = (id, index, btn) => {
+  const asideButton = document.querySelector('#'+id+"-button");
+  const isDead = asideButton.classList.contains('dead');
+  let buttonText = '';
+  if (!isDead){
+    buttonText = "Mark as alive";
+    document.getElementById('death-list').append(asideButton);
+  } else {
+    buttonText = "Mark as dead";
+    const nextEl = document.querySelector('aside > [index="'+(Number(index)+1)+'"]');
+    const prevEl = document.querySelector('aside > [index="'+(Number(index)-1)+'"]');
+    nextEl ? nextEl.before(asideButton): prevEl.after(asideButton);
+  }
+  btn.innerText = buttonText;
+  asideButton.classList.toggle('dead');
+};
 toggleAside = () => {
   [
     document.querySelector('aside'),
