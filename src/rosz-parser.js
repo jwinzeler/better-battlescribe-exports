@@ -120,7 +120,7 @@ class RoszParser {
   static getUnit(unit) {
     return {
       name: unit._name,
-      pts: `${Number(unit.costs.cost._value)}`,
+      pts: `${this.findInObject(unit, 'pts', [], ['_name']).map(pts => Number(pts._value)).reduce((a, b) => a + b)}`,
       keywords: [unit.categories.category.map(({ _name }) => _name)],
       selections: this.getSelections(unit),
       stats: this.getUnitStats(unit),
@@ -208,16 +208,16 @@ class RoszParser {
     };
   }
 
-  static findInObject(obj, type, tempArray) {
+  static findInObject(obj, type, tempArray, keys = ['_type', '_typeName']) {
     Object.keys(obj).forEach((key) => {
-      if ((key === '_type' || key === '_typeName') && obj[key] === type) {
+      if (keys.includes(key) && obj[key] === type) {
         tempArray.push(obj);
       } else if (Array.isArray(obj[key])) {
         obj[key].forEach(a => {
-          this.findInObject(a, type, tempArray);
+          this.findInObject(a, type, tempArray, keys);
         });
       } else if (!Array.isArray(obj[key]) && typeof obj[key] === "object") {
-        this.findInObject(obj[key], type, tempArray);
+        this.findInObject(obj[key], type, tempArray, keys);
       }
     });
     return tempArray;
