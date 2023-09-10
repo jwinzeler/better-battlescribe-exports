@@ -135,7 +135,7 @@ class Builder {
     return `
       <div id="${id}-page" class="page">
         <div class="datasheet">
-          ${this.getDatasheetHeader(unit)}
+          ${this.getDatasheetHeader(unit, id, index)}
           <div class="datasheet-body">
             <div class="column-left">
               <div class="column-padding">
@@ -275,7 +275,7 @@ class Builder {
     `;
   }
 
-  static getDatasheetHeader(unit) {
+  static getDatasheetHeader(unit, id, unitIndex) {
     return `
       <header>
         <div class="unit-name">
@@ -299,6 +299,7 @@ class Builder {
             ${unit.stats.length > 1 ? `<div class="stats-model-name${index === 0 ? ' first' : ''}">${stats.name}</div>` : ''}
             </div>
           `).join('')}
+          <button class='death-button' onclick='toggleDeath("${id}","${unitIndex}",this)'>Mark as dead</button>
           </div>
       </header>
     `;
@@ -310,6 +311,7 @@ class Builder {
         ${this.getToggleAsideButton('X', 'close')}
         ${this.getOverviewButton(roster)}
         ${roster.units.map((unit, index) => this.getUnitButton(unit, index)).join('')}
+        <div id='death-list'></div>
       </aside>
     `;
   }
@@ -317,7 +319,7 @@ class Builder {
   static getUnitButton(unit, index) {
     const id = this.stringToId(unit.name + index);
     return `
-      <button class="sidebar-button" onclick="togglePage('${id}')" id="${id}-button">
+      <button class="sidebar-button" index=${index} onclick="togglePage('${id}')" id="${id}-button">
         ${unit.name}
         ${unit.sidebarSelections.length ? `
           <div class="overview-info">
