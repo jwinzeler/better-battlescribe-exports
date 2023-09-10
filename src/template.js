@@ -346,6 +346,7 @@ div.page.active {
 }
 
 .datasheet {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -812,14 +813,17 @@ table.army-comp td:nth-of-type(3) {
   }
 }
 
-.death-button{
+.death-button {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  top: 0;
+  right: 0;
   height: 2.5rem;
   background-color: var(--background-primary);
   border: 1px solid var(--border-primary);
   color: var(--text-primary);
+  cursor: pointer;
 }
 
 .sidebar-button.dead {
@@ -834,20 +838,27 @@ table.army-comp td:nth-of-type(3) {
 
 const script = `
 toggleDeath = (id, index, btn) => {
-  const asideButton = document.querySelector('#'+id+"-button");
+  const deathList = document.getElementById('death-list');
+  const asideButton = document.querySelector('#' + id + "-button");
   const isDead = asideButton.classList.contains('dead');
   let buttonText = '';
-  if (!isDead){
+  if (!isDead) {
     buttonText = "Mark as alive";
-    document.getElementById('death-list').append(asideButton);
+    deathList.append(asideButton);
   } else {
+    const findClosestEl = (index) => {
+      const elements = Array.from(document.querySelectorAll('aside > button[index]'));
+      return elements.length? elements.reduce((prev, curr) => {
+          const currIndex = Number(curr.getAttribute('index'));
+          const prevIndex = Number(prev.getAttribute('index'));
+          return Math.abs(currIndex - index) < Math.abs(prevIndex - index) ? curr : prev;
+        }) : null;
+    };
     buttonText = "Mark as dead";
-    const nextEl = document.querySelector('aside > [index="'+(Number(index)+1)+'"]');
-    const prevEl = document.querySelector('aside > [index="'+(Number(index)-1)+'"]');
-    nextEl ? nextEl.before(asideButton): prevEl.after(asideButton);
+    const closest = findClosestEl(index) || document.getElementById('overview-button');
+    (Number(closest.getAttribute('index')) || -1) > index ? closest.before(asideButton) : closest.after(asideButton);
   }
-  btn.innerText = buttonText;
-  asideButton.classList.toggle('dead');
+  btn.innerText = buttonText; asideButton.classList.toggle('dead');
 };
 toggleAside = () => {
   [
