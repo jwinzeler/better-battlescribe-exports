@@ -42,7 +42,7 @@ class RoszParser {
   static getBattleSize({ selection }) {
     Logger.log('Finding battle size...');
     const battleSizeSelection = selection.filter((({ _name }) => _name === 'Battle Size'))[0];
-    const battleSize = battleSizeSelection.selections.selection._name;
+    const battleSize = battleSizeSelection?.selections?.selection?._name || '';
     Logger.logRosterValue(battleSize);
     return battleSize;
   }
@@ -197,7 +197,7 @@ class RoszParser {
   static getDetachment({ selection }) {
     Logger.log('Finding detachment name...');
     const detachmentSelection = selection.filter((({ _name }) => _name.includes('Detachment')))[0];
-    const name = detachmentSelection.selections.selection._name;
+    const name = detachmentSelection?.selections?.selection?._name || '';
     Logger.logRosterValue(name);
     Logger.log('Finding detachment abilites...');
     const abilities = this.getRules(selection).filter(({ _page }) => _page === '2');

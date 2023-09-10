@@ -243,6 +243,24 @@ body.aeldari_craftworlds {
   --background-primary: #023539;
 }
 
+body.chaos_chaos_daemons {
+  --border-datasheet: #7A3533;
+  --text-datasheet: #530e0d;
+  --background-primary: #530e0d;
+}
+
+body.imperium_adeptus_custodes {
+  --border-datasheet: #755C42;
+  --text-datasheet: #68141c;
+  --background-primary: #68141c;
+}
+
+body.xenos_tau_empire {
+  --border-datasheet: #186071;
+  --text-datasheet: #0e3741;
+  --background-primary: #0e3741;
+}
+
 b {
   font-weight: 500;
 }
