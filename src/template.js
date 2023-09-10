@@ -505,13 +505,24 @@ div.page.active {
   position: absolute;
   display: none;
   background: var(--background-datasheet);
-  padding: .5em;
   z-index: 9999;
   width: 50%;
   height: auto;
   font-size: 1rem;
   font-weight: 300;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  cursor: default;
+  box-shadow: 0 0 0 100vh rgba(0,0,0,.5);
+}
+
+.tooltip .title {
+  color: var(--text-primary);
+  background: var(--border-datasheet);
+  padding: .5rem;
+  font-weight: 500;
+}
+
+.tooltip .description {
+  padding: .5rem;
 }
 
 #backdrop {
