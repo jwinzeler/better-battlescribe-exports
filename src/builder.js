@@ -99,16 +99,12 @@ class Builder {
   `;
   }
 
-  static getStratagemThemeClass(when) {
-    if (when.toLowerCase().includes('opponent')) return "enemy-turn";
-    return when.toLowerCase().includes('your') ? "your-turn" : "both-turn";
-  }
-
   static getStratagems(stratagems) {
     if (!stratagems) return '';
     const stratagemsHtml = stratagems.map((stratagem) => `
-      <div class="stratagem ${this.getStratagemThemeClass(stratagem.when)}">
+      <div class="stratagem ${stratagem.turn}">
         <div class='rule-row header'>${stratagem.name.toUpperCase()}</div>
+        <div class='rule-row small'>${stratagem.type}</div>
         <div class='rule-row'><b>When: </b>${stratagem.when}</div>
         <div class='rule-row'><b>Target: </b>${stratagem.target}</div>
         <div class='rule-row'><b>Effect: </b>${stratagem.effect}</div>

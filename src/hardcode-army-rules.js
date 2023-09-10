@@ -1,4 +1,17 @@
 class HardcodeArmyRules {
+	static stratagem_types = {
+		wargear: 'Wargear',
+		strategic_ploy: 'Strategic Ploy',
+		battle_tactic: 'Battle Tactic',
+		epic_deed: 'Epic Deed',
+	}
+
+	static stratagem_turn = {
+		your: 'your-turn',
+		opponent: 'enemy-turn',
+		both: 'both-turn',
+	}
+
 	static data = {
 		imperium_adeptus_mechanicus: {
 			army_rules: [{
@@ -26,6 +39,8 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'BALEFUL HALO',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: 'Fight phase, just after an enemy unit has selected its targets.',
 					target: 'One Adeptus Mechanicus unit from your army (excluding Vehicle units) that was selected as the target of one or more of that enemy unit\'s attacks.',
 					effect: 'Until the end of the turn, each time an attack is made that targets your unit, subtract 1 from the Wound roll. ',
@@ -33,6 +48,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'LETHAL DOSAGE',
+					type: this.stratagem_types.wargear,
+					turn: this.stratagem_turn.your,
 					when: 'Your Shooting phase.',
 					target: ' One Adeptus Mechanicus unit from your army that has not been selected to shoot this phase.',
 					effect: 'Until the end of the phase, each time a model in your unit makes a ranged attack that targets an enemy unit (excluding Vehicle units), add 1 to the Wound roll.',
@@ -40,6 +57,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'EXTINCTION ORDER',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: 'Your Command phase.',
 					target: 'One Tech-Priest model from your army and one objective marker within 24" of that model.',
 					effect: 'Roll one D6 for each enemy unit within range of that objective marker. On a 4+, that unit suffers 1 mortal wound and it must take a Battle-shock test.',
@@ -47,6 +66,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'AGGRESSOR IMPERATIVE',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.your,
 					when: 'Your Charge phase.',
 					target: 'One Skitarii unit from your army that Advanced this turn.',
 					effect: 'Until the end of the turn, your unit is eligible to declare a charge even though it Advanced this turn.',
@@ -55,6 +76,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'VENGEFUL FALLOUT',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.opponent,
 					when: 'Your opponent\'s Shooting phase, just after an enemy unit has resolved its attacks',
 					target: 'One Adeptus Mechanicus unit from your army that was selected as the target of one or more of that enemy unit\'s attacks',
 					effect: ' Your unit can shoot as if it were your Shooting phase, but it must target only that enemy unit when doing so, and it can only do so if that enemy unit is an eligible target. After your unit has finished making these attacks, it is not eligible to shoot again this turn.',
@@ -62,6 +85,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'BULWARK IMPERATIVE',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.opponent,
 					when: 'Your opponent\'s Shooting phase, just after an enemy unit has selected its targets.',
 					target: 'One Skitarii unit from your army that was selected as the target of one or more of that enemy unit\'s attacks',
 					effect: 'Until the end of the turn, models in your unit have a 4+ invulnerable save',
@@ -95,6 +120,8 @@ class HardcodeArmyRules {
 			}],
 			stratagems: [{
 				name: 'ARMOUR OF CONTEMPT',
+				type: this.stratagem_types.battle_tactic,
+				turn: this.stratagem_turn.both,
 				when: 'Your opponent\'s Shooting phase or the Fight phase, just after an enemy unit has selected its targets.',
 				target: 'One Adeptus Astartes unit from your army that was selected as the target of one or more of the attacking unit\'s attacks.',
 				effect: 'Until the end of the phase, each time an attack targets your unit, worsen the Armour Penetration characteristic of that attack by 1.',
@@ -102,6 +129,8 @@ class HardcodeArmyRules {
 			},
 			{
 				name: 'TELEPORTARIUM',
+				type: this.stratagem_types.strategic_ploy,
+				turn: this.stratagem_turn.opponent,
 				when: 'End of your opponent\'s Fight phase.',
 				target: 'Up to two Kill Team units from your army, or one other Adeptus Astartes Infantry unit from your army',
 				effect: 'Remove those units from the battlefield. In the Reinforcements step of your next Movement phase, set each of those units up anywhere on the battlefield that is more than 9" horizontally away from all enemy models.',
@@ -110,6 +139,8 @@ class HardcodeArmyRules {
 			},
 			{
 				name: 'ADAPTIVE TACTICS',
+				type: this.stratagem_types.strategic_ploy,
+				turn: this.stratagem_turn.your,
 				when: 'Your Command phase',
 				target: 'Up to two Kill Team units from your army, or one other Adeptus Astartes unit your army',
 				effect: 'For each unit targeted, select the Furor Tactics, Malleus Tactics or Purgatus Tactics. Until the start of your next Command phase, that Mission Tactic is active for that unit instead of any Mission Tactic that is active for your army.',
@@ -117,6 +148,8 @@ class HardcodeArmyRules {
 			},
 			{
 				name: 'HELLFIRE ROUNDS',
+				type: this.stratagem_types.wargear,
+				turn: this.stratagem_turn.your,
 				when: 'Your Shooting phase.',
 				target: 'Up to two Kill Team units from your army that have not been selected to shoot this phase, or one other Adeptus Astartes unit from your army (excluding Vehicles) that has not been selected to shoot this phase.',
 				effect: 'Until the end of the phase, ranged weapons (excluding Devastating Wounds weapons) equipped by models in your unit have the [ANTI-INFANTRY 2+] and [ANTI-MONSTER 5+] abilities.',
@@ -125,6 +158,8 @@ class HardcodeArmyRules {
 			},
 			{
 				name: 'KRAKEN ROUNDS',
+				type: this.stratagem_types.wargear,
+				turn: this.stratagem_turn.your,
 				when: 'Your Shooting phase',
 				target: 'Up to two Kill Team units from your army that have not been selected to shoot this phase, or one other Adeptus Astartes unit from your army (excluding Vehicles) that has not been selected to shoot this phase',
 				effect: 'Until the end of the phase, improve the Armour Penetration characteristic of ranged weapons equipped by models in your unit by 1 and improve the range characteristic of those weapons by 6".',
@@ -133,6 +168,8 @@ class HardcodeArmyRules {
 			},
 			{
 				name: 'DRAGONFIRE ROUNDS',
+				type: this.stratagem_types.wargear,
+				turn: this.stratagem_turn.your,
 				when: 'Your Shooting phase.',
 				target: 'Up to two Kill Team units from your army that have not been selected to shoot this phase, or one other Adeptus Astartes unit from your army (excluding Vehicles) that has not been selected to shoot this phase',
 				effect: 'Until the end of the phase, ranged weapons equipped by models in your unit have the [ASSAULT] and [IGNORES COVER] abilities.',
@@ -168,6 +205,8 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'SLAYERS OF NIGHTMARES',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `Fight phase.`,
 					target: `One Adeptus Custodes unit from
           your army that has not been selected to
@@ -180,6 +219,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'UNWAVERING SENTINELS',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `Start of the Fight phase.`,
 					target: `One Adeptus Custodes unit
           from your army (excluding Anathema
@@ -191,6 +232,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'AVENGE THE FALLEN',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `Start of the Fight phase.`,
 					target: `One Adeptus Custodes unit
           from your army that is below its Starting
@@ -207,6 +250,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'ARCANE GENETIC ALCHEMY',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `Your opponent's Shooting phase or
           the Fight phase, just after an enemy unit
           has selected its targets.`,
@@ -223,6 +268,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'VIGIL UNENDING',
+					type: this.stratagem_types.epic_deed,
+					turn: this.stratagem_turn.your,
 					when: `Your Command phase.`,
 					target: `One Adeptus Custodes Infantry
           unit from your army (excluding Anathema
@@ -237,6 +284,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'SWORN GUARDIANS',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: `Your Movement phase.`,
 					target: `One Adeptus Custodes unit from
           your army (excluding Anathema Psykana
@@ -296,6 +345,8 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'GORY MASSACRE',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.both,
 					when: `Fight phase.`,
 					target: `One World Eaters unit from
 				your army that made a Charge move this
@@ -313,6 +364,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'FOR THE BLOOD GOD!',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `Fight phase, just after a World
 				Eaters unit from your army destroys an
 				enemy unit.`,
@@ -328,6 +381,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'FOR THE SKULL THRONE!',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `Fight Phase.`,
 					target: `One World Eaters unit from
 				your army that has not been selected to
@@ -341,6 +396,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'KHORNE CARES NOT…',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.both,
 					when: `Fight phase, just after an enemy
 				unit has selected its targets.`,
 					target: `One World Eaters unit from
@@ -355,6 +412,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'BLOOD OFFERING',
+					type: this.stratagem_types.epic_deed,
+					turn: this.stratagem_turn.both,
 					when: `Any phase`,
 					target: `One World Eaters unit from
 				your army that was just destroyed
@@ -371,6 +430,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'APOPLECTIC FRENZY',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.your,
 					when: `Your Movement phase.`,
 					target: `One World Eaters unit from
 				your army that has not been selected to
@@ -388,13 +449,17 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'CORRUPT REALSPACE',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.both,
 					when: `Start of any Command phase.`,
 					target: `One Legiones Daemonica unit from your army that is within range of an objective marker you control`,
-					effect: `	That objective marker is said to be Corrupted and remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn. In addition, while an objective marker is Corrupted and under your control, the area of the battlefield within 6" of that objective marker is considered to be within your army’s Shadow of Chaos.`,
+					effect: `	That objective marker is said to be Corrupted and remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn. In addition, while an objective marker is Corrupted and under your control, the area of the battlefield within 6" of that objective marker is considered to be within your army\'s Shadow of Chaos.`,
 					cost: 1,
 				},
 				{
 					name: 'DRAUGHT OF TERROR',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: `: Your Shooting phase or the Fight phase`,
 					target: `One Legiones Daemonica unit from your army that has not been selected to shoot or fight this phase.`,
 					effect: `Until the end of the phase,
@@ -409,9 +474,11 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'WARP SURGE',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: `Your Charge phase`,
 					target: `One Legiones Daemonica unit
-					from your army that is within your army’s
+					from your army that is within your army\'s
 					Shadow of Chaos.`,
 					effect: `Until the end of the phase, your
 					unit is eligible to declare a charge even if it
@@ -420,6 +487,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'DENIZENS OF THE WARP',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: `Your Movement phase.`,
 					target: `One Legiones Daemonica unit
 					from your army that is arriving using the
@@ -434,10 +503,12 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'THE REALM OF CHAOS',
-					when: `End of your opponent’s turn`,
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.opponent,
+					when: `End of your opponent\'s turn`,
 					target: `Up to two Legiones Daemonica
 					units from your army that are within
-					your army’s Shadow of Chaos, or one
+					your army\'s Shadow of Chaos, or one
 					other Legiones Daemonica unit from
 					your army`,
 					effect: `Remove the targeted units
@@ -453,13 +524,15 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'DAEMONIC INVULNERABILITY',
-					when: `Your opponent’s Shooting phase,
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.opponent,
+					when: `Your opponent\'s Shooting phase,
 					just after an enemy unit has selected
 					its targets.`,
 					target: `One Legiones Daemonica unit
 					from your army that was selected as
 					the target of one or more of that enemy
-					unit’s attacks.`,
+					unit\'s attacks.`,
 					effect: `Until the end of the phase, each
 					time an invulnerable saving throw is made
 					for a model in your unit, re-roll a saving
@@ -495,6 +568,8 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'RAPID REGENERATION',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: 'Your opponent\'s Shooting phase or the Fight phase, just after an enemy unit 	has selected its targets.',
 					target: 'One Tyranids unit from your army that was selected as the target of one or more of the attacking unit\'s attacks',
 					effect: 'Until the end of the phase, models in your unit have the Feel No Pain 6+ ability. If your unit is within Synapse Range of your army, until the end of the phase, models in your unit have the Feel No Pain 5+ ability instead.',
@@ -502,6 +577,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'ADRENAL SURGE',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: 'Fight phase.',
 					target: 'Up to two Tyranids units from your army that are within Synapse Range of your army and are eligible to fight, or one other Tyranids unit from your army that is eligible to fight',
 					effect: 'Until the end of the phase, each time a model in one of those selected units makes an attack, a successful unmodified Hit roll of 5+ scores a Critical Hit.',
@@ -509,6 +586,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'DEATH FRENZY',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.both,
 					when: 'Fight phase, just after an enemy unit has selected its targets.',
 					target: 'One Tyranids unit from your army that was selected as the target of one or more of the attacking unit\'s attacks.',
 					effect: 'Until the end of the phase, each time a model in your unit is destroyed, if that model has not fought this phase, roll one D6: on a 4+, do not remove it from play. The destroyed model can fight after the attacking model\'s unit has finished making attacks, and is then removed from play',
@@ -516,6 +595,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'OVERRUN',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.both,
 					when: 'Fight phase, just before a Tyranids unit from your army Consolidates.',
 					target: 'That Tyranids unit.',
 					effect: 'Until the end of the phase, each time a model in your unit makes a Consolidation move, it can move up to 6" instead of up to 3", provided your unit can end its Consolidation move in Unit Coherency and within Engagement Range of one or more enemy units. If your unit is within Synapse Range of your army and not within Engagement Range of any enemy units, instead of making that Consolidation move, it can instead make a Normal move of up to 6".',
@@ -523,6 +604,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'SYNAPTIC INSIGHT',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: 'Your Command phase',
 					target: 'Up to two Tyranids units from your army that are within Synapse Range of your army, or one other Tyranids unit from your army.',
 					effect: 'Select one Hyper-adaptation. Until the end of the battle round, that hyper-adaptation is active for those selected units in addition to any other that may be active for your army.',
@@ -531,6 +614,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'ENDLESS SWARM',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: 'Your Command phase.',
 					target: 'Up to two Endless Multitude units from your army that are within Synapse Range of your army, or one other Endless Multitude unit from your army.',
 					effect: 'Up to D3+3 destroyed models are returned to each of the selected units.',
@@ -571,6 +656,8 @@ class HardcodeArmyRules {
 			stratagems: [
 				{
 					name: 'FEIGNED RETREAT',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: 'Your Movement phase, just after an Aeldari unit from your army makes a Fall Back move.',
 					target: 'That Aeldari unit.',
 					effect: 'Your unit is eligible to shoot and declare a charge this turn even though it Fell Back.',
@@ -578,6 +665,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'MATCHLESS AGILITY',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.your,
 					when: 'Your Movement phase.',
 					target: 'One Aeldari unit from your army that has not been selected to move this phase.',
 					effect: 'Until the end of the phase, if your unit Advances, do not make an Advance roll for it. Instead, until the end of the phase, add 6" to the Move characteristic of models in your unit.',
@@ -585,6 +674,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'FIRE AND FADE',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: 'End of your Shooting phase.',
 					target: 'One Aeldari unit from your army.',
 					effect: 'Your unit can make a Normal move. It cannot embark within a Transport at the end of this move.',
@@ -593,6 +684,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'BLADESTORM',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
 					when: 'Your Shooting phase.',
 					target: 'One Aeldari unit from your army that has not been selected to shoot this phase.',
 					effect: 'Until the end of the phase, each time a model in your unit makes an attack, on a Critical Wound, improve the Armour Penetration characteristic of that attack by 2.',
@@ -600,6 +693,8 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'PHANTASM',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.opponent,
 					when: 'End of your opponent\'s Movement phase.',
 					target: 'One Aeldari unit from your army (excluding Aircraft).',
 					effect: 'Your unit can make a Normal move of up to 7". It cannot embark within a Transport at the end of this move.',
@@ -608,17 +703,102 @@ class HardcodeArmyRules {
 				},
 				{
 					name: 'LIGHTNING-FAST REACTIONS',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.both,
 					when: 'Your opponent\'s Shooting phase or the Fight phase, just after an enemy unit has selected its targets.',
 					target: 'One Aeldari unit from your army (excluding Wraith Construct units) that was selected as the target of one or more of the attacking unit\'s attacks.',
 					effect: 'Until the end of the phase, each time an attack targets your unit, subtract 1 from the Hit roll.',
 					cost: 1,
 				},
+			],
+		},
+		xenos_tau_empire: {
+			army_rules: [
+				{
+					name: `FOR THE GREATER GOOD`,
+					description: `
+					If your Army Faction is T'au Empire, then in your Shooting phase units from your army can work in	pairs to help each other target specific enemy units. When they do this, one unit is the Observer unit and the other is their Guided unit. The enemy they are	targeting is called their Spotted unit.
 
-			]
+					Each time you select this unit to shoot, if it is not an Observer unit, it can use this ability. If it does, select	one other friendly unit with this ability that is also eligible to shoot (excluding Fortification, Battleshocked and Observer units). Until the end of the phase, this unit is considered a Guided unit, and that friendly unit is considered an Observer unit. Then select one enemy unit that is visible to both your units to be their Spotted unit.
+
+					Until the end of the phase:
+
+					- Each time a model in a Guided unit makes an attack that targets their Spotted unit, improve the Ballistic Skill characteristic of	the attack by 1 and, if their Observer unit	has the Markerlight keyword, the attack
+					has the [IGNORES COVER] ability.
+
+					- Each time a model in a Guided unit makes an	attack that does not target their Spotted unit,	worsen the Ballistic Skill characteristic of the attack	by 1.
+					`
+				},
+			],
+			detachment_rules: [
+				{
+					name: `KAUYON`,
+					description: `
+					From the third battle round onwards, all ranged weapons equipped by T'au Empire models from your army have the [SUSTAINED HITS 1] ability. While a unit is a Guided unit (see For the Greater Good), weapons in that unit have the [SUSTAINED HITS 2] ability instead.
+					`
+				}
+			],
+			stratagems: [
+				{
+					name: 'STIMM INJECTORS',
+					type: this.stratagem_types.wargear,
+					turn: this.stratagem_turn.both,
+					when: 'Fight phase or your opponent\'s Shooting phase, just after an enemy unit has selected its targets.',
+					target: 'One T\'au Empire Battlesuit unit from your army that was selected as the target of one or more of the attacking	unit\'s attacks',
+					effect: 'Until the end of the phase, models in your unit have the Feel No Pain 6+ ability',
+					cost: 1,
+				},
+				{
+					name: 'STRIKE AND FADE',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.your,
+					when: 'Your Shooting phase.',
+					target: 'One T\'au Empire Battlesuit	unit from your army that can Fly whose attacks have been resolved this phase.',
+					effect: 'If your unit is not within Engagement Range of any enemy units, it can make a Normal move. If it does, your unit cannot declare a charge this turn.',
+					cost: 2,
+				},
+				{
+					name: 'COORDINATE TO ENGAGE',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.your,
+					when: 'Your Shooting phase.',
+					target: 'One T\'au Empire unit from your army that has just been selected as an Observer unit (see For the Greater Good).',
+					effect: 'Until the end of the phase, each time a model in your unit makes an attack that targets their Spotted unit, improve the Ballistic Skill characteristic of that attack by 1 and, if your unit has the Markerlight keyword, that attack has the [IGNORES COVER] ability.',
+					cost: 1,
+				},
+				{
+					name: 'POINT-BLANK AMBUSH',
+					type: this.stratagem_types.battle_tactic,
+					turn: this.stratagem_turn.your,
+					when: 'Your Shooting phase.',
+					target: 'One T\'au Empire unit from your army that has not been selected to shoot this phase.',
+					effect: 'Until the end of the phase, each time a model in your unit makes a ranged attack that targets an enemy unit within 9", improve the Armour Penetration characteristic of that attack by 1.',
+					cost: 1,
+				},
+				{
+					name: 'PHOTON GRENADES',
+					type: this.stratagem_types.wargear,
+					turn: this.stratagem_turn.opponent,
+					when: 'Your opponent\'s Charge phase, just after an enemy unit has declared a charge.',
+					target: 'One T\'au Empire Grenades unit from your army that was selected as one of the targets of that charge.',
+					effect: 'That enemy unit must immediately take a Battle-shock test, and until the end of the phase, subtract 2 from Charge rolls made for that enemy unit.',
+					cost: 1,
+				},
+				{
+					name: 'COMBAT EMBARKATION',
+					type: this.stratagem_types.strategic_ploy,
+					turn: this.stratagem_turn.opponent,
+					when: 'Your opponent\'s Charge phase, just after an enemy unit has declared a charge.',
+					target: 'One T\'au Empire Infantry unit from your army that was selected as one of the targets of that charge, and one friendly Transport.',
+					effect: 'Your unit can embark within that Transport. If it does, your opponent can select new targets for that charge.',
+					restrictions: 'Every model in your T\'au Empire Infantry unit must be within 3" of that Transport and there must be sufficient transport capacity to embark the entire unit.',
+					cost: 1,
+				},
+			],
 		},
 	};
 
 	static get(armyName) {
-		return HardcodeArmyRules.data[armyName.toLowerCase().replace(/- /g, '').replace(/ /g, '_')];
+		return HardcodeArmyRules.data[armyName.toLowerCase().replace(/- /g, '').replace(/ /g, '_').replace(/['\']/g, '')];
 	}
 };
