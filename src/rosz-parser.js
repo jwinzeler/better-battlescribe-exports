@@ -1,5 +1,7 @@
 class RoszParser {
 
+  static UNIT_ORDER = ['Epic Hero', 'Character', 'Battleline', 'Infantry', 'Swarm', 'Mounted', 'Beast', 'Monster', 'Vehicle', 'Dedicated Transport', 'Fortification', 'Allied Units'];
+
   static async unzip(file) {
     if (file.charAt(0) !== 'P') {
       return file;
@@ -105,7 +107,14 @@ class RoszParser {
     if (!units.length) {
       Logger.warn('No units found!');
     }
-    return units.sort((a, b) => this.sortBy('name', a, b));
+    return units
+      .sort((a, b) => {
+        const getKeyword = (keywords, index) => {
+          if (keywords.includes(this.UNIT_ORDER[index])) return this.UNIT_ORDER[index];
+          return index > this.UNIT_ORDER.length ? '' : getKeyword(keywords, index + 1);
+        };
+        return this.UNIT_ORDER.indexOf(getKeyword(a.keywords[0], 0)) - this.UNIT_ORDER.indexOf(getKeyword(b.keywords[0], 0)) || a.name.localeCompare(b.name);
+      });
   }
 
   static getUnit(unit) {
@@ -128,7 +137,7 @@ class RoszParser {
       .map((selection) => (selection.selections ? selection.selections.selection : selection))
       .flat(1)
       .filter(this.removeDuplication)
-      .sort((a, b) => this.sortBy('_name', a, b))
+      .sort((a, b) => a._name.localeCompare(b._name))
       .map(({ _name, _number }) => _number + "x" + _name);
     return [selections];
   }
@@ -216,13 +225,5 @@ class RoszParser {
 
   static removeDuplication(obj1, i, a) {
     return a.findIndex(obj2 => (JSON.stringify(obj1) === JSON.stringify(obj2))) === i;
-  }
-
-  static sortBy(param, a, b) {
-    let fa = a[param].toLowerCase();
-    let fb = b[param].toLowerCase();
-    if (fa < fb) return -1;
-    if (fa > fb) return 1;
-    return 0;
   }
 }
