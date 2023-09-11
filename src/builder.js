@@ -38,11 +38,11 @@ class Builder {
         <div id="overview-page" class="page active">
           <div class="left-column">
             ${this.getRules('Army rules', roster.armyData.army_rules || [])}
-            ${this.getRules('Detachment rules', roster.armyData.detachment_rules || [])}
+            ${this.getRules('Detachment rules', roster.armyData.detachment?.rules || [])}
             ${this.getArmyComposition(roster)}
           </div>
           <div class="right-column">
-            ${this.getStratagems(roster.armyData.stratagems)}
+            ${this.getStratagems(roster.armyData.detachment?.stratagems)}
           </div>
         </div>
     `;
