@@ -137,8 +137,8 @@ class RoszParser {
       .map((selection) => (selection.selections ? selection.selections.selection : selection))
       .flat(1)
       .filter(this.removeDuplication)
-      .sort((a, b) => a._name.localeCompare(b._name))
-      .map(({ _name, _number }) => _number + "x" + _name);
+      .map(({ _name, _number }) => _number + "x" + _name)
+      .sort((a, b) => a.localeCompare(b));
     return [selections];
   }
 
@@ -220,7 +220,7 @@ class RoszParser {
         this.findInObject(obj[key], type, tempArray, keys);
       }
     });
-    return tempArray;
+    return tempArray.sort((a, b) => a._name.localeCompare(b._name));
   }
 
   static removeDuplication(obj1, i, a) {
