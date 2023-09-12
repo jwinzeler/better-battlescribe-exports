@@ -16,7 +16,7 @@ class HardcodeArmyRules {
 
 		return {
 			...armyRules,
-			detachment: armyRules?.detachments[toSnakeCase(detachmentName)],
+			detachment: armyRules?.detachments?.[toSnakeCase(detachmentName)],
 		};
 	}
 };
