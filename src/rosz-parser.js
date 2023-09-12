@@ -25,7 +25,7 @@ class RoszParser {
       units: this.getUnits(roster.forces),
     };
     const armyData = {
-      ...HardcodeArmyRules.get(parsedRoster.faction.name),
+      ...HardcodeArmyRules.get(parsedRoster.faction.name, parsedRoster.detachment.name),
       ...(parsedRoster.faction?.rules?.length ? { army_rules: parsedRoster.faction.rules } : {}),
       ...(parsedRoster.detachment?.abilities?.length ? { detachment_rules: parsedRoster.detachment.abilities } : {})
     };
@@ -39,8 +39,9 @@ class RoszParser {
     return name;
   }
 
-  static getBattleSize({ selection }) {
+  static getBattleSize(selections) {
     Logger.log('Finding battle size...');
+    const selection = selections?.selection || [];
     const battleSizeSelection = selection.filter((({ _name }) => _name === 'Battle Size'))[0];
     const battleSize = battleSizeSelection?.selections?.selection?._name || '';
     Logger.logRosterValue(battleSize);
@@ -53,11 +54,11 @@ class RoszParser {
     Logger.logRosterValue(name);
 
     Logger.log('Finding faction points...');
-    const points = `${Number(costs.cost._value)}`;
+    const points = `${Number(costs?.cost._value)}`;
     Logger.logRosterValue(points);
 
     Logger.log('Finding faction rules...');
-    const rules = this.getRules(forces.force.selections.selection).filter(({ _page }) => _page === '1');
+    const rules = this.getRules(forces.force.selections?.selection || []).filter(({ _page }) => _page === '1');
     Logger.logArray(rules);
     if (!rules.length) {
       Logger.warn('No faction rules found!');
@@ -102,7 +103,7 @@ class RoszParser {
   static getUnits({ force }) {
     Logger.log('Finding units...');
 
-    const units = force.selections.selection.filter(({ _type }) => _type === 'model' || _type === 'unit').map(unit => this.getUnit(unit));
+    const units = force.selections?.selection.filter(({ _type }) => _type === 'model' || _type === 'unit').map(unit => this.getUnit(unit)) || [];
 
     if (!units.length) {
       Logger.warn('No units found!');
@@ -194,8 +195,9 @@ class RoszParser {
     return [ruleKeys];
   }
 
-  static getDetachment({ selection }) {
+  static getDetachment(selections) {
     Logger.log('Finding detachment name...');
+    const selection = selections?.selection || [];
     const detachmentSelection = selection.filter((({ _name }) => _name.includes('Detachment')))[0];
     const name = detachmentSelection?.selections?.selection?._name || '';
     Logger.logRosterValue(name);

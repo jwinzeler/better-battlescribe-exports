@@ -3,15 +3,18 @@ class HtmlParser {
     Logger.log(`Reading file...`);
     const contents = document.createElement('div');
     contents.innerHTML = file;
+
     const faction = this.getFaction(contents);
+    const detachment = this.getDetachment(contents);
+
     return {
       name: this.getRosterName(contents),
       battleSize: this.getBattleSize(contents),
       faction,
-      detachment: this.getDetachment(contents),
+      detachment: detachment,
       units: this.getUnits(contents),
       rules: this.getRules(contents),
-      armyData: HardcodeArmyRules.get(faction.name)
+      armyData: HardcodeArmyRules.get(faction.name, detachment.name),
     };
   }
 

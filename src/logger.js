@@ -9,7 +9,7 @@ class Logger {
 
   static logRosterValue(message) {
     const maxCharacters = 100;
-    if (message.split('').length > maxCharacters) {
+    if (message?.split('').length > maxCharacters) {
       message = message.split('').splice(0, 150).join('') + '...';
     }
     this.writeToElement(`<span class="log">>&nbsp;&nbsp;&nbsp;&nbsp;${message}</span>`);
