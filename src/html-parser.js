@@ -332,7 +332,7 @@ class HtmlParser {
     Logger.log('Finding detachment name...');
     const nameElement = html.querySelector('p');
     let name = this.getStringFromHtml(nameElement);
-    name = name.replaceAll(/<span.*?<\/span>/g, '');
+    name = name.replaceAll(/<span.*?<\/span>/g, '').trim();
 
     if (!name) {
       Logger.warn('Detachment name not found!');
