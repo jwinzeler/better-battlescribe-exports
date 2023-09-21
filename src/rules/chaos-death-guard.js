@@ -1,6 +1,6 @@
 const chaos_death_guard = {
   army_rules: [{
-    name: `NURGLE’S GIFT (AURA)`,
+    name: `NURGLE\’S GIFT (AURA)`,
     description: `If your Army Faction is DEATH GUARD, while an enemy unit is within CONTAGION RANGE of this unit, subtract 1 from the Toughness characteristic of models in that enemy unit. CONTAGION RANGE changes over the course of the battle, as shown below.
 
 CONTAGION RANGE
@@ -12,12 +12,12 @@ CONTAGION RANGE
     plague_company: {   
       rules: [{	
         name: `RUTHLESS EFFICIENCY`,
-        description: `During the Declare Battle Formations step, select one of the Sicknesses below. Until the end of the battle, all units from your army with the Nurgle’s Gift ability gain the selected Sickness.
+        description: `During the Declare Battle Formations step, select one of the Sicknesses below. Until the end of the battle, all units from your army with the Nurgle\’s Gift ability gain the selected Sickness.
 ■ Skullsquirm Blight (Aura): While an enemy unit is within Contagion Range of this unit, worsen the Ballistic Skill and Weapon Skill characteristics of weapons equipped by models in that enemy unit by 1.
 ■ Rattlejoint Ague (Aura): While an enemy unit is within Contagion Range of this unit, worsen the Save characteristic of models in that enemy unit by 1.
 ■ Scabrous Soulrot (Aura): While an enemy unit is within Contagion Range of this unit, worsen the Leadership and Objective Control characteristics of models in that enemy unit by 1 (to a minimum of 1).
 
-If you control an objective marker at the end of your Command phase and a Death Guard unit from your army is within range of that objective marker, that objective marker is said to be Infected and remains under your control even if you have no models within range of it, until your opponent controls it at the start or end of any turn. In addition, while an objective marker is Infected and under your control, it has the Nurgle’s Gift ability as if it were a unit from your army (so enemy units within Contagion Range of it will have their characteristics modified).`
+If you control an objective marker at the end of your Command phase and a Death Guard unit from your army is within range of that objective marker, that objective marker is said to be Infected and remains under your control even if you have no models within range of it, until your opponent controls it at the start or end of any turn. In addition, while an objective marker is Infected and under your control, it has the Nurgle\’s Gift ability as if it were a unit from your army (so enemy units within Contagion Range of it will have their characteristics modified).`
       }],
       stratagems: [{
         name: 'FERRIC BLIGHT',
@@ -33,7 +33,7 @@ If you control an objective marker at the end of your Command phase and a Death 
         type: stratagem_types.battle_tactic,
         turn: stratagem_turn.both,
         when: 'Fight phase, just after an enemy unit has selected its targets',
-        target: 'One Death Guard unit from your army that was selected as the target of one or more of that enemy unit’s attacks',
+        target: 'One Death Guard unit from your army that was selected as the target of one or more of that enemy unit\’s attacks',
         effect: 'Until the end of the phase, each time an attack is allocated to a model in your unit, subtract 1 from the Damage characteristic of that attack.',
         cost: 2,
       },
@@ -52,7 +52,7 @@ If you control an objective marker at the end of your Command phase and a Death 
         turn: stratagem_turn.your,
         when: 'Your Command phase',
         target: 'One Death Guard model from your army',
-        effect: 'Your model regains up to D3 lost wounds. If your model’s unit is within Contagion Range of an Infected objective marker you control, your model regains up to 3 lost wounds instead.',
+        effect: 'Your model regains up to D3 lost wounds. If your model\’s unit is within Contagion Range of an Infected objective marker you control, your model regains up to 3 lost wounds instead.',
         cost: 1,
       },
       {
@@ -68,8 +68,8 @@ If you control an objective marker at the end of your Command phase and a Death 
         name: 'CLOUD OF FLIES',
         type: stratagem_types.strategic_ploy,
         turn: stratagem_turn.opponent,
-        when: 'Your opponent’s Shooting phase, just after an enemy unit has selected its targets.',
-        target: 'One Death Guard unit from your army that was selected as the target of one or more of that enemy unit’s attacks',
+        when: 'Your opponent\’s Shooting phase, just after an enemy unit has selected its targets.',
+        target: 'One Death Guard unit from your army that was selected as the target of one or more of that enemy unit\’s attacks',
         effect: 'Until the end of the phase, your unit has the Stealth ability',
         cost: 1,
       },
