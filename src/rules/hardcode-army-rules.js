@@ -6,9 +6,9 @@ class HardcodeArmyRules {
 		imperium_adeptus_astartes_deathwatch,
 		imperium_adeptus_custodes,
 		imperium_adeptus_mechanicus,
+		xenos_leagues_of_votann,
 		xenos_tau_empire,
 		xenos_tyranids,
-		xenos_leagues_of_votann,
 	};
 
 	static get(armyName, detachmentName) {
