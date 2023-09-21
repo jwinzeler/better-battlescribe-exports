@@ -7,7 +7,7 @@ Each time a model from your army with this ability makes an attack that targets 
 2 Judgement tokens - Now We’ve Got a Grudge to Settle: Add 1 to the Hit roll and add 1 to the Wound roll.`
   }],
   detachments: {
-    oathband_mission_tactics: {   
+    oathband: {   
       rules: [{
         name: `RUTHLESS EFFICIENCY`,
         description: `At the start of the battle, select a number of units from your opponent\’s army depending on the battle size, as shown below:
