@@ -8,6 +8,7 @@ class HardcodeArmyRules {
 		imperium_adeptus_mechanicus,
 		xenos_tau_empire,
 		xenos_tyranids,
+		xenos_leagues_of_votann,
 	};
 
 	static get(armyName, detachmentName) {
