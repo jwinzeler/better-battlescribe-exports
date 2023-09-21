@@ -5,8 +5,7 @@ const xenos_leagues_of_votann = {
 Each time a model from your army with this ability makes an attack that targets a unit that has one or more Judgement tokens, until that model\’s attacks have been resolved, apply the relevant bonus from the table below to that attack.
 1 Jodgement token - Eminent Threat: Add 1 to the Hit roll
 2 Judgement tokens - Now We’ve Got a Grudge to Settle: Add 1 to the Hit roll and add 1 to the Wound roll.`
-  },
-  ],
+  }],
   detachments: {
     oathband_mission_tactics: {   
       rules: [{
