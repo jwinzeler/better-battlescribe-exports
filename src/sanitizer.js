@@ -62,6 +62,7 @@ class Sanitizer {
         .replace(/([A-Z]{5,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
         // Replace uppercase words with bold capitalized versions
         .replace(/^(\d):$/g, '$1"') // replace mistake in movement data where : was placed instead of "
+        .replace(/(<br>){3,}/g, '<br>') // replace 3 or more <br> with 1 <br>. <br><br> still possible.
         .trim();
     });
   }
