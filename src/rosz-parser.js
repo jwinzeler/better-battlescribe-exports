@@ -128,6 +128,7 @@ class RoszParser {
       meleeWeapons: this.getWeapons(unit, 'Melee Weapons'),
       rangedWeapons: this.getWeapons(unit, 'Ranged Weapons'),
       abilities: this.getAbilities(unit),
+      specialSectionAbilities: this.getSpecialSection(unit),
       ruleKeys: unit.rules ? this.getUnitRulekeys(unit.rules.rule) : [],
     };
   }
@@ -188,6 +189,17 @@ class RoszParser {
       description: profile.characteristics.characteristic.__text.replace(/\n/g, '<br>') // TODO Maybe not the best place for it
     })).filter(this.removeDuplication);
     return { abilities, abilityNames: [abilities.map(({ name }) => name)] };
+  }
+
+  static getSpecialSection(unit) {
+    const abilities = Object.values(unit.profiles.profile).filter((profile) => 
+      !['Unit', 'Abilities', undefined].includes(profile._typeName)
+    ).map(profile => ({
+      name: profile._name,
+      description: profile.characteristics.characteristic.__text.replace(/\n/g, '<br>'), // TODO Maybe not the best place for it
+      type: profile._typeName,
+    })).filter(this.removeDuplication);
+    return { abilities, abilityNames: abilities.map(({ name }) => name), abilityTypes: abilities.map(({ type }) => type).filter(this.removeDuplication) };
   }
 
   static getUnitRulekeys(rules) {

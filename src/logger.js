@@ -3,7 +3,7 @@ class Logger {
     const logElement = document.getElementById('log');
     if (logElement) {
       const existingLog = logElement.innerHTML;
-      logElement.innerHTML = message.concat(existingLog ? '<br />' : '', existingLog);
+      logElement.innerHTML = existingLog.concat(existingLog ? '<br />' : '', message);
     }
   }
 

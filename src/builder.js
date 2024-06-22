@@ -194,30 +194,55 @@ class Builder {
               </div>
             </th>
           </tr>
+          <tr>
+            <td>
+              <div>
+                ${invulnerableSaveAbility.description}
+              </div>
+            </td>
+          </tr>
         </table>
       `;
     }
 
-    const tableData = [
+    const abilitiesTableData = [
       ['ABILITIES'],
     ];
 
     if (unit.ruleKeys) {
-      tableData.push([`CORE: <b>${unit.ruleKeys.flat(1).join(', ')}</b>`]);
+      abilitiesTableData.push([`CORE: <b>${unit.ruleKeys.flat(1).join(', ')}</b>`]);
     }
 
     if (unit.abilities.abilities) {
-      tableData.push(
+      abilitiesTableData.push(
         ...unit.abilities.abilities
           .filter((ability) => !['Invulnerable Save', 'Leader'].includes(ability.name))
           .map((ability) => ([
             `<b>${ability.name}: </b>${ability.description}`,
           ]),
-          ),
+        ),
       );
     }
 
-    const abilitiesTable = this.createTable(tableData);
+    const abilitiesTable = this.createTable(abilitiesTableData);
+
+    let specialSectionAbilitiesTable = '';
+
+    if (unit.specialSectionAbilities.abilityTypes.length) {
+      const specialSectionAbilitiesTableData = [unit.specialSectionAbilities.abilityTypes];
+      specialSectionAbilitiesTableData.push(
+        ...unit.specialSectionAbilities.abilityTypes.map((type) => 
+          unit.specialSectionAbilities.abilities
+          .filter((ability) => ability.type === type)
+          .map((ability) => ([
+            `<b>${ability.name}: </b>${ability.description}`,
+          ])),
+        )
+        .flat(),
+      );
+
+      specialSectionAbilitiesTable = this.createTable(specialSectionAbilitiesTableData);
+    }
 
     const extraSectionData = [
       ['EXTRA'],
@@ -243,6 +268,7 @@ class Builder {
     return `
       ${invulnerableSaveAbilityHtml}
       ${abilitiesTable}
+      ${specialSectionAbilitiesTable}
       ${extraSection}
     `;
   }
