@@ -1,7 +1,6 @@
 class Main {
-  static async run(file, fileType) {
-    const isHtml = fileType === "html";
-    let roster = isHtml ? HtmlParser.read(file) : await RoszParser.read(file);
+  static async run(file) {
+    let roster = await RoszParser.read(file);
     this.build(roster);
   }
 

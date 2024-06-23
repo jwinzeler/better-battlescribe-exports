@@ -21,9 +21,9 @@ class RosterHistory {
 							<div class='delete' onclick="RosterHistory.remove(${index})"><b>X</b></div>
 						</div>
 						<span><b>Name:</b> ${roster.name}</span>
-						<span><b>Battlesize:</b> ${roster.battleSize}</span>
 						<span><b>Faction:</b> ${roster.faction.name}</span>
-						<span><b>Poins:</b> ${roster.faction.points}</span>
+						<span><b>Detachment:</b> ${roster.detachment.name}</span>
+						<span><b>Points:</b> ${roster.faction.points}</span>
 					</div>`;
 			});
 			historyListEl.innerHTML = html;

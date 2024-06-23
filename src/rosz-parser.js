@@ -16,20 +16,18 @@ class RoszParser {
     Logger.log(`Reading ROSZ file...`);
     const xmldata = await this.unzip(file);
     const { roster } = new X2JS().xml_str2json(xmldata);
-    const parsedRoster = {
+
+    const faction = this.getFaction(roster);
+    const detachment = this.getDetachment(roster.forces.force.selections);
+
+    return {
       name: this.getRosterName(roster),
-      battleSize: this.getBattleSize(roster.forces.force.selections),
-      faction: this.getFaction(roster),
-      rules: this.gatherAllRules(roster),
-      detachment: this.getDetachment(roster.forces.force.selections),
+      faction,
+      detachment,
       units: this.getUnits(roster.forces),
+      rules: this.gatherAllRules(roster),
+      armyData: WahapediaParser.getArmyRules(faction.name, detachment.name)
     };
-    const armyData = {
-      ...HardcodeArmyRules.get(parsedRoster.faction.name, parsedRoster.detachment.name),
-      ...(parsedRoster.faction?.rules?.length ? { army_rules: parsedRoster.faction.rules } : {}),
-      ...(parsedRoster.detachment?.abilities?.length ? { detachment_rules: parsedRoster.detachment.abilities } : {})
-    };
-    return { ...parsedRoster, armyData };
   }
 
   static getRosterName({ _name }) {
@@ -39,22 +37,13 @@ class RoszParser {
     return name;
   }
 
-  static getBattleSize(selections) {
-    Logger.log('Finding battle size...');
-    const selection = selections?.selection || [];
-    const battleSizeSelection = selection.filter((({ _name }) => _name === 'Battle Size'))[0];
-    const battleSize = battleSizeSelection?.selections?.selection?._name || '';
-    Logger.logRosterValue(battleSize);
-    return battleSize;
-  }
-
   static getFaction({ forces, costs }) {
     Logger.log('Finding faction name...');
     const name = forces.force._catalogueName;
     Logger.logRosterValue(name);
 
     Logger.log('Finding faction points...');
-    const points = `${Number(costs?.cost._value)}`;
+    const points = `${Number(costs?.cost._value || costs?.cost.find((cost) => cost._name === 'pts')?._value)}`;
     Logger.logRosterValue(points);
 
     Logger.log('Finding faction rules...');
@@ -193,7 +182,7 @@ class RoszParser {
 
   static getSpecialSection(unit) {
     const abilities = Object.values(unit.profiles.profile).filter((profile) => 
-      !['Unit', 'Abilities', undefined].includes(profile._typeName)
+      !['Unit', 'Abilities', 'Melee Weapons', 'Ranged Weapons', undefined].includes(profile._typeName)
     ).map(profile => ({
       name: profile._name,
       description: profile.characteristics.characteristic.__text.replace(/\n/g, '<br>'), // TODO Maybe not the best place for it
@@ -213,13 +202,7 @@ class RoszParser {
     const detachmentSelection = selection.filter((({ _name }) => _name.includes('Detachment')))[0];
     const name = detachmentSelection?.selections?.selection?._name || '';
     Logger.logRosterValue(name);
-    Logger.log('Finding detachment abilites...');
-    const abilities = this.getRules(selection).filter(({ _page }) => _page === '2');
-    Logger.logArray(abilities);
-    return {
-      name,
-      abilities
-    };
+    return { name };
   }
 
   static findInObject(obj, type, tempArray, keys = ['_type', '_typeName']) {

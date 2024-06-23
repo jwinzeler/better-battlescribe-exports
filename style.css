@@ -288,6 +288,7 @@ details.second-level-details summary {
   border-radius: 5px;
   cursor: pointer;
   position: relative;
+  min-width: 250px;
 }
 .roster-history-box > .backdrop {
   display: none;

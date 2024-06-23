@@ -37,12 +37,13 @@ class Builder {
     return `
         <div id="overview-page" class="page active">
           <div class="left-column">
-            ${this.getRules('Army rules', roster.armyData.army_rules || [])}
-            ${this.getRules('Detachment rules', roster.armyData.detachment?.rules || [])}
+            ${this.getRules('Army rules', roster.armyData.factionAbilities || [])}
+            ${this.getRules('Detachment rules', roster.armyData.detachmentAbilities || [])}
             ${this.getArmyComposition(roster)}
           </div>
           <div class="right-column">
-            ${this.getStratagems(roster.armyData.detachment?.stratagems)}
+            ${this.getStratagems('Detachment', roster.armyData.detachmentStrats)}
+            ${this.getStratagems('Core', roster.armyData.coreStrats)}
           </div>
         </div>
     `;
@@ -55,7 +56,7 @@ class Builder {
           <summary>
             ${name}
           </summary>
-          ${rules.map((rule) => `
+          ${rules.map((rule, i) => `
             <details class="content-details" open>
               <summary>
                 ${rule.name.toLowerCase()}
@@ -63,6 +64,7 @@ class Builder {
               <p class="description">
               ${rule.description}
               </p>
+              ${i === rules.length-1 ? '' : '<hr>' }
             </details>
           `).join('')}
         </details>
@@ -73,23 +75,20 @@ class Builder {
   static getArmyComposition(roster) {
     return `
     <div>
-      <details class="title-details">
+      <details class="title-details" open>
         <summary>Army Composition</summary>
         <table class="army-comp">
           <tr>
-            <th>Count</th>
             <th>Unit</th>
             <th>Cost</th>
           </tr>
           ${roster.armyComposition.map((unit) => `
             <tr>
-              <td>${unit.count}</td>
-              <td>${unit.name}</td>
-              <td>${unit.points.replace('pts', '')}</td>
+              <td>${unit.count}x ${unit.name} (${unit.points.replace('pts', '')})</td>
+              <td>${Number(unit.points.replace('pts', '')) * Number(unit.count)}</td>
             </tr>
           `).join('')}
           <tr>
-            <th></th>
             <th>Total</th>
             <th>${roster.faction.points.replace('pts', '')}</td>
           </tr>
@@ -99,24 +98,24 @@ class Builder {
   `;
   }
 
-  static getStratagems(stratagems) {
+  static getStratagems(type, stratagems) {
     if (!stratagems) return '';
+
     const stratagemsHtml = stratagems.map((stratagem) => `
-      <div class="stratagem ${stratagem.turn}">
-        <div class='rule-row header'>${stratagem.name.toUpperCase()}</div>
+      <div class="stratagem ${stratagem.turn.toLowerCase().replace(/- /g, '').replace(/ /g, '-').replace(/'|’/g, '')}">
+        <div class='rule-row header'>
+          <div>${stratagem.name}</div>
+        <div class='cost'>${stratagem.cp_cost} CP</div>
+        </div>
         <div class='rule-row small'>${stratagem.type}</div>
-        <div class='rule-row'><b>When: </b>${stratagem.when}</div>
-        <div class='rule-row'><b>Target: </b>${stratagem.target}</div>
-        <div class='rule-row'><b>Effect: </b>${stratagem.effect}</div>
-        ${stratagem.restrictions ? `<div class='rule-row'><b>Restrictions: </b>${stratagem.restrictions}</div>` : ""}
-        <div class='cost'>${stratagem.cost} CP</div>
+        <div class='rule-row'>${stratagem.description}</div>
       </div>
       `);
 
     return `
         <details class="title-details" id="stratagems" open>
           <summary>
-            Stratagems
+            ${type} Stratagems
           </summary>
           <div class="stratagems-wrapper">
             ${stratagemsHtml.join('')}
@@ -366,7 +365,7 @@ class Builder {
             <b>Detachment: </b>${roster.detachment.name}
           </div>
           <div>
-            <b>Size: </b>${roster.battleSize}
+            <b>Points: </b>${roster.faction.points}
           </div>
         </div>
       </button>
@@ -396,14 +395,14 @@ class Builder {
   }
 
   static getTooltip(text, description) {
-    return `<span class="tooltip-on-hover">${text}<div class="tooltip">
-        <div class="title">
+    return `<span class="tooltip-on-hover">${text}<span class="tooltip">
+        <span class="title">
           ${text}
-        </div>
-        <div class="description">
-          ${description}
-        </div>
-      </div></span>`;
+        </span>
+        <span class="description">
+          ${description.trim()}
+        </span>
+      </span></span>`;
   }
 
   static stringToId(string) {
