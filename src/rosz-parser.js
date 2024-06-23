@@ -181,7 +181,7 @@ class RoszParser {
   }
 
   static getSpecialSection(unit) {
-    const abilities = Object.values(unit.profiles.profile).filter((profile) => 
+    const abilities = Object.values(unit?.profiles?.profile ?? []).filter((profile) => 
       !['Unit', 'Abilities', 'Melee Weapons', 'Ranged Weapons', undefined].includes(profile._typeName)
     ).map(profile => ({
       name: profile._name,
@@ -200,7 +200,7 @@ class RoszParser {
     Logger.log('Finding detachment name...');
     const selection = selections?.selection || [];
     const detachmentSelection = selection.filter((({ _name }) => _name.includes('Detachment')))[0];
-    const name = detachmentSelection?.selections?.selection?._name || '';
+    const name = detachmentSelection?.selections?.selection?._name?.replace(' Detachment', '') || '';
     Logger.logRosterValue(name);
     return { name };
   }

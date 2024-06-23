@@ -3,6 +3,7 @@ class Sanitizer {
     Logger.log('Sanitizing data...');
     roster = this.removeLinks(roster);
     roster = this.removeSpans(roster);
+    roster = this.removeInlineStyles(roster);
     roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
     roster = this.removeDuplicateStatlines(roster);
@@ -65,6 +66,13 @@ class Sanitizer {
         .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1')
         .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1')
         .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1');
+    });
+  }
+
+  static removeInlineStyles(roster) {
+    return this.mutateEachStringInObject(roster, (string) => {
+      return string
+        .replace(/style="[^"]*?"/g, '$1');
     });
   }
 

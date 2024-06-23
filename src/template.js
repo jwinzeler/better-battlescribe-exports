@@ -489,12 +489,12 @@ div.page.active {
   margin-top: 1rem;
 }
 
-.tooltip-on-hover {
+.tooltip-on-mouseover {
   cursor: pointer;
   text-decoration: underline;
 }
 
-.tooltip-on-hover:hover .tooltip {
+.tooltip-on-mouseover:hover .tooltip {
   display: block;
 }
 
@@ -528,7 +528,7 @@ div.page.active {
   display: block;
 }
 
-.tooltip-on-hover:hover .tooltip .tooltip {
+.tooltip-on-mouseover:hover .tooltip .tooltip {
   display: none;
 }
 

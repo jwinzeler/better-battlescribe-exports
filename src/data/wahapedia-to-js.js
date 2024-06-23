@@ -51,7 +51,7 @@ const wahapediaExport = Object.keys(files).reduce((fileAcc, file) => {
             columns.reduce((columnAcc, column, index) => {
               return {
                 ...columnAcc,
-                [headers[index]]: column.trim(),
+                [headers[index]]: column.trim().replace('’', '\''),
               };
             }, {}),
           );
