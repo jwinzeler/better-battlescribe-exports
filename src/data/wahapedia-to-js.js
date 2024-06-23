@@ -20,17 +20,19 @@ const files = {
 };
 
 async function main() {
-  const wahapediaExport = await Object.keys(files).reduce(async (fileAcc, file) => {
+  return await Object.keys(files).reduce(async (fileAcc, file) => {
     try {
+      console.log(`Fetching ${file}`);
       const response = await fetch(`http://wahapedia.ru/wh40k10ed/${file}.csv`);
       const raw = await response.text();
       const data = raw?.toString()?.split(/\n/)
   
       let headers = data[0].replace(/\|\r/, '').split(/\|/).map((header) => header.trim());
+      console.log(`Headers: ${headers.join(',')}`)
       data.shift();
       
       return {
-        ...fileAcc,
+        ... await fileAcc,
         [file.toLowerCase()]: data.reduce((rowAcc, row) => {
           if (!row) {
             return rowAcc;
@@ -47,8 +49,8 @@ async function main() {
                     ...columnAcc,
                     [headers[index]]: column
                       .trim()
-                      .replace('’', '\'')
-                      .replace('–', '-'),
+                      .replaceAll('’', '\'')
+                      .replaceAll('–', '-'),
                   };
                 }, {}),
               ],
@@ -60,8 +62,8 @@ async function main() {
                   ...columnAcc,
                   [headers[index]]: column
                     .trim()
-                    .replace('’', '\'')
-                    .replace('–', '-'),
+                    .replaceAll('’', '\'')
+                    .replaceAll('–', '-'),
                 };
               }, {}),
             );
@@ -74,8 +76,8 @@ async function main() {
       console.error(`Error while trying to read ${file}.csv:`, error);
     }
   }, Promise.resolve({}));
-
-  fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8');
 }
 
-main().then();
+main().then((wahapediaExport) => {
+  fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8')
+});
