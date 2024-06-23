@@ -78,6 +78,88 @@ async function main() {
   }, Promise.resolve({}));
 }
 
+function validateExportedData(data) {
+  const validators = {
+    abilities: {
+      0: {
+        0: {
+          description: null,
+          faction_id: null,
+          id: null,
+          legend: null,
+          name: null,
+        },
+      },
+    },
+    detachment_abilities: {
+      0: {
+        0: {
+          description: null,
+          detachment: null,
+          faction_id: null,
+          id: null,
+          legend: null,
+          name: null,
+        },
+      },
+    },
+    factions: {
+      0: {
+        0: {
+          id: null,
+          link: null,
+          name: null,
+        },
+      },
+    },
+    last_update: {
+      0: {
+        0: {
+          last_update: null,
+        },
+      },
+    },
+    stratagems: {
+      1: {
+        0: {
+          cp_cost: null,
+          description: null,
+          faction_id: null,
+          id: null,
+          legend: null,
+          name: null,
+          phase: null,
+          turn: null,
+          type: null,
+        },
+      },
+    },
+  };
+  
+  Object.keys(validators).forEach((validator) => validateRecursively(data, validator, validators[validator], 'data'));
+}
+
+function validateRecursively(data, validator, validators, path) {
+  if (!isNaN(Number(validator))) {
+    if (data[Object.keys(data)[Number(validator)]]) {
+      if (validators) {
+        Object.keys(validators).forEach((nextValidator) => validateRecursively(data[Object.keys(data)[Number(validator)]], nextValidator, validators[nextValidator], `${path}.${validator}`));
+      }
+    } else {
+      console.log(`X Validation failed:`, `${path}.${validator}`);
+    }
+  } else if (!!validator) {
+    if (data[validator]) {      
+      if (validators) {
+        Object.keys(validators).forEach((nextValidator) => validateRecursively(data[validator], nextValidator, validators[nextValidator], `${path}.${validator}`))
+      }
+    } else {
+      console.log(`\n\nX Validation failed:`, `${path}.${validator}`);
+    }
+  }
+}
+
 main().then((wahapediaExport) => {
+  validateExportedData(wahapediaExport);
   fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8')
 });
