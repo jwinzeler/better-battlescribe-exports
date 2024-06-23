@@ -19,50 +19,63 @@ const files = {
   'Stratagems': 0,
 };
 
-const wahapediaExport = Object.keys(files).reduce((fileAcc, file) => {
-  try {
-    const data = fs.readFileSync(`./src/data/wahapedia-exports/${file}.csv`).toString().split(/\n/);
-    let headers = data[0].replace(/\|\r/, '').split(/\|/).map((header) => header.trim());
-    data.shift();
-    
-    return {
-      ...fileAcc,
-      [file.toLowerCase()]: data.reduce((rowAcc, row) => {
-        if (!row) {
-          return rowAcc;
-        }
+async function main() {
+  const wahapediaExport = await Object.keys(files).reduce(async (fileAcc, file) => {
+    try {
+      const response = await fetch(`http://wahapedia.ru/wh40k10ed/${file}.csv`);
+      const raw = await response.text();
+      const data = raw?.toString()?.split(/\n/)
   
-        const columns = row.replace(/\|\r/, '').split(/\|/);
-
-        if (!rowAcc[columns[files[file]]]) {
-          return {
-            ...rowAcc,
-            [columns[files[file]] ?? 'ANY']: [
+      let headers = data[0].replace(/\|\r/, '').split(/\|/).map((header) => header.trim());
+      data.shift();
+      
+      return {
+        ...fileAcc,
+        [file.toLowerCase()]: data.reduce((rowAcc, row) => {
+          if (!row) {
+            return rowAcc;
+          }
+    
+          const columns = row.replace(/\|\r/, '').split(/\|/);
+  
+          if (!rowAcc[columns[files[file]]]) {
+            return {
+              ...rowAcc,
+              [columns[files[file]] ?? 'ANY']: [
+                columns.reduce((columnAcc, column, index) => {
+                  return {
+                    ...columnAcc,
+                    [headers[index]]: column
+                      .trim()
+                      .replace('’', '\'')
+                      .replace('–', '-'),
+                  };
+                }, {}),
+              ],
+            }
+          } else {
+            rowAcc[columns[files[file]]].push(
               columns.reduce((columnAcc, column, index) => {
                 return {
                   ...columnAcc,
-                  [headers[index]]: column.trim().replace('’', '\''),
+                  [headers[index]]: column
+                    .trim()
+                    .replace('’', '\'')
+                    .replace('–', '-'),
                 };
               }, {}),
-            ],
+            );
+  
+            return rowAcc;
           }
-        } else {
-          rowAcc[columns[files[file]]].push(
-            columns.reduce((columnAcc, column, index) => {
-              return {
-                ...columnAcc,
-                [headers[index]]: column.trim().replace('’', '\''),
-              };
-            }, {}),
-          );
-
-          return rowAcc;
-        }
-      }, {}),
+        }, {}),
+      }
+    } catch(error) {
+      console.error(`Error while trying to read ${file}.csv:`, error);
     }
-  } catch(error) {
-    console.error(`Error while trying to read ${file}.csv:`, error);
-  }
-}, {});
+  }, Promise.resolve({}));
 
-fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8');
+  fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8');
+}
+
+main().then();
