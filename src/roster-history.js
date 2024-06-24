@@ -13,17 +13,17 @@ class RosterHistory {
 		let rosterHistory = this.get();
 		let html = '';
 		if (rosterHistory.history.length) {
-			rosterHistory.history.forEach(({ roster, rosterInfo }, index) => {
+			rosterHistory.history.forEach(({ rosterInfo }, index) => {
 				html += ` 
 					<div class='roster-history-box'>
 						<div class='backdrop'">
 							<div class="load-wrapper" onclick="Main.loadFromHistory(${index})"><b>LOAD</b></div>
 							<div class='delete' onclick="RosterHistory.remove(${index})"><b>X</b></div>
 						</div>
-						<span><b>Name:</b> ${rosterInfo.name}</span>
-						<span><b>Faction:</b> ${rosterInfo.faction}</span>
-						<span><b>Detachment:</b> ${rosterInfo.detachment}</span>
-						<span><b>Points:</b> ${rosterInfo.points}</span>
+						<span><b>Name:</b> ${rosterInfo?.name}</span>
+						<span><b>Faction:</b> ${rosterInfo?.faction}</span>
+						<span><b>Detachment:</b> ${rosterInfo?.detachment}</span>
+						<span><b>Points:</b> ${rosterInfo?.points}</span>
 					</div>`;
 			});
 			historyListEl.innerHTML = html;
