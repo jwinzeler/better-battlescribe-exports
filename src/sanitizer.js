@@ -1,6 +1,9 @@
 class Sanitizer {
   static sanitize(roster) {
     Logger.log('Sanitizing data...');
+    roster = this.removeLinks(roster);
+    roster = this.removeSpans(roster);
+    roster = this.removeInlineStyles(roster);
     roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
     roster = this.removeDuplicateStatlines(roster);
@@ -12,8 +15,6 @@ class Sanitizer {
      * 
      * - Better styles for toolips
      * - Fix missing space between commas in abilities and keywords
-     *  Where to get stratagems?
-     * - Fix CORE abilities, show faction abilities (different values in real datasheet compared to here)
      * - check small mobile portait mode
      * 
      */
@@ -26,7 +27,7 @@ class Sanitizer {
   static removeDuplicateStatlines(roster) {
     const isDuplicateStat = (stats, compareStats) => Object.keys(stats).every((key) => {
       if (key === 'name') {
-        return compareStats[key] !== stats[key];
+        return true;
       } else {
         return compareStats[key] === stats[key];
       }
@@ -51,6 +52,30 @@ class Sanitizer {
     };
   }
 
+  static removeLinks(roster) {
+    return this.mutateEachStringInObject(roster, (string) => {
+      return string
+        .replace(/<a[^>]*?>(.*?)<\/a>/g, '$1');
+    });
+  }
+
+  static removeSpans(roster) {
+    return this.mutateEachStringInObject(roster, (string) => {
+      return string
+        .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1')
+        .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1')
+        .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1')
+        .replace(/<span[^>]*?>([^<]*?)<\/span>/g, '$1');
+    });
+  }
+
+  static removeInlineStyles(roster) {
+    return this.mutateEachStringInObject(roster, (string) => {
+      return string
+        .replace(/style="[^"]*?"/g, '');
+    });
+  }
+
   static cleanUpText(roster) {
     return this.mutateEachStringInObject(roster, (string) => {
       return string
@@ -59,7 +84,7 @@ class Sanitizer {
         .replace(/'/g, "") // Remove ' in name  TODO
         .replace(/ +\n */g, '\n') // Remove extra spaces around line separators
         .replace(/ +, */g, ', ') // Remove spaces before and after commas, leave only 1 after
-        .replace(/([A-Z]{5,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
+        .replace(/([A-Z|\s]{5,})/g, (match) => `<b class="capitalize">${match.toLowerCase()}</b>`)
         // Replace uppercase words with bold capitalized versions
         .replace(/^(\d):$/g, '$1"') // replace mistake in movement data where : was placed instead of "
         .replace(/(<br>){3,}/g, '<br><br>') // replace 3 or more <br> with 2 <br>. <br><br> still possible.
@@ -120,6 +145,8 @@ class Sanitizer {
       rules.forEach((rule) => {
         if (string.includes(rule.name)) {
           string = string.replace(rule.name, Builder.getTooltip(rule.name, rule.description));
+        } else if (string.includes(rule.name.toLowerCase())) {
+          string = string.replace(rule.name.toLowerCase(), Builder.getTooltip(rule.name.toLowerCase(), rule.description));
         }
       });
 
@@ -149,6 +176,25 @@ class Sanitizer {
         })),
         ruleKeys: addNestedTooltips(unit.ruleKeys),
       })),
+      armyData: {
+        ...roster.armyData,
+        factionAbilities: roster.armyData.factionAbilities.map((ability) => ({
+          ...ability,
+          description: addTooltip(ability.description),
+        })),
+        detachmentAbilities: roster.armyData.detachmentAbilities.map((ability) => ({
+          ...ability,
+          description: addTooltip(ability.description),
+        })),
+        detachmentStrats: roster.armyData.detachmentStrats.map((ability) => ({
+          ...ability,
+          description: addTooltip(ability.description),
+        })),
+        coreStrats: roster.armyData.coreStrats.map((ability) => ({
+          ...ability,
+          description: addTooltip(ability.description),
+        })),
+      },
     });
   }
 
@@ -161,7 +207,7 @@ class Sanitizer {
         count: 1,
         points: unit.pts,
       })).reduce((units, unit) => {
-        if (units.some((u) => u.name === unit.name)) {
+        if (units.some((u) => u.name === unit.name && u.points === unit.points)) {
           units.find((u) => u.name === unit.name).count++;
         } else {
           units.push(unit);

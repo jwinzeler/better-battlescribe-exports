@@ -13,17 +13,17 @@ class RosterHistory {
 		let rosterHistory = this.get();
 		let html = '';
 		if (rosterHistory.history.length) {
-			rosterHistory.history.forEach((roster, index) => {
+			rosterHistory.history.forEach(({ roster, rosterInfo }, index) => {
 				html += ` 
 					<div class='roster-history-box'>
 						<div class='backdrop'">
-							<div class="load-wrapper" onclick="Main.rerun(${index})"><b>LOAD</b></div>
+							<div class="load-wrapper" onclick="Main.loadFromHistory(${index})"><b>LOAD</b></div>
 							<div class='delete' onclick="RosterHistory.remove(${index})"><b>X</b></div>
 						</div>
-						<span><b>Name:</b> ${roster.name}</span>
-						<span><b>Battlesize:</b> ${roster.battleSize}</span>
-						<span><b>Faction:</b> ${roster.faction.name}</span>
-						<span><b>Poins:</b> ${roster.faction.points}</span>
+						<span><b>Name:</b> ${rosterInfo.name}</span>
+						<span><b>Faction:</b> ${rosterInfo.faction}</span>
+						<span><b>Detachment:</b> ${rosterInfo.detachment}</span>
+						<span><b>Points:</b> ${rosterInfo.points}</span>
 					</div>`;
 			});
 			historyListEl.innerHTML = html;
@@ -33,9 +33,9 @@ class RosterHistory {
 		}
 	}
 
-	static add(roster) {
+	static add(roster, rosterInfo) {
 		const historyStore = this.get();
-		historyStore.history.unshift(roster);
+		historyStore.history.unshift({ roster, rosterInfo });
 		localStorage.setItem('roster-history', JSON.stringify(historyStore));
 		this.showList();
 	}
@@ -46,12 +46,4 @@ class RosterHistory {
 		localStorage.setItem('roster-history', JSON.stringify(historyStore));
 		this.showList();
 	}
-
-	static addToList(roster) {
-		const historyStore = this.get();
-		historyStore.history.unshift(roster);
-		localStorage.setItem('roster-history', JSON.stringify(historyStore));
-		this.showList();
-	}
-
 }

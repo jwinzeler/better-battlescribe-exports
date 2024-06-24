@@ -31,5 +31,6 @@ class Logger {
 
   static error(message) {
     this.writeToElement(`<span class="error">${message}</span>`);
+    document.getElementById('log-details')?.setAttribute('open', true);
   }
 }

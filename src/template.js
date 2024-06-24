@@ -199,8 +199,8 @@ html, body {
   --background-datasheet-header: ##1F2123;
   --sidebar-width: 200px;
   --your-turn-stratagem-color: #0e4d6b;
-  --both-turn-stratagem-color: #1d6357;
-  --enemy-turn-stratagem-color: #a11217;
+  --either-players-turn-stratagem-color: #1d6357;
+  --opponents-turn-stratagem-color: #a11217;
   margin: 0;
   background: var(--background-primary);
   box-sizing: border-box;
@@ -276,6 +276,7 @@ aside {
   border-right: 1px solid var(--border-primary);
   display: block;
   overflow-y: scroll;
+  z-index: 10000;
 }
 
 main {
@@ -346,7 +347,6 @@ div.page.active {
 }
 
 .datasheet {
-  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -409,8 +409,8 @@ div.page.active {
 
 .datasheet-body td {
   padding: .5rem .5rem;
-  color: var(--text-datasheet);
   text-align: center;
+  color: var(--text-datasheet);
 }
 
 .datasheet-body td:first-child {
@@ -489,20 +489,20 @@ div.page.active {
   margin-top: 1rem;
 }
 
-.tooltip-on-hover {
+.tooltip-on-mouseover {
   cursor: pointer;
   text-decoration: underline;
 }
 
-.tooltip-on-hover:hover .tooltip {
+.tooltip-on-mouseover:hover .tooltip {
   display: block;
 }
 
 .tooltip {
-  left: 50%;
+  left: calc(50% + var(--sidebar-width));
   top: 50%;
   transform: translate(-50%, -50%);
-  position: absolute;
+  position: fixed;
   display: none;
   background: var(--background-datasheet);
   z-index: 9999;
@@ -512,6 +512,7 @@ div.page.active {
   font-weight: 300;
   cursor: default;
   box-shadow: 0 0 0 100vh rgba(0,0,0,.5);
+  white-space: normal;
 }
 
 .tooltip .title {
@@ -519,10 +520,16 @@ div.page.active {
   background: var(--border-datasheet);
   padding: .5rem;
   font-weight: 500;
+  display: block;
 }
 
 .tooltip .description {
   padding: .5rem;
+  display: block;
+}
+
+.tooltip-on-mouseover:hover .tooltip .tooltip {
+  display: none;
 }
 
 #backdrop {
@@ -616,17 +623,17 @@ div#overview-page.active {
   right: 0;
 }
 
-#overview-page .enemy-turn .cost {
-  background: var(--enemy-turn-stratagem-color);
+#overview-page .opponents-turn .cost {
+  background: var(--opponents-turn-stratagem-color);
 }
 
-#overview-page .stratagem.enemy-turn{
-  border-color: var(--enemy-turn-stratagem-color);
+#overview-page .stratagem.opponents-turn{
+  border-color: var(--opponents-turn-stratagem-color);
 }
 
-#overview-page .stratagem.enemy-turn .header,
-#overview-page .stratagem.enemy-turn b  {
-  color: var(--enemy-turn-stratagem-color);
+#overview-page .stratagem.opponents-turn .header,
+#overview-page .stratagem.opponents-turn b  {
+  color: var(--opponents-turn-stratagem-color);
 }
 
 #overview-page .your-turn .cost {
@@ -642,17 +649,17 @@ div#overview-page.active {
   color: var(--your-turn-stratagem-color);
 }
 
-#overview-page .both-turn .cost {
-  background: var(--both-turn-stratagem-color);
+#overview-page .either-players-turn .cost {
+  background: var(--either-players-turn-stratagem-color);
 }
 
-#overview-page .stratagem.both-turn {
-  border-color: var(--both-turn-stratagem-color);
+#overview-page .stratagem.either-players-turn {
+  border-color: var(--either-players-turn-stratagem-color);
 }
 
-#overview-page .stratagem.both-turn .header,
-#overview-page .stratagem.both-turn b  {
-  color: var(--both-turn-stratagem-color);
+#overview-page .stratagem.either-players-turn .header,
+#overview-page .stratagem.either-players-turn b  {
+  color: var(--either-players-turn-stratagem-color);
 }
 
 #overview-page .visibility-button {
@@ -664,30 +671,43 @@ div#overview-page.active {
   text-align: center;
 }
 
+#overview-page table {
+  font-weight: inherit;
+}
+
+#overview-page td {
+  color: var(--text-datasheet);
+  padding-bottom: 1rem;
+}
+
+#overview-page .impact18 {
+  font-weight: 500;
+}
+
+#overview-page .impact18+p {
+  padding-left: 1rem;
+}
+
 table.army-comp {
   color: var(--text-datasheet);
+  width: 100%;
+}
+
+#overview-page table.army-comp td {
+  padding-bottom: 0;
 }
 
 table.army-comp tr:nth-child(even) {
   background: rgba(0, 0, 0, 0.05);
 }
 
-table.army-comp th:nth-of-type(1),
-table.army-comp td:nth-of-type(1) {
+table.army-comp th:nth-child(1),
+table.army-comp td:nth-child(1)  {
   text-align: left;
-  width: 25%;
 }
 
-table.army-comp th:nth-of-type(2),
-table.army-comp td:nth-of-type(2) {
+table.army-comp td:nth-child(2)  {
   text-align: center;
-  width: 50%;
-}
-
-table.army-comp th:nth-of-type(3),
-table.army-comp td:nth-of-type(3) {
-  text-align: right;
-  width: 25%;
 }
 
 /* Phones */
