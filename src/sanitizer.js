@@ -72,7 +72,7 @@ class Sanitizer {
   static removeInlineStyles(roster) {
     return this.mutateEachStringInObject(roster, (string) => {
       return string
-        .replace(/style="[^"]*?"/g, '$1');
+        .replace(/style="[^"]*?"/g, '');
     });
   }
 
