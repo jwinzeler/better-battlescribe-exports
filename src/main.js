@@ -45,7 +45,7 @@ class Main {
     let historyStore = RosterHistory.get().history;
     const roster = historyStore[index];
     
-    this.setupAll(roster.rosterInfo.name, roster.roster);
+    this.setupAll(roster.rosterInfo?.name, roster.roster);
   }
 
   static setupAll(rosterName, output) {
