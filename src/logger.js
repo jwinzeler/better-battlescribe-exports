@@ -26,11 +26,11 @@ class Logger {
   }
 
   static warn(message) {
-    this.writeToElement(`<span class="warn">${message}</span>`);
+    this.writeToElement(`<span class="warn">WARNING: ${message}</span>`);
   }
 
   static error(message) {
-    this.writeToElement(`<span class="error">${message}</span>`);
+    this.writeToElement(`<span class="error">ERROR: ${message}</span>`);
     document.getElementById('log-details')?.setAttribute('open', true);
   }
 }

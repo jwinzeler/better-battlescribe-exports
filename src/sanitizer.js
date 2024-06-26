@@ -7,9 +7,13 @@ class Sanitizer {
     roster = this.cleanUpText(roster);
     roster = this.removeDuplicateUnits(roster);
     roster = this.removeDuplicateStatlines(roster);
+    roster = this.removeExtraAbilities(roster);
     roster = this.addTooltips(roster, roster.rules);
     roster = this.flattenSelections(roster);
     roster = this.addSidebarSelections(roster);
+
+    // Specific to "Nurgles Gift" Ability, Wahapedia uses images for this, so we need to replace them with text.
+    roster = this.fixContagionRange(roster);
 
     /**
      * 
@@ -74,6 +78,51 @@ class Sanitizer {
       return string
         .replace(/style="[^"]*?"/g, '');
     });
+  }
+
+  static removeExtraAbilities(roster) {
+    const factionKeywords = roster.units.reduce((acc, unit) => {
+      const factionKeywordRegex = /Faction: (a-zA-Z0-9\s)*/g;
+      const factionKeyword = unit?.keywords?.[0]?.filter((keyword) => factionKeywordRegex.test(keyword))?.map((keyword) => keyword.replace(factionKeywordRegex, '$1')) || '';
+      
+      if (factionKeyword && acc[factionKeyword]) {
+        acc[factionKeyword]++;
+      } else if (factionKeyword) {
+        acc[factionKeyword] = 1;
+      }
+
+      return acc;
+    }, {});
+
+    const factionKeyword = Object.keys(factionKeywords).reduce((highestKeyword, keyword) => factionKeywords[highestKeyword] > factionKeywords[keyword] ? highestKeyword : keyword)?.toLowerCase() || '';
+
+    return {
+      ...roster,
+      armyData: {
+        ...roster.armyData,
+        factionAbilities: roster.armyData.factionAbilities.filter((ability) => ability.description.includes(factionKeyword)),
+      },
+    };
+  }
+
+  static fixContagionRange(roster) {
+    const fixedAbilities = roster.armyData.factionAbilities.map((ability) => {
+      const getContagionRangeRegex = (number) => RegExp(`<img [a-zA-Z0-9"=\\s]*?src="\/wh40k10ed\/img\/ContagionRange${number}\.png"\\s*>`, 'g');
+
+      for (let i = 1; i <= 3; i++) {
+        ability.description = ability.description.replace(getContagionRangeRegex(i), `<b>${i === 1 ? '1st' : i === 2 ? '2nd' : '3rd'} Battle Round:</b> Contagion Range ${i * 3}"`);
+      }
+      
+      return ability;
+    });
+
+    return {
+      ...roster,
+      armyData: {
+        ...roster.armyData,
+        factionAbilities: fixedAbilities,
+      },
+    };
   }
 
   static cleanUpText(roster) {
