@@ -161,5 +161,6 @@ function validateRecursively(data, validator, validators, path) {
 
 main().then((wahapediaExport) => {
   validateExportedData(wahapediaExport);
+  console.log(wahapediaExport.last_update);
   fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8')
 });
