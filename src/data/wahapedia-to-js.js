@@ -50,6 +50,7 @@ async function main() {
                     [headers[index]]: column
                       .trim()
                       .replaceAll('’', '\'')
+                      .replaceAll('‘', '\'')
                       .replaceAll('–', '-'),
                   };
                 }, {}),
@@ -63,6 +64,7 @@ async function main() {
                   [headers[index]]: column
                     .trim()
                     .replaceAll('’', '\'')
+                    .replaceAll('‘', '\'')
                     .replaceAll('–', '-'),
                 };
               }, {}),
@@ -162,5 +164,6 @@ function validateRecursively(data, validator, validators, path) {
 main().then((wahapediaExport) => {
   validateExportedData(wahapediaExport);
   console.log(wahapediaExport.last_update);
-  fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8')
+  fs.writeFileSync('./src/data/wahapedia.js', `const wahapediaData = ${JSON.stringify(wahapediaExport, null, 2)}`, 'utf-8')
+  fs.writeFileSync('./src/data/wahapedia.min.js', `const wahapediaData = ${JSON.stringify(wahapediaExport)}`, 'utf-8')
 });
