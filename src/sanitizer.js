@@ -256,8 +256,9 @@ class Sanitizer {
         count: 1,
         points: unit.pts,
       })).reduce((units, unit) => {
-        if (units.some((u) => u.name === unit.name && u.points === unit.points)) {
-          units.find((u) => u.name === unit.name).count++;
+        const findMatchingUnit = (u) => u.name === unit.name && u.points === unit.points;
+        if (units.some(findMatchingUnit)) {
+          units.find(findMatchingUnit).count++;
         } else {
           units.push(unit);
         }
