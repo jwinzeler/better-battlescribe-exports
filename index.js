@@ -31,5 +31,7 @@ fileInput.addEventListener('change', (event) => {
 window.onload = (() => {
   RosterHistory.showList();
 
+  Settings.setupCheckbox('buttonStatLine');
+
   document.getElementById('lastUpdate').innerHTML = Object.keys(wahapediaData.last_update)[0];
 });

@@ -332,3 +332,84 @@ details.second-level-details summary {
 .roster-history-box span {
   display: block;
 }
+
+.settings {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: width 0.3s ease, height 0.3s ease;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .default {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    background-color: #ccc;
+    clip-path: polygon(
+            50% 0%,
+            85% 15%,
+            100% 50%,
+            85% 85%,
+            50% 100%,
+            15% 85%,
+            0% 50%,
+            15% 15%
+    );
+  }
+
+  .default::before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    background-color: #333;
+    border-radius: 50%;
+  }
+
+  .setting {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transition: opacity 0.5s ease-in;
+    cursor: pointer;
+  }
+
+  &:hover {
+    width: 150px;
+    height: 25px;
+    border-radius: 25px;
+
+    .default {
+      display: none
+    }
+
+    .setting {
+      visibility: visible;
+      opacity: 1;
+      width: 100%;
+      height: 100%;
+      margin-left: 10px;
+      transition: opacity 0.5s ease-in;
+    }
+  }
+}
+
+
+

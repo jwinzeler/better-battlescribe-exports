@@ -456,9 +456,19 @@ div.page.active {
   text-transform: uppercase;
 }
 
+.button-stats-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .stats-wrapper {
   display: flex;
   flex-direction: row;
+}
+
+.mini {
+    transform: scale(0.6)
 }
 
 .stat {
