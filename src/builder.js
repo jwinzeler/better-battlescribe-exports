@@ -177,7 +177,7 @@ class Builder {
   }
 
   static getRightColumn(unit) {
-    const invulnerableSaveAbility = unit.abilities.abilities.find((ability) => ability.name === "Invulnerable Save");
+    const invulnerableSaveAbility = this.getInvulnerability(unit);
     let invulnerableSaveAbilityHtml = '';
 
     if (invulnerableSaveAbility) {
@@ -321,7 +321,7 @@ class Builder {
             </div>
           `).join('')}
           <button class='death-button' onclick='toggleDeath("${id}","${unitIndex}",this)'>Mark as dead</button>
-          </div>
+        </div>
       </header>
     `;
   }
@@ -341,20 +341,45 @@ class Builder {
     const id = this.stringToId(unit.name + index);
     return `
       <button class="sidebar-button" index=${index} onclick="togglePage('${id}')" id="${id}-button">
-        ${unit.name}
+        ${this.getUnitName(unit)}
         ${unit.sidebarSelections.length ? `
           <div class="overview-info">
             <div>
               ${unit.sidebarSelections.map((selection) => `${selection.count}x ${selection.name}`).join('<br />')}
             </div>
           </div>
-        ` : ''}        
+        ` : ''}     
+        ${this.getButtonStats(unit)}
       </button>
     `;
   }
 
-  static getOverviewButton(roster) {
-    return `
+  static getButtonStats(unit) {
+      return Settings.getSetting('buttonStatLine') ? `
+          <div class="button-stats-wrapper">
+              ${unit.stats.map((stats, index) => `
+              <div class="mini">${unit.stats.length > 1 ? `<div class="stats-model-name${index === 0 ? ' first' : ''}">${stats.name}</div>` : ''}</div>
+              <div class="stats-wrapper mini">
+                ${Object.keys(stats).filter((stat) => stat !== 'name').map((stat) => `
+                  <div class="stat">
+                    ${index === 0 ? `
+                      <div class="stat-name">
+                        ${stat}
+                      </div>
+                    ` : ''}
+                    <div class="stat-value">
+                      ${stats[stat]}
+                    </div>
+                  </div>
+                `).join('')}
+                </div>
+              `).join('')}
+          </div>
+      ` : ''
+  }
+
+    static getOverviewButton(roster) {
+        return `
       <button class="sidebar-button"  onclick="togglePage('overview')" id="overview-button">
         ${roster.name}
         <div class="overview-info">
@@ -370,18 +395,18 @@ class Builder {
         </div>
       </button>
     `;
-  }
+    }
 
-  static getToggleAsideButton(text, id) {
-    return `
+    static getToggleAsideButton(text, id) {
+        return `
       <button onclick="toggleAside()" class="toggle-aside" id="${id}">
         ${text}
       </button>
     `;
-  }
+    }
 
-  static getMetaTags() {
-    return `
+    static getMetaTags() {
+        return `
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -411,5 +436,18 @@ class Builder {
 
   static isTablet() {
     return (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  static getInvulnerability(unit) {
+      return unit.abilities.abilities.find((ability) => ability.name.includes("Invulnerable Save"));
+  }
+
+  static getUnitName(unit) {
+      const invulnerableSaveAbility = this.getInvulnerability(unit);
+      return `
+        ${unit.name} ${Settings.getSetting('buttonStatLine') && invulnerableSaveAbility ? 
+          `
+            <span class="invuln">(${invulnerableSaveAbility.description.replace(/.*?([\d]+\+).*?$/g, '$1')}+)</span>`: ''}
+          `
   }
 }

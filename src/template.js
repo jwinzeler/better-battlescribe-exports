@@ -328,6 +328,10 @@ div.overview-info {
   font-size: 0.75rem;
 }
 
+.invuln {
+    color: #FFD700
+}
+
 .capitalize {
   text-transform: capitalize;
 }
