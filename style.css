@@ -333,20 +333,19 @@ details.second-level-details summary {
   display: block;
 }
 
-/* Base styles for the settings container */
 .settings {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000; /* Stay above everything */
-  background-color: #333; /* Dark background */
+  z-index: 1000;
+  background-color: #333;
   color: #fff;
   padding: 10px;
-  border-radius: 25px; /* Rounded initially */
+  border-radius: 25px;
   cursor: pointer;
   transition: width 0.3s ease, height 0.3s ease;
-  width: 25px; /* Initial small width */
-  height: 25px; /* Initial small height */
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,8 +378,6 @@ details.second-level-details summary {
     border-radius: 50%;
   }
 
-
-
   .setting {
     width: 0;
     height: 0;
@@ -394,10 +391,9 @@ details.second-level-details summary {
     cursor: pointer;
   }
 
-
   &:hover {
-    width: 150px; /* Expand width */
-    height: 25px; /* Keep height the same */
+    width: 150px;
+    height: 25px;
     border-radius: 25px;
 
     .default {
@@ -413,7 +409,6 @@ details.second-level-details summary {
       transition: opacity 0.5s ease-in;
     }
   }
-
 }
 
 
