@@ -197,7 +197,7 @@ html, body {
   --accent-datasheet: #dddde0;
   --border-datasheet: #3e1844;
   --background-datasheet-header: ##1F2123;
-  --sidebar-width: 200px;
+  --sidebar-width: 220px;
   --your-turn-stratagem-color: #0e4d6b;
   --either-players-turn-stratagem-color: #1d6357;
   --opponents-turn-stratagem-color: #a11217;
@@ -231,10 +231,22 @@ body.imperium_adeptus_astartes_deathwatch {
   --background-primary: #1b2830;
 }
 
+body.imperium_adeptus_astartes_dark_angels {
+  --border-datasheet: #004318;
+  --text-datasheet: #1b2830;
+  --background-primary: #00240d;
+}
+
 body.chaos_world_eaters {
   --border-datasheet: #531415;
   --text-datasheet: #411818;
   --background-primary: #411818;
+}
+
+body.chaos_thousand_sons {
+  --border-datasheet: #005e66;
+  --text-datasheet: #411818;
+  --background-primary: #004c53;
 }
 
 body.aeldari_craftworlds {
@@ -261,6 +273,12 @@ body.xenos_tau_empire {
   --background-primary: #0e3741;
 }
 
+body.xenos_orks, body.chaos_death_guard {
+  --border-datasheet: #4d6320;
+  --text-datasheet: #0e3741;
+  --background-primary: #262e17;
+}
+
 b {
   font-weight: 500;
 }
@@ -276,6 +294,7 @@ aside {
   border-right: 1px solid var(--border-primary);
   display: block;
   overflow-y: scroll;
+  overflow-x: hidden;
   z-index: 10000;
 }
 
@@ -753,19 +772,19 @@ table.army-comp td:nth-child(2)  {
   body.smartphone button.toggle-aside {
     display: block;
     position: absolute;
-    border: 1px solid var(--border-primary);
     background: var(--background-primary);
     color: var(--text-primary);
-    min-height: 30px;
-    width: 30px;
+    min-height: 50px;
+    width: 70px;
     padding: 0;
-    border-radius: 50%;
-    right: 5px;
-    top: 5px;
+    border-radius: 10px;
+    left: 5px;
+    bottom: 25px;
+    z-index: 9;
   }
 
   body.smartphone button#open {
-    left: 5px;
+    left: 5%;
     right: auto;
   }
 
@@ -850,25 +869,62 @@ table.army-comp td:nth-child(2)  {
 /* Portrait */
 @media only screen and (min-device-width: 319px) and (max-device-width: 852px) and (orientation: portrait) {
   body.smartphone aside {
-    width: 90%;
+    width: 100%;
   }
 
   body.smartphone .stats-wrapper {
     width: 100%;
   }
+  
+  #overview-button {
+    position: fixed;
+    bottom: 50%;
+    right: 10px;
+    z-index: 1000;
+    background-color: transparent;
+    color: #fff;
+    padding: 10px;
+    border-radius: 9px;
+    transition: width 0.3s ease, height 0.3s ease;
+    width: 0;
+    height: 0;
+  }
+  
+  #close {
+    display: none;
+  }
+  
+  .overview-info {
+    display: none;
+  }
+  
+  #overview-button:before {
+    top: -10px;
+    left: 30px;
+    content: "Army Rules & Stratagems";
+    width: 120px;
+    height: 60px;
+    position: absolute;
+    border-radius: 0 0 20px 20px;
+    background: var(--background-primary);
+    padding: 10px;
+    transform-origin: 0 0;
+    transform: rotate(90deg);
+    border: 2px solid var(--border-datasheet);    
+  }
 }
 
 .death-button {
   position: absolute;
-  margin-top: 1rem;
-  margin-right: 1rem;
-  top: 0;
-  right: 0;
-  height: 2.5rem;
-  background-color: var(--background-primary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-primary);
-  cursor: pointer;
+    bottom: 25px;
+    right: 5%;
+    height: 50px;
+    width: 120px;
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 .sidebar-button.dead {

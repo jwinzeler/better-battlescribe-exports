@@ -5,45 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" />
-    <title>Suicide Overwatch - Better Battlescribe Exports</title>
+    <title>Suicide Overwatch - Better Datasheet Exports</title>
   </head>
   <body>
     <div class="wrapper">
-      <p>
-        Export your roster from Battlescribe as .rosz and upload it here to convert it into an actually usable
-        format.<br />
-        Use <b>Download</b> if you want to download the converted roster as an .html file.<br />
-        Use <b>Open</b> if you want to directly use the converted roster in fullscreen.<br />
-        <br />
-        <i><small>Stratagems, factions and detachments powered by <a href="https://wahapedia.ru" target="_blank" >Wahapedia.ru</a> - updated <span id="lastUpdate"></span></small></i>
-      </p>
-      <details open>
-        <summary>Roster</summary>
-        <div class="buttons-wrapper">
-          <input id="fileInput" type="file" />
-          <a id="downloadButton"><button>Download</button></a>
-          <a id="openButton"><button>Open</button></a>
+
+        <div class="heading">
+            <h1>Suicide Overwatch
+                <span>Better Datasheet Exports</span>
+            </h1>
         </div>
-        <div id="history" hidden>
-          <h4>OR</h4>
-          <div id="history-list"></div>
+
+        <div class="upload-wrapper">
+            <label for="fileInput" class="file-upload">
+                <span id="fileInputDisplay">Upload your .rosz...</span>
+            </label>
+            <input required id="fileInput" type="file" />
+            <div class="buttons-wrapper">
+                <a id="downloadButton"><button class="button">Download</button></a>
+                <a id="openButton"><button class="button">Open</button></a>
+            </div>
+
         </div>
-      </details>
-      <details id="log-details">
-        <summary>Log</summary>
-        <div id="log-wrapper">
-          <code id="log"></code>
+        <p class="description">
+            Export your roster from Battlescribe or New Recruit as .rosz and upload it here to convert it into an actually usable
+            format.<br />
+            Use <b>Download</b> if you want to download the converted roster as an .html file.<br />
+            Use <b>Open</b> if you want to directly use the converted roster in fullscreen.<br />
+            <br />
+        </p>
+
+       <!--<details>
+         <summary>Customizer</summary>
+         <div id="customizer"></div>
+         <button onclick="Main.loadFromCustomizer()">Change</button>
+       </details>-->
+       <!--<details open class="preview-wrapper">
+         <summary>Preview</summary>
+         <iframe id="preview"></iframe>
+       </details>-->
+    </div>
+    <div id="history">
+        <h4>Load Previous</h4>
+        <div id="history-list"></div>
+    </div>
+
+    <div id="log-wrapper">
+        <h4 class="log-button">Log</h4>
+        <div class="log-content">
+            <code id="log"></code>
         </div>
-      </details>
-      <details>
-        <summary>Customizer</summary>
-        <div id="customizer"></div>
-        <button onclick="Main.loadFromCustomizer()">Change</button>
-      </details>
-      <details open class="preview-wrapper">
-        <summary>Preview</summary>
-        <iframe id="preview"></iframe>
-      </details>
     </div>
 
     <div class="settings">
@@ -54,7 +65,7 @@
         </div>
     </div>
 
-
+    <i class="foot-note"><small>Stratagems, factions and detachments powered by <a href="https://wahapedia.ru" target="_blank" >Wahapedia.ru</a> - updated <span id="lastUpdate"></span></small></i>
 
     <script src="src/libs/jszip.min.js"></script>
     <script src="src/libs/xml2json.js"></script>
