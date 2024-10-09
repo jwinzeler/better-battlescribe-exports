@@ -8,7 +8,7 @@ class Main {
     const sanitizedRoster = Sanitizer.sanitize(roster);
     const output = Builder.getOutput(sanitizedRoster);
 
-    ArmyCustomizer.show(sanitizedRoster);
+    //ArmyCustomizer.show(sanitizedRoster);
 
     this.setupAll(roster.name, output);
 
@@ -44,12 +44,14 @@ class Main {
   static loadFromHistory(index = null) {
     let historyStore = RosterHistory.get().history;
     const roster = historyStore[index];
-    
+    document.getElementById('fileInputDisplay').innerText = roster.rosterInfo?.name;
+    document.getElementById('fileInput').removeAttribute('required')
+
     this.setupAll(roster.rosterInfo?.name, roster.roster);
   }
 
   static setupAll(rosterName, output) {
-    this.setupPreview(output);
+    //this.setupPreview(output);
 
     const blob = window.URL.createObjectURL(new Blob([output], { type: 'text/html' }), { type: "text/html" });
     this.setupOpenButton(blob);

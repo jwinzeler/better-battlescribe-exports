@@ -32,8 +32,10 @@ class RoszParser {
 
   static getRosterName({ _name }) {
     Logger.log('Finding roster name...');
+    document.getElementById('fileInputDisplay').innerText = _name;
     const name = _name.replaceAll(/(.*?)\(.*?$/g, '$1').trim();
     Logger.logRosterValue(name);
+
     return name;
   }
 
