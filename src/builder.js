@@ -177,7 +177,7 @@ class Builder {
   }
 
   static getRightColumn(unit) {
-    const invulnerableSaveAbility = unit.abilities.abilities.find((ability) => ability.name === "Invulnerable Save");
+    const invulnerableSaveAbility = this.getInvulnerability(unit);
     let invulnerableSaveAbilityHtml = '';
 
     if (invulnerableSaveAbility) {
@@ -341,7 +341,7 @@ class Builder {
     const id = this.stringToId(unit.name + index);
     return `
       <button class="sidebar-button" index=${index} onclick="togglePage('${id}')" id="${id}-button">
-        ${unit.name}
+        ${this.getUnitName(unit)}
         ${unit.sidebarSelections.length ? `
           <div class="overview-info">
             <div>
@@ -436,5 +436,18 @@ class Builder {
 
   static isTablet() {
     return (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  static getInvulnerability(unit) {
+      return unit.abilities.abilities.find((ability) => ability.name.includes("Invulnerable Save"));
+  }
+
+  static getUnitName(unit) {
+      const invulnerableSaveAbility = this.getInvulnerability(unit);
+      return `
+        ${unit.name} ${Settings.getSetting('buttonStatLine') && invulnerableSaveAbility ? 
+          `
+            <span class="invuln">(${invulnerableSaveAbility.description.replace(/.*?([\d]+\+).*?$/g, '$1')}+)</span>`: ''}
+          `
   }
 }
