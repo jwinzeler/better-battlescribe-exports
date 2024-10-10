@@ -51,7 +51,7 @@ class Main {
   }
 
   static setupAll(rosterName, output) {
-    //this.setupPreview(output);
+    this.setupPreview(output);
 
     const blob = window.URL.createObjectURL(new Blob([output], { type: 'text/html' }), { type: "text/html" });
     this.setupOpenButton(blob);
