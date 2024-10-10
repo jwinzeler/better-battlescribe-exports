@@ -21,7 +21,7 @@
                 <span id="fileInputDisplay">Upload your .rosz...</span>
             </label>
             <input required id="fileInput" type="file" />
-            <div class="buttons-wrapper">
+            <div id="button-container" class="buttons-wrapper hidden">
                 <a id="downloadButton"><button class="button">Download</button></a>
                 <a id="openButton"><button class="button">Open</button></a>
             </div>
@@ -40,32 +40,43 @@
          <div id="customizer"></div>
          <button onclick="Main.loadFromCustomizer()">Change</button>
        </details>-->
-       <!--<details open class="preview-wrapper">
-         <summary>Preview</summary>
-         <iframe id="preview"></iframe>
-       </details>-->
     </div>
     <div id="history">
         <h4>Load Previous</h4>
-        <div id="history-list"></div>
+        <div id="history-list" class="hidden"></div>
     </div>
 
     <div id="log-wrapper">
-        <h4 class="log-button">Log</h4>
-        <div class="log-content">
+        <h4 id="log-button">Log</h4>
+        <div id="log-content" class="hidden">
             <code id="log"></code>
         </div>
     </div>
 
-    <div class="settings">
-        <div class="default"></div>
-        <div class="setting">
-            <label for="buttonStatLine">Enable Button Stats</label>
-            <input type="checkbox" id="buttonStatLine">
+    <div id="settings" class="settings">
+        <div id="cog" class="default"></div>
+        <div id="setting-container" class="hidden">
+            <div class="setting">
+                <label for="buttonStatLine">Enable Button Stats</label>
+                <input type="checkbox" id="buttonStatLine">
+            </div>
+            <div class="setting">
+                <label for="darkMode">Enable Dark mode</label>
+                <input type="checkbox" id="darkMode">
+            </div>
+            <div class="setting">
+                <label for="previewSetting">Enable Preview</label>
+                <input type="checkbox" id="previewSetting">
+            </div>
         </div>
     </div>
 
-    <i class="foot-note"><small>Stratagems, factions and detachments powered by <a href="https://wahapedia.ru" target="_blank" >Wahapedia.ru</a> - updated <span id="lastUpdate"></span></small></i>
+    <i class="foot-note"><small>Stratagems, factions and detachments powered by <a class="link" href="https://wahapedia.ru" target="_blank" >Wahapedia.ru</a> - updated <span id="lastUpdate"></span></small></i>
+
+   <details id="preview-panel" open class="preview-wrapper">
+     <summary>Preview</summary>
+     <iframe id="preview"></iframe>
+   </details>
 
     <script src="src/libs/jszip.min.js"></script>
     <script src="src/libs/xml2json.js"></script>
@@ -76,6 +87,7 @@
     <script src="src/template.js"></script>
     <script src="src/temp-storage.js"></script>
     <script src="src/settings.js"></script>
+    <script src="src/buttonManager.js"></script>
     <script src="src/roster-history.js"></script>
     <script src="src/army-customizer.js"></script>
     <script src="src/logger.js"></script>
